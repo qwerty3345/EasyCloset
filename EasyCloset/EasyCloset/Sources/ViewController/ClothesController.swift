@@ -23,6 +23,11 @@ final class ClothesController: UIViewController {
   
   // MARK: - UI Components
   
+//  private lazy var clothesCollectionViews = ClothesCategory.allCases
+//    .reduce(into: [ClothesCategory: UICollectionView](), { result, category in
+//      result[category] = UICollectionView(frame: .zero, collectionViewLayout: carouselLayout)
+//    })
+  
   private lazy var collectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: carouselLayout
@@ -40,9 +45,11 @@ final class ClothesController: UIViewController {
     cellProvider: { collectionView, indexPath, item in
       let cell = collectionView.dequeueReusableCell(cellClass: ClothesCell.self, for: indexPath)
       if indexPath.row == 0 {
-        collectionView.cellForItem(at: indexPath)
+        cell.showAddPhotoImage()
+      } else {
+        cell.configure(with: item)
       }
-      cell.configure(with: item)
+      
       return cell
     })
   
@@ -99,23 +106,6 @@ extension ClothesController {
   private func setupCollectionView() {
     collectionView.registerCell(cellClass: ClothesCell.self)
     setupInitialSnapshot()
-  }
-  
-  // TODO: - Carousel Layout 구현
-  private func collectionViewLayout() -> UICollectionViewLayout {
-    let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                          heightDimension: .fractionalWidth(1))
-    let item = NSCollectionLayoutItem(layoutSize: itemSize)
-    
-    let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(120),
-                                           heightDimension: .estimated(120))
-    let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-    
-    let section = NSCollectionLayoutSection(group: group)
-    section.orthogonalScrollingBehavior = .groupPagingCentered
-    
-    section.interGroupSpacing = 4
-    return UICollectionViewCompositionalLayout(section: section)
   }
 }
 

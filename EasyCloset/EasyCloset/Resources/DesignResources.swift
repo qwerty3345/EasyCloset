@@ -21,6 +21,9 @@ extension UIImage {
   static let tshirtSelected = UIImage(named: "tshirt-selected")
   
   static let filter = UIImage(named: "filter")
+  
+  // Image
+  static let addPhoto = UIImage(named: "add_photo")
 }
 
 extension UIFont {
