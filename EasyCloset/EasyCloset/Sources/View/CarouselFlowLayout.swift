@@ -16,7 +16,7 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
   private var spacing: CGFloat = 40
   
   // collectionView의 크기
-  private lazy var size: CGSize = collectionView?.bounds.size ?? .zero
+  private var size: CGSize = .zero
   
   // 처음 컬렉션 뷰가 나타날 때 호출되거나 레이아웃을 명시적 혹은 암묵적으로 무효화했을 때 호출
   override func prepare() {
@@ -26,6 +26,8 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
     if currentSize != size {
       self.setupCollectionView()
       self.updateLayout()
+      self.size = currentSize
+      print("preprepapreparpap")
     }
   }
   
