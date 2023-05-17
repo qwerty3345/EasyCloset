@@ -47,4 +47,3 @@ extension ClothesController {
   
   private func setupLayout() { }
 }
-

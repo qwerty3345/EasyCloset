@@ -47,4 +47,3 @@ extension HomeController {
   
   private func setupLayout() { }
 }
-

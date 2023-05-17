@@ -13,6 +13,7 @@
 		B438897E2A1496C300476BFC /* DesignResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438897D2A1496C300476BFC /* DesignResources.swift */; };
 		B438898D2A14A7D400476BFC /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = B438898C2A14A7D400476BFC /* Then */; };
 		B43889902A14A80900476BFC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B438898F2A14A80900476BFC /* SnapKit */; };
+		B43889932A14A8D600476BFC /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = B43889922A14A8D600476BFC /* .swiftlint.yml */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -34,6 +35,7 @@
 		B43889862A14A1A900476BFC /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		B43889872A14A1A900476BFC /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
 		B43889882A14A1A900476BFC /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		B43889922A14A8D600476BFC /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 		B46CB8B42A14739F00039F72 /* EasyCloset */ = {
 			isa = PBXGroup;
 			children = (
+				B43889922A14A8D600476BFC /* .swiftlint.yml */,
 				B46CB8C92A1473F100039F72 /* Sources */,
 				B46CB8CA2A1473F500039F72 /* Resources */,
 			);
@@ -231,6 +234,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B46CB8C62A1473A000039F72 /* Build configuration list for PBXNativeTarget "EasyCloset" */;
 			buildPhases = (
+				B43889912A14A88900476BFC /* SwiftLint Script */,
 				B46CB8AE2A14739F00039F72 /* Sources */,
 				B46CB8AF2A14739F00039F72 /* Frameworks */,
 				B46CB8B02A14739F00039F72 /* Resources */,
@@ -290,12 +294,34 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B43889932A14A8D600476BFC /* .swiftlint.yml in Resources */,
 				B46CB8C22A1473A000039F72 /* LaunchScreen.storyboard in Resources */,
 				B46CB8BF2A1473A000039F72 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B43889912A14A88900476BFC /* SwiftLint Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "SwiftLint Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if test -d \"/opt/homebrew/bin/\"; then\n  PATH=\"/opt/homebrew/bin/:${PATH}\"\nfi\n\nexport PATH\n\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B46CB8AE2A14739F00039F72 /* Sources */ = {
