@@ -49,7 +49,7 @@ final class ClothesCell: UICollectionViewCell {
   
   func configure(with clothes: Clothes) {
     nameLabel.text = clothes.name
-    // 이미지 넣기...
+    // TODO: 이미지 넣기...
     clothes.imageURL
   }
   

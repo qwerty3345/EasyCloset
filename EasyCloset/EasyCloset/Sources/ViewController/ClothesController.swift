@@ -16,17 +16,12 @@ final class ClothesController: UIViewController {
   
   private enum Metric {
     static let collectionViewRowHeight: CGFloat = 160
-//    static let cellSize = CGSize(width: collectionViewHeight - 10, height: collectionViewHeight - 10)
   }
   
   // MARK: - Properties
   
   // MARK: - UI Components
-  
-//  private lazy var clothesCollectionViews = ClothesCategory.allCases
-//    .reduce(into: [ClothesCategory: UICollectionView](), { result, category in
-//      result[category] = UICollectionView(frame: .zero, collectionViewLayout: carouselLayout)
-//    })
+
   
   private lazy var containerCollectionView = UICollectionView(
     frame: .zero,
@@ -40,39 +35,6 @@ final class ClothesController: UIViewController {
     $0.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
     $0.itemSize = CGSize(width: view.frame.width, height: Metric.collectionViewRowHeight)
   }
-  
-//  private lazy var collectionView = UICollectionView(
-//    frame: .zero,
-//    collectionViewLayout: carouselLayout
-//  ).then {
-//    $0.backgroundColor = .brown
-//  }
-//
-//  private lazy var carouselLayout = CarouselFlowLayout().then {
-//    $0.itemSize = Metric.cellSize
-//    $0.scrollDirection = .horizontal
-//  }
-  
-//  private lazy var dataSource: DataSource = DataSource(
-//    collectionView: collectionView,
-//    cellProvider: { collectionView, indexPath, item in
-//      let cell = collectionView.dequeueReusableCell(cellClass: ClothesCell.self, for: indexPath)
-//      if indexPath.row == 0 {
-//        cell.showAddPhotoImage()
-//      } else {
-//        cell.configure(with: item)
-//      }
-//
-//      return cell
-//    })
-  
-//  enum Section: CaseIterable {
-//    case top
-//    case bottom
-//    case shoes
-//  }
-  
-//  typealias DataSource = UICollectionViewDiffableDataSource<Section, Clothes>
     
   // MARK: - Initialization
   
@@ -81,9 +43,6 @@ final class ClothesController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setup()
-    
-//    let mockClothes = (0..<10).map { _ in Clothes.mock }
-//    appendSnapshot(with: mockClothes)
   }
   
   // MARK: - Public Methods
@@ -99,7 +58,6 @@ extension ClothesController {
   private func setup() {
     setUI()
     setupLayout()
-    setupCollectionView()
   }
   
   private func setUI() {
@@ -112,18 +70,8 @@ extension ClothesController {
     containerCollectionView.snp.makeConstraints {
       $0.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
     }
-//    view.addSubview(collectionView)
-//    collectionView.snp.makeConstraints {
-//      $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-//      $0.horizontalEdges.equalToSuperview()
-//      $0.height.equalTo(Metric.collectionViewHeight)
-//    }
   }
   
-  private func setupCollectionView() {
-//    collectionView.registerCell(cellClass: ClothesCell.self)
-//    setupInitialSnapshot()
-  }
 }
 
 //MARK: UICollectionViewDataSource
@@ -158,22 +106,6 @@ extension ClothesController: UICollectionViewDataSource {
 //    return view
 //  }
 }
-
-// MARK: - UICollectionView DataSource / Snapshot
-
-//extension ClothesController {
-//  private func setupInitialSnapshot() {
-//    var snapshot = dataSource.snapshot()
-//    snapshot.appendSections(Section.allCases)
-//    dataSource.apply(snapshot)
-//  }
-//
-//  private func appendSnapshot(with items: [Clothes]) {
-//    var listSnapshot = NSDiffableDataSourceSectionSnapshot<Clothes>()
-//    listSnapshot.append(items)
-//    dataSource.apply(listSnapshot, to: .top)
-//  }
-//}
 
 // MARK: - Preview
 
