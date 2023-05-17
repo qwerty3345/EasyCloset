@@ -9,17 +9,6 @@ import UIKit
 
 final class ClothesCell: UICollectionViewCell {
   
-  enum CellType {
-    case add
-    case show
-  }
-  
-  // MARK: - Constants
-  
-  private enum Metric { }
-
-  // MARK: - Properties
-  
   // MARK: - UI Components
   
   private let clothesImageView = UIImageView().then {

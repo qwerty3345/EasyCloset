@@ -32,6 +32,7 @@
 		B43889AB2A14B8F300476BFC /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AA2A14B8F300476BFC /* ReusableView.swift */; };
 		B43889AD2A14B92600476BFC /* UICollectionView+RegisterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AC2A14B92600476BFC /* UICollectionView+RegisterCell.swift */; };
 		B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */; };
+		B43889B32A150BF500476BFC /* CarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889B22A150BF500476BFC /* CarouselCell.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -63,6 +64,7 @@
 		B43889AA2A14B8F300476BFC /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		B43889AC2A14B92600476BFC /* UICollectionView+RegisterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RegisterCell.swift"; sourceTree = "<group>"; };
 		B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselFlowLayout.swift; sourceTree = "<group>"; };
+		B43889B22A150BF500476BFC /* CarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselCell.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 		B46CB8D12A1488AD00039F72 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B43889B22A150BF500476BFC /* CarouselCell.swift */,
 				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
 				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
 			);
@@ -380,6 +383,7 @@
 				B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */,
 				B43889A92A14B7E600476BFC /* ClothesCell.swift in Sources */,
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
+				B43889B32A150BF500476BFC /* CarouselCell.swift in Sources */,
 				B43889AD2A14B92600476BFC /* UICollectionView+RegisterCell.swift in Sources */,
 				B43889AB2A14B8F300476BFC /* ReusableView.swift in Sources */,
 				B438897E2A1496C300476BFC /* DesignResources.swift in Sources */,
