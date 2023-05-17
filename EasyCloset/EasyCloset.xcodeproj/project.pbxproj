@@ -26,6 +26,8 @@
 		B438899E2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */; };
 		B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438899F2A14ACF600476BFC /* ClothesCategory.swift */; };
 		B43889A22A14AD8800476BFC /* Clothes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889A12A14AD8800476BFC /* Clothes.swift */; };
+		B43889A42A14B16D00476BFC /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889A32A14B16D00476BFC /* UIViewPreview.swift */; };
+		B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889A52A14B22100476BFC /* UIViewController+Preview.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -51,6 +53,8 @@
 		B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationTitle.swift"; sourceTree = "<group>"; };
 		B438899F2A14ACF600476BFC /* ClothesCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCategory.swift; sourceTree = "<group>"; };
 		B43889A12A14AD8800476BFC /* Clothes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clothes.swift; sourceTree = "<group>"; };
+		B43889A32A14B16D00476BFC /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
+		B43889A52A14B22100476BFC /* UIViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Preview.swift"; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +97,15 @@
 				B43889812A14A1A800476BFC /* Pretendard-Thin.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		B43889A72A14B28D00476BFC /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				B43889A52A14B22100476BFC /* UIViewController+Preview.swift */,
+				B43889A32A14B16D00476BFC /* UIViewPreview.swift */,
+			);
+			path = Preview;
 			sourceTree = "<group>";
 		};
 		B46CB8A92A14739F00039F72 = {
@@ -229,6 +242,7 @@
 		B46CB8E72A148CE000039F72 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				B43889A72A14B28D00476BFC /* Preview */,
 				B46CB8E82A148D0B00039F72 /* Extensions */,
 			);
 			path = Utils;
@@ -356,8 +370,10 @@
 				B438899E2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift in Sources */,
 				B43889782A14934600476BFC /* ClothesController.swift in Sources */,
 				B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */,
+				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
 				B438897E2A1496C300476BFC /* DesignResources.swift in Sources */,
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,
+				B43889A42A14B16D00476BFC /* UIViewPreview.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
