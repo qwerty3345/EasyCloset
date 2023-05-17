@@ -14,7 +14,10 @@ final class ClothesController: UIViewController {
   
   // MARK: - Constants
   
-  private enum Metric { }
+  private enum Metric {
+    static let collectionViewHeight: CGFloat = 160
+    static let cellSize = CGSize(width: collectionViewHeight - 10, height: collectionViewHeight - 10)
+  }
   
   // MARK: - Properties
   
@@ -22,14 +25,23 @@ final class ClothesController: UIViewController {
   
   private lazy var collectionView = UICollectionView(
     frame: .zero,
-    collectionViewLayout: collectionViewLayout()).then {
-      $0.backgroundColor = .brown
-    }
+    collectionViewLayout: carouselLayout
+  ).then {
+    $0.backgroundColor = .brown
+  }
   
-  private lazy var dataSource = DataSource(
+  private lazy var carouselLayout = CarouselFlowLayout().then {
+    $0.itemSize = Metric.cellSize
+    $0.scrollDirection = .horizontal
+  }
+  
+  private lazy var dataSource: DataSource = DataSource(
     collectionView: collectionView,
     cellProvider: { collectionView, indexPath, item in
       let cell = collectionView.dequeueReusableCell(cellClass: ClothesCell.self, for: indexPath)
+      if indexPath.row == 0 {
+        collectionView.cellForItem(at: indexPath)
+      }
       cell.configure(with: item)
       return cell
     })
@@ -78,7 +90,9 @@ extension ClothesController {
   private func setupLayout() {
     view.addSubview(collectionView)
     collectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+      $0.horizontalEdges.equalToSuperview()
+      $0.height.equalTo(Metric.collectionViewHeight)
     }
   }
   
@@ -87,7 +101,8 @@ extension ClothesController {
     setupInitialSnapshot()
   }
   
-  private func collectionViewLayout() -> UICollectionViewCompositionalLayout {
+  // TODO: - Carousel Layout 구현
+  private func collectionViewLayout() -> UICollectionViewLayout {
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                           heightDimension: .fractionalWidth(1))
     let item = NSCollectionLayoutItem(layoutSize: itemSize)

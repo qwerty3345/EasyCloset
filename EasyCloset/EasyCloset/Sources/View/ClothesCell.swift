@@ -68,4 +68,3 @@ extension ClothesCell {
   
   private func setupLayout() { }
 }
-
