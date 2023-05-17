@@ -29,9 +29,9 @@ final class ClothesController: UIViewController {
   private lazy var dataSource = DataSource(
     collectionView: collectionView,
     cellProvider: { collectionView, indexPath, item in
-//      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "", for: indexPath)
-//      return cell
-      return UICollectionViewCell()
+      let cell = collectionView.dequeueReusableCell(cellClass: ClothesCell.self, for: indexPath)
+      cell.configure(with: item)
+      return cell
     })
   
   enum Section: CaseIterable {
@@ -83,7 +83,7 @@ extension ClothesController {
   }
   
   private func setupCollectionView() {
-    // Cell Register 하기...
+    collectionView.registerCell(cellClass: ClothesCell.self)
     setupInitialSnapshot()
   }
   
