@@ -49,21 +49,24 @@ extension MainTabBarController {
   }
   
   private func setupViewControllers() {
-    tabBar.tintColor = Color.accentColor
+    tabBar.tintColor = .accentColor
     
     let clothesController = navigationController(
-      image: Icon.tshirt,
-      selectedImage: Icon.tshirtSelected,
+      image: .tshirt,
+      selectedImage: .tshirtSelected,
+      title: "옷",
       viewController: ClothesController())
     
     let homeController = navigationController(
-      image: Icon.house,
-      selectedImage: Icon.houseSelected,
+      image: .house,
+      selectedImage: .houseSelected,
+      title: "홈",
       viewController: HomeController())
     
     let styleController = navigationController(
-      image: Icon.closet,
-      selectedImage: Icon.closetSelected,
+      image: .closet,
+      selectedImage: .closetSelected,
+      title: "스타일",
       viewController: StyleController())
     
     viewControllers = [clothesController, homeController, styleController]
@@ -71,11 +74,13 @@ extension MainTabBarController {
   
   private func navigationController(image: UIImage?,
                                     selectedImage: UIImage?,
+                                    title: String,
                                     viewController: UIViewController) -> UINavigationController {
     let navigationController = UINavigationController(rootViewController: viewController)
     navigationController.tabBarItem.image = image
     navigationController.tabBarItem.selectedImage = selectedImage
-    navigationController.navigationBar.tintColor = Color.accentColor
+    navigationController.tabBarItem.title = title
+    navigationController.navigationBar.tintColor = .accentColor
     return navigationController
   }
 }

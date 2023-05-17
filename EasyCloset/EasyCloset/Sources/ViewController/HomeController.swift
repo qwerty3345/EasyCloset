@@ -41,7 +41,9 @@ extension HomeController {
     setupLayout()
   }
   
-  private func setUI() { }
+  private func setUI() {
+    navigationItem.title = "HOME"
+  }
   
   private func setupLayout() { }
 }

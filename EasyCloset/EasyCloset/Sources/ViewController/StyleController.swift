@@ -41,7 +41,9 @@ extension StyleController {
     setupLayout()
   }
   
-  private func setUI() { }
+  private func setUI() {
+    navigationItem.title = "MY STYLE"
+  }
   
   private func setupLayout() { }
 }

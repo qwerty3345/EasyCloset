@@ -41,7 +41,9 @@ extension ClothesController {
     setupLayout()
   }
   
-  private func setUI() { }
+  private func setUI() {
+    navigationItem.title = "MY CLOSET"
+  }
   
   private func setupLayout() { }
 }
