@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Clothes {
+struct Clothes: Hashable {
   let id: UUID
   let name: String
   let createdAt: Date
@@ -25,4 +25,6 @@ struct Clothes {
     self.imageURL = imageURL
     self.category = category
   }
+  
+  static var mock: Clothes { Clothes(name: "AAA", imageURL: "", category: .accessory) }
 }
