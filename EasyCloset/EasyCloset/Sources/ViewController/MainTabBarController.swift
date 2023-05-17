@@ -49,33 +49,33 @@ extension MainTabBarController {
   }
   
   private func setupViewControllers() {
-//    tabBar.tintColor = appColor
+    tabBar.tintColor = Color.accentColor
     
     let clothesController = navigationController(
-      unselectedImage: UIImage(systemName: "film.stack"),
-      selectedImage: UIImage(systemName: "film.stack.fill"),
+      image: Icon.tshirt,
+      selectedImage: Icon.tshirtSelected,
       viewController: ClothesController())
     
     let homeController = navigationController(
-      unselectedImage: UIImage(systemName: "magnifyingglass"),
-      selectedImage: UIImage(systemName: "magnifyingglass"),
+      image: Icon.house,
+      selectedImage: Icon.houseSelected,
       viewController: HomeController())
     
     let styleController = navigationController(
-      unselectedImage: UIImage(systemName: "person.crop.circle"),
-      selectedImage: UIImage(systemName: "person.crop.circle.fill"),
+      image: Icon.closet,
+      selectedImage: Icon.closetSelected,
       viewController: StyleController())
     
     viewControllers = [clothesController, homeController, styleController]
   }
   
-  private func navigationController(unselectedImage: UIImage?,
+  private func navigationController(image: UIImage?,
                                     selectedImage: UIImage?,
                                     viewController: UIViewController) -> UINavigationController {
     let navigationController = UINavigationController(rootViewController: viewController)
-    navigationController.tabBarItem.image = unselectedImage
+    navigationController.tabBarItem.image = image
     navigationController.tabBarItem.selectedImage = selectedImage
-    //    nav.navigationBar.tintColor =
+    navigationController.navigationBar.tintColor = Color.accentColor
     return navigationController
   }
 }
