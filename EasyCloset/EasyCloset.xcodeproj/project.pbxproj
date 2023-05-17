@@ -10,7 +10,7 @@
 		B43889782A14934600476BFC /* ClothesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889772A14934600476BFC /* ClothesController.swift */; };
 		B438897A2A14935200476BFC /* StyleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889792A14935200476BFC /* StyleController.swift */; };
 		B438897C2A1493B400476BFC /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438897B2A1493B400476BFC /* HomeController.swift */; };
-		B438897E2A1496C300476BFC /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438897D2A1496C300476BFC /* Resources.swift */; };
+		B438897E2A1496C300476BFC /* DesignResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438897D2A1496C300476BFC /* DesignResources.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -22,7 +22,7 @@
 		B43889772A14934600476BFC /* ClothesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesController.swift; sourceTree = "<group>"; };
 		B43889792A14935200476BFC /* StyleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleController.swift; sourceTree = "<group>"; };
 		B438897B2A1493B400476BFC /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
-		B438897D2A1496C300476BFC /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
+		B438897D2A1496C300476BFC /* DesignResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignResources.swift; sourceTree = "<group>"; };
 		B43889802A14A1A800476BFC /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
 		B43889812A14A1A800476BFC /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
 		B43889822A14A1A800476BFC /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
@@ -117,7 +117,7 @@
 		B46CB8CA2A1473F500039F72 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				B438897D2A1496C300476BFC /* Resources.swift */,
+				B438897D2A1496C300476BFC /* DesignResources.swift */,
 				B438897F2A14A0F900476BFC /* Fonts */,
 				B46CB8BE2A1473A000039F72 /* Assets.xcassets */,
 				B46CB8C02A1473A000039F72 /* LaunchScreen.storyboard */,
@@ -292,7 +292,7 @@
 			files = (
 				B43889782A14934600476BFC /* ClothesController.swift in Sources */,
 				B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */,
-				B438897E2A1496C300476BFC /* Resources.swift in Sources */,
+				B438897E2A1496C300476BFC /* DesignResources.swift in Sources */,
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,

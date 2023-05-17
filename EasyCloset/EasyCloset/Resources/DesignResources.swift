@@ -1,5 +1,5 @@
 //
-//  Resources.swift
+//  DesignResources.swift
 //  EasyCloset
 //
 //  Created by Mason Kim on 2023/05/17.
@@ -41,6 +41,7 @@ extension UIFont {
     return UIFont(name: "Pretendard-\(weight.rawValue)", size: size)!
   }
   
-  static let pretendardClosetTitle = UIFont.pretendard(size: 18)
-  static let pretendardHashtag = UIFont.pretendard(size: 12, weight: .light)
+  static let pretendardLargeTitle = UIFont.pretendard(size: 18)
+  static let pretendardMediumTitle = UIFont.pretendard(size: 16)
+  static let pretendardContent = UIFont.pretendard(size: 12, weight: .light)
 }
