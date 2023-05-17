@@ -13,9 +13,7 @@ import UIKit
 final class CarouselFlowLayout: UICollectionViewFlowLayout {
   
   private var sideItemScale: CGFloat = 0.6
-  private var sideItemShift: CGFloat = 0.0
   private var spacing: CGFloat = 40
-  private var isSetupFinished: Bool = false
   
   // collectionView의 크기
   private lazy var size: CGSize = collectionView?.bounds.size ?? .zero
@@ -28,7 +26,6 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
     if currentSize != size {
       self.setupCollectionView()
       self.updateLayout()
-      isSetupFinished = true
     }
   }
   
@@ -45,10 +42,9 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
     
     let collectionSize = collectionView.bounds.size
     
-    let verticalInset = (collectionSize.height - self.itemSize.height) / 2
     let horizontalInset = (collectionSize.width - self.itemSize.width) / 2
-    self.sectionInset = UIEdgeInsets.init(top: verticalInset, left: horizontalInset,
-                                          bottom: verticalInset, right: horizontalInset)
+    self.sectionInset = UIEdgeInsets.init(top: 0, left: horizontalInset,
+                                          bottom: 0, right: horizontalInset)
     
     let scaledItemOffset = (self.itemSize.width - self.itemSize.width * self.sideItemScale) / 2
     self.minimumLineSpacing = self.spacing - scaledItemOffset
@@ -96,10 +92,11 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
     }
     
     let midSide = collectionView.bounds.size.width / 2
-    let proposedContentOffsetCenterOrigin = proposedContentOffset.x + midSide
+    // 컬렉션뷰의 중앙지점에 제안된 오프셋의 중앙 지점을 더해 새로운 중앙 지점을 계산
+    let proposedContentOffsetCenter = proposedContentOffset.x + midSide
     
     let closest = layoutAttributes.min {
-      abs($0.center.x - proposedContentOffsetCenterOrigin) < abs($1.center.x - proposedContentOffsetCenterOrigin)
+      abs($0.center.x - proposedContentOffsetCenter) < abs($1.center.x - proposedContentOffsetCenter)
     } ?? UICollectionViewLayoutAttributes()
 
     let targetContentOffset = CGPoint(x: floor(closest.center.x - midSide), y: proposedContentOffset.y)
