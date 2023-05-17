@@ -37,11 +37,11 @@ extension UIFont {
   }
   
   static func pretendard(size: CGFloat = 14,
-                         weight: PretendardWeight = .regular) -> UIFont {
-    return UIFont(name: "Pretendard-\(weight.rawValue)", size: size)!
+                         weight: PretendardWeight = .regular) -> UIFont? {
+    return UIFont(name: "Pretendard-\(weight.rawValue)", size: size)
   }
   
-  static let pretendardLargeTitle = UIFont.pretendard(size: 18)
+  static let pretendardLargeTitle = UIFont.pretendard(size: 18, weight: .semiBold)
   static let pretendardMediumTitle = UIFont.pretendard(size: 16)
   static let pretendardContent = UIFont.pretendard(size: 12, weight: .light)
 }
