@@ -7,6 +7,9 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
 final class ClothesController: UIViewController {
   
   // MARK: - Constants
@@ -42,7 +45,7 @@ extension ClothesController {
   }
   
   private func setUI() {
-    navigationItem.title = "MY CLOSET"
+    addLeftTitle(with: "MY CLOSET")
   }
   
   private func setupLayout() { }
