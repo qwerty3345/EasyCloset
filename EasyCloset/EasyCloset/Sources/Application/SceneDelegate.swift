@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   
   var window: UIWindow?
   
@@ -16,10 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let window = UIWindow(windowScene: windowScene)
     self.window = window
     window.makeKeyAndVisible()
-    
-    let rootViewController = ViewController()
-    let navigationController = UINavigationController(rootViewController: rootViewController)
-    window.rootViewController = navigationController
+    window.rootViewController = MainTabBarController()
   }
   
 }
