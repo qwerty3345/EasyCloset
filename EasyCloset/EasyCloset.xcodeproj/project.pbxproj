@@ -24,6 +24,8 @@
 		B438899B2A14AA5400476BFC /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B43889852A14A1A900476BFC /* Pretendard-SemiBold.otf */; };
 		B438899C2A14AA5600476BFC /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = B43889812A14A1A800476BFC /* Pretendard-Thin.otf */; };
 		B438899E2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */; };
+		B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438899F2A14ACF600476BFC /* ClothesCategory.swift */; };
+		B43889A22A14AD8800476BFC /* Clothes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889A12A14AD8800476BFC /* Clothes.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -47,6 +49,8 @@
 		B43889882A14A1A900476BFC /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		B43889922A14A8D600476BFC /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationTitle.swift"; sourceTree = "<group>"; };
+		B438899F2A14ACF600476BFC /* ClothesCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCategory.swift; sourceTree = "<group>"; };
+		B43889A12A14AD8800476BFC /* Clothes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clothes.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -54,7 +58,6 @@
 		B46CB8BE2A1473A000039F72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B46CB8C12A1473A000039F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B46CB8C32A1473A000039F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B46CB8CE2A14889C00039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8D92A148AE000039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8DB2A148AE700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8DF2A148B3700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
@@ -167,7 +170,8 @@
 		B46CB8CD2A14888600039F72 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B46CB8CE2A14889C00039F72 /* .gitkeep */,
+				B43889A12A14AD8800476BFC /* Clothes.swift */,
+				B438899F2A14ACF600476BFC /* ClothesCategory.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -355,7 +359,9 @@
 				B438897E2A1496C300476BFC /* DesignResources.swift in Sources */,
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
+				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
+				B43889A22A14AD8800476BFC /* Clothes.swift in Sources */,
 				B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
