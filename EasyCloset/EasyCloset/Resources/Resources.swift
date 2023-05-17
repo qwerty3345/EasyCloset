@@ -7,11 +7,11 @@
 
 import UIKit
 
-enum Color {
+extension UIColor {
   static let accentColor = UIColor(named: "AccentColor") ?? .systemBlue
 }
 
-enum Icon {
+extension UIImage {
   // TabBar
   static let closet = UIImage(named: "closet")
   static let closetSelected = UIImage(named: "closet-selected")
@@ -21,4 +21,26 @@ enum Icon {
   static let tshirtSelected = UIImage(named: "tshirt-selected")
   
   static let filter = UIImage(named: "filter")
+}
+
+extension UIFont {
+  enum PretendardWeight: String {
+    case black      = "Black"
+    case extraBold  = "ExtraBold"
+    case bold       = "Bold"
+    case semiBold   = "SemiBold"
+    case medium     = "Medium"
+    case regular    = "Regular"
+    case light      = "Light"
+    case extraLight = "ExtraLight"
+    case thin       = "Thin"
+  }
+  
+  static func pretendard(size: CGFloat = 14,
+                         weight: PretendardWeight = .regular) -> UIFont {
+    return UIFont(name: "Pretendard-\(weight.rawValue)", size: size)!
+  }
+  
+  static let pretendardClosetTitle = UIFont.pretendard(size: 18)
+  static let pretendardHashtag = UIFont.pretendard(size: 12, weight: .light)
 }
