@@ -7,7 +7,18 @@
 
 import UIKit
 
-final class CarouselCell: UICollectionViewCell {
+final class ClothesCarouselCell: UICollectionViewCell {
+  
+  enum Section: CaseIterable {
+    case main
+  }
+  
+  enum Item: Hashable {
+    case addClothes
+    case clothes(Clothes)
+  }
+  
+  typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
   
   // MARK: - Constants
   
@@ -19,9 +30,8 @@ final class CarouselCell: UICollectionViewCell {
   
   // MARK: - Properties
   
-  var category: ClothesCategory?
-  
-  private let mockClothes = (0..<10).map { _ in Clothes.mock }
+  private lazy var dataSource: DataSource = makeDataSource()
+  private var clothes: [Clothes] = []
   
   // MARK: - UI Components
   
@@ -30,10 +40,9 @@ final class CarouselCell: UICollectionViewCell {
     collectionViewLayout: carouselLayout
   ).then {
     $0.backgroundColor = .blue
-    $0.dataSource = self
   }
   
-  private lazy var carouselLayout = CarouselFlowLayout().then {
+  private let carouselLayout = CarouselFlowLayout().then {
     $0.itemSize = Metric.cellSize
     $0.scrollDirection = .horizontal
   }
@@ -49,27 +58,22 @@ final class CarouselCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: - Lifecycle
-  
-  override func prepareForReuse() {
-    super.prepareForReuse()
-    resetUIComponents()
-  }
-  
   // MARK: - Public Methods
   
-  
-  // MARK: - Private Methods
-  
-
-  private func resetUIComponents() {
+  func configure(with clothes: [Clothes]) {
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+    snapshot.appendSections([.main])
+    
+    let items = clothes.map { Item.clothes($0) }
+    snapshot.appendItems([.addClothes] + items, toSection: .main)
+    dataSource.apply(snapshot, animatingDifferences: true)
   }
   
 }
 
 // MARK: - UI & Layout
 
-extension CarouselCell {
+extension ClothesCarouselCell {
   
   private func setup() {
     setUI()
@@ -89,28 +93,22 @@ extension CarouselCell {
   
   private func setupCollectionView() {
     collectionView.registerCell(cellClass: ClothesCell.self)
-  }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension CarouselCell: UICollectionViewDataSource {
-  func collectionView(_ collectionView: UICollectionView,
-                      numberOfItemsInSection section: Int) -> Int {
-    return mockClothes.count
+    collectionView.registerCell(cellClass: AddPhotoCell.self)
   }
   
-  func collectionView(_ collectionView: UICollectionView,
-                      cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(cellClass: ClothesCell.self, for: indexPath)
-    
-    if let clothes = mockClothes[safe: indexPath.row] {
-      cell.configure(with: clothes)
+  private func makeDataSource() -> DataSource {
+    DataSource(collectionView: collectionView) { collectionView, indexPath, item in
+      switch item {
+      case .addClothes:
+        return collectionView.dequeueReusableCell(cellClass: AddPhotoCell.self, for: indexPath)
+      case .clothes(let clothes):
+        let cell = collectionView.dequeueReusableCell(cellClass: ClothesCell.self, for: indexPath)
+        cell.configure(with: clothes)
+        return cell
+      }
     }
-    
-    cell.backgroundColor = .cyan
-    return cell
   }
+  
 }
 
 // MARK: - Preview
@@ -121,7 +119,7 @@ import SwiftUI
 struct CarouselCellPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
-      let cell = CarouselCell()
+      let cell = ClothesCarouselCell()
       return cell
     }
     .frame(height: 180)

@@ -26,5 +26,10 @@ struct Clothes: Hashable {
     self.category = category
   }
   
-  static var mock: Clothes { Clothes(name: "AAA", imageURL: "", category: .accessory) }
+  static var mock: Clothes {
+    Clothes(
+      name: "\(Int.random(in: (1...100)))",
+      imageURL: "",
+      category: .allCases.randomElement()!)
+  }
 }

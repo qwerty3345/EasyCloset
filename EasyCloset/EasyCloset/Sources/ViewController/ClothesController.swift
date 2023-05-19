@@ -20,6 +20,8 @@ final class ClothesController: UIViewController {
   
   // MARK: - Properties
   
+  private let viewModel: ClothesViewModel
+  
   // MARK: - UI Components
   
   private lazy var containerCollectionView = UICollectionView(
@@ -42,6 +44,15 @@ final class ClothesController: UIViewController {
   }
     
   // MARK: - Initialization
+  
+  init(viewModel: ClothesViewModel) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   // MARK: - Lifecycle
   
@@ -81,7 +92,7 @@ extension ClothesController {
   private func setupCollectionView() {
     containerCollectionView.dataSource = self
     containerCollectionView.delegate = self
-    containerCollectionView.registerCell(cellClass: CarouselCell.self)
+    containerCollectionView.registerCell(cellClass: ClothesCarouselCell.self)
     containerCollectionView.registerHeaderView(viewClass: ClothesCategoryHeaderView.self)
   }
   
@@ -105,8 +116,12 @@ extension ClothesController: UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView,
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(cellClass: CarouselCell.self, for: indexPath)
-    cell.category = ClothesCategory.allCases[indexPath.section]
+    let cell = collectionView.dequeueReusableCell(cellClass: ClothesCarouselCell.self, for: indexPath)
+    if let category = ClothesCategory.allCases[safe: indexPath.section] {
+      let clothes = viewModel.clothes(of: category)
+      cell.configure(with: clothes)
+    }
+    
     return cell
   }
   
@@ -142,7 +157,7 @@ import SwiftUI
 
 struct ClothesControllerPreview: PreviewProvider {
   static var previews: some View {
-    UINavigationController(rootViewController: ClothesController()).toPreview()
+    UINavigationController(rootViewController: ClothesController(viewModel: ClothesViewModel())).toPreview()
   }
 }
 #endif

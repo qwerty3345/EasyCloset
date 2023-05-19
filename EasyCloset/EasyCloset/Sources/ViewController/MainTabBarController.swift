@@ -55,7 +55,7 @@ extension MainTabBarController {
       image: .tshirt,
       selectedImage: .tshirtSelected,
       title: "옷",
-      viewController: ClothesController())
+      viewController: ClothesController(viewModel: ClothesViewModel()))
     
     let homeController = navigationController(
       image: .house,
