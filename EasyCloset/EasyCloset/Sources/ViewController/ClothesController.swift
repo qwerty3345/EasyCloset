@@ -116,10 +116,10 @@ extension ClothesController: UICollectionViewDataSource {
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(cellClass: ClothesCarouselCell.self, for: indexPath)
     if let category = ClothesCategory.allCases[safe: indexPath.section] {
-//      let clothes = viewModel.clothes(of: category)
-//      cell.configure(with: clothes)
       cell.bind(to: viewModel, with: category)
     }
+    
+    cell.delegate = self
     
     return cell
   }
@@ -146,6 +146,19 @@ extension ClothesController: UICollectionViewDelegateFlowLayout {
                       layout collectionViewLayout: UICollectionViewLayout,
                       referenceSizeForHeaderInSection section: Int) -> CGSize {
     return CGSize(width: view.frame.width, height: 60)
+  }
+}
+
+// MARK: - ClothesCarouselCellDelegate
+
+extension ClothesController: ClothesCarouselCellDelegate {
+  
+  func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes) {
+    // TODO: 옷 상세정보 나타내기
+  }
+  
+  func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory) {
+    // TODO: 옷 추가하기
   }
 }
 
