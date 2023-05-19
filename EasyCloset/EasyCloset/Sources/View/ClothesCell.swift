@@ -13,7 +13,6 @@ final class ClothesCell: UICollectionViewCell {
   
   private let clothesImageView = UIImageView().then {
     $0.contentMode = .scaleAspectFit
-    $0.backgroundColor = .lightGray
   }
   
   private let nameLabel = UILabel().then {
@@ -67,7 +66,6 @@ extension ClothesCell {
   
   private func setUI() {
     layer.cornerRadius = 8
-    backgroundColor = .green
   }
   
   private func setupLayout() {

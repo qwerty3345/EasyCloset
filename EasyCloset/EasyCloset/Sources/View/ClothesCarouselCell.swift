@@ -41,9 +41,7 @@ final class ClothesCarouselCell: UICollectionViewCell {
   private lazy var collectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: carouselLayout
-  ).then {
-    $0.backgroundColor = .blue
-  }
+  )
   
   private let carouselLayout = CarouselFlowLayout().then {
     $0.itemSize = Metric.cellSize

@@ -26,9 +26,7 @@ final class ClothesController: UIViewController {
   
   private lazy var containerCollectionView = UICollectionView(
     frame: .zero,
-    collectionViewLayout: collectionViewLayout).then {
-      $0.backgroundColor = .accentColor
-    }
+    collectionViewLayout: collectionViewLayout)
   
   private lazy var collectionViewLayout = UICollectionViewFlowLayout().then {
     $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0)
