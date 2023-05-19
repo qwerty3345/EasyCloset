@@ -82,7 +82,7 @@ extension ClothesController {
     containerCollectionView.dataSource = self
     containerCollectionView.delegate = self
     containerCollectionView.registerCell(cellClass: CarouselCell.self)
-    containerCollectionView.registerHeaderView(viewClass: CarouselClothesHeaderView.self)
+    containerCollectionView.registerHeaderView(viewClass: ClothesCategoryHeaderView.self)
   }
   
   private func setupFilterButton() {
@@ -114,7 +114,7 @@ extension ClothesController: UICollectionViewDataSource {
                       viewForSupplementaryElementOfKind kind: String,
                       at indexPath: IndexPath) -> UICollectionReusableView {
     let headerView = collectionView.dequeueReusableHeaderView(
-      ofType: CarouselClothesHeaderView.self,
+      ofType: ClothesCategoryHeaderView.self,
       for: indexPath)
     let category = ClothesCategory.allCases[indexPath.section]
     headerView.configure(with: category)
