@@ -21,19 +21,24 @@ final class ClothesController: UIViewController {
   // MARK: - Properties
   
   // MARK: - UI Components
-
   
   private lazy var containerCollectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: collectionViewLayout).then {
-      $0.dataSource = self
-      $0.registerCell(cellClass: CarouselCell.self)
       $0.backgroundColor = .accentColor
     }
   
   private lazy var collectionViewLayout = UICollectionViewFlowLayout().then {
-    $0.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+    $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0)
     $0.itemSize = CGSize(width: view.frame.width, height: Metric.collectionViewRowHeight)
+  }
+  
+  private let filterButton = UIButton().then {
+    $0.setImage(.filter, for: .normal)
+    $0.imageView?.contentMode = .scaleAspectFit
+    $0.snp.makeConstraints { make in
+      make.width.height.equalTo(24)
+    }
   }
     
   // MARK: - Initialization
@@ -58,11 +63,12 @@ extension ClothesController {
   private func setup() {
     setUI()
     setupLayout()
+    setupCollectionView()
   }
   
   private func setUI() {
     addLeftTitle(with: "MY CLOSET")
-    view.backgroundColor = .cyan
+    setupFilterButton()
   }
   
   private func setupLayout() {
@@ -72,9 +78,19 @@ extension ClothesController {
     }
   }
   
+  private func setupCollectionView() {
+    containerCollectionView.dataSource = self
+    containerCollectionView.delegate = self
+    containerCollectionView.registerCell(cellClass: CarouselCell.self)
+    containerCollectionView.registerHeaderView(viewClass: CarouselClothesHeaderView.self)
+  }
+  
+  private func setupFilterButton() {
+    navigationItem.rightBarButtonItem = UIBarButtonItem(customView: filterButton)
+  }
 }
 
-//MARK: UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 
 extension ClothesController: UICollectionViewDataSource {
   
@@ -94,17 +110,26 @@ extension ClothesController: UICollectionViewDataSource {
     return cell
   }
   
-  // TODO: - 헤더 설정 (상의, 하의...)
-//  func collectionView(_ collectionView: UICollectionView,
-//                      viewForSupplementaryElementOfKind kind: String,
-//                      at indexPath: IndexPath) -> UICollectionReusableView {
-//    let view = collectionView.dequeueReusableSupplementaryView(
-//      ofKind: UICollectionView.elementKindSectionHeader,
-//      withReuseIdentifier: <#identifier#>,
-//      for: indexPath
-//    )
-//    return view
-//  }
+  func collectionView(_ collectionView: UICollectionView,
+                      viewForSupplementaryElementOfKind kind: String,
+                      at indexPath: IndexPath) -> UICollectionReusableView {
+    let headerView = collectionView.dequeueReusableHeaderView(
+      ofType: CarouselClothesHeaderView.self,
+      for: indexPath)
+    let category = ClothesCategory.allCases[indexPath.section]
+    headerView.configure(with: category)
+    return headerView
+  }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension ClothesController: UICollectionViewDelegateFlowLayout {
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      referenceSizeForHeaderInSection section: Int) -> CGSize {
+    return CGSize(width: view.frame.width, height: 60)
+  }
 }
 
 // MARK: - Preview
