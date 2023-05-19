@@ -9,20 +9,23 @@ import UIKit
 
 struct Clothes: Hashable {
   let id: UUID
-  let name: String
+  var name: String
   let createdAt: Date
   let imageURL: String
-  let category: ClothesCategory
+  var image: UIImage?
+  var category: ClothesCategory
   
   init(id: UUID = UUID(),
        name: String,
        createdAt: Date = Date(),
        imageURL: String,
+       image: UIImage?,
        category: ClothesCategory) {
     self.id = id
     self.name = name
     self.createdAt = createdAt
     self.imageURL = imageURL
+    self.image = image
     self.category = category
   }
   
@@ -30,6 +33,8 @@ struct Clothes: Hashable {
     Clothes(
       name: "\(Int.random(in: (1...100)))",
       imageURL: "",
-      category: .allCases.randomElement()!)
+      image: .Sample.cap1,
+      category: .allCases.randomElement()!
+    )
   }
 }

@@ -44,8 +44,7 @@ final class ClothesCell: UICollectionViewCell {
   
   func configure(with clothes: Clothes) {
     nameLabel.text = clothes.name
-    // TODO: 이미지 넣기...
-    clothes.imageURL
+    clothesImageView.image = clothes.image
   }
   
   // MARK: - Private Methods
