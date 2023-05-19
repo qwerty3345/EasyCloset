@@ -118,8 +118,9 @@ extension ClothesController: UICollectionViewDataSource {
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(cellClass: ClothesCarouselCell.self, for: indexPath)
     if let category = ClothesCategory.allCases[safe: indexPath.section] {
-      let clothes = viewModel.clothes(of: category)
-      cell.configure(with: clothes)
+//      let clothes = viewModel.clothes(of: category)
+//      cell.configure(with: clothes)
+      cell.bind(to: viewModel, with: category)
     }
     
     return cell

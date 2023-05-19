@@ -7,6 +7,8 @@
 
 import UIKit
 
+import Combine
+
 final class ClothesCarouselCell: UICollectionViewCell {
   
   enum Section: CaseIterable {
@@ -32,6 +34,7 @@ final class ClothesCarouselCell: UICollectionViewCell {
   
   private lazy var dataSource: DataSource = makeDataSource()
   private var clothes: [Clothes] = []
+  private var cancellables = Set<AnyCancellable>()
   
   // MARK: - UI Components
   
@@ -60,7 +63,18 @@ final class ClothesCarouselCell: UICollectionViewCell {
   
   // MARK: - Public Methods
   
-  func configure(with clothes: [Clothes]) {
+  func bind(to viewModel: ClothesViewModel, with category: ClothesCategory) {
+    viewModel.clothes(of: category)
+      .sink { [weak self] clothes in
+        guard let self = self else { return }
+        self.applySnapshot(with: clothes)
+      }
+      .store(in: &cancellables)
+  }
+  
+  // MARK: - Private Methods
+  
+  private func applySnapshot(with clothes: [Clothes]) {
     var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections([.main])
     
@@ -68,7 +82,6 @@ final class ClothesCarouselCell: UICollectionViewCell {
     snapshot.appendItems([.addClothes] + items, toSection: .main)
     dataSource.apply(snapshot, animatingDifferences: true)
   }
-  
 }
 
 // MARK: - UI & Layout

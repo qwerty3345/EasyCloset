@@ -7,11 +7,24 @@
 
 import Foundation
 
+import Combine
+
 final class ClothesViewModel {
-  @Published private(set) var clothesList = ClothesList.mock
+  @Published private(set) var clothesList = ClothesList(clothesByCategory: [:])
   
-  func clothes(of category: ClothesCategory) -> [Clothes] {
-    return clothesList.clothesByCategory[category] ?? []
+  // 3초 후에 로딩 되는 것을 테스트 함
+  init() {
+    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+      self.clothesList = .mock
+    }
+  }
+  
+  func clothes(of category: ClothesCategory) -> AnyPublisher<[Clothes], Never> {
+    $clothesList
+      .map {
+        $0.clothesByCategory[category] ?? []
+      }
+      .eraseToAnyPublisher()
   }
   
 }

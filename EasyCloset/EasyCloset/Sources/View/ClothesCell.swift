@@ -22,11 +22,6 @@ final class ClothesCell: UICollectionViewCell {
     $0.textColor = .lightGray
   }
   
-  private let addPhotoImageView = UIImageView().then {
-    $0.contentMode = .scaleAspectFit
-    $0.image = .addPhoto
-  }
-  
   // MARK: - Initialization
   
   override init(frame: CGRect) {
@@ -53,18 +48,10 @@ final class ClothesCell: UICollectionViewCell {
     clothes.imageURL
   }
   
-  func showAddPhotoImage() {
-    addSubview(addPhotoImageView)
-    addPhotoImageView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
-    }
-  }
-  
   // MARK: - Private Methods
   
   private func resetUIComponents() {
     nameLabel.text = ""
-    addPhotoImageView.isHidden = true
     clothesImageView.image = nil
   }
   
