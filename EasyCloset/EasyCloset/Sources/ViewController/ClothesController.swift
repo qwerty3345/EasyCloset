@@ -116,8 +116,11 @@ extension ClothesController: UICollectionViewDataSource {
     let headerView = collectionView.dequeueReusableHeaderView(
       ofType: ClothesCategoryHeaderView.self,
       for: indexPath)
-    let category = ClothesCategory.allCases[indexPath.section]
-    headerView.configure(with: category)
+    
+    if let category = ClothesCategory.allCases[safe: indexPath.section] {
+      headerView.configure(with: category)
+    }
+    
     return headerView
   }
 }

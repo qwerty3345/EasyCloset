@@ -103,8 +103,11 @@ extension CarouselCell: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView,
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(cellClass: ClothesCell.self, for: indexPath)
-    let clothes = mockClothes[indexPath.row]
-    cell.configure(with: clothes)
+    
+    if let clothes = mockClothes[safe: indexPath.row] {
+      cell.configure(with: clothes)
+    }
+    
     cell.backgroundColor = .cyan
     return cell
   }
