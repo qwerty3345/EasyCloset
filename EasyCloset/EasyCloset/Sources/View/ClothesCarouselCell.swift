@@ -25,9 +25,9 @@ final class ClothesCarouselCell: UICollectionViewCell {
   // MARK: - Constants
   
   private enum Metric {
-    static let collectionViewHeight: CGFloat = 160
-    static let cellSize = CGSize(width: collectionViewHeight - 10,
-                                 height: collectionViewHeight - 10)
+    static let collectionViewHeight: CGFloat = 180
+    static let cellSize = CGSize(width: collectionViewHeight - 20,
+                                 height: collectionViewHeight - 20)
   }
   
   // MARK: - Properties

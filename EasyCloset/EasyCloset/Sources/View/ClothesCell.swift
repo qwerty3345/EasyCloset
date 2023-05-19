@@ -11,6 +11,11 @@ final class ClothesCell: UICollectionViewCell {
   
   // MARK: - UI Components
   
+//  private let containerView = UIView()
+//    .then {
+//    $0.backgroundColor = .lightGray
+//  }
+  
   private let clothesImageView = UIImageView().then {
     $0.contentMode = .scaleAspectFit
   }
@@ -60,23 +65,51 @@ final class ClothesCell: UICollectionViewCell {
 extension ClothesCell {
   
   private func setup() {
-    setUI()
     setupLayout()
+    setUI()
   }
   
   private func setUI() {
-    layer.cornerRadius = 8
+    backgroundColor = .systemBackground
+//    shadowDecorate()
+
+    addShadowToCell(to: .bottom)
+    
+//    contentView.layer.cornerRadius = 10
+//    contentView.layer.borderWidth = 1
+//    contentView.layer.borderColor = UIColor.clear.cgColor
+//    contentView.layer.masksToBounds = true
+//
+//    layer.shadowColor = UIColor.black.cgColor
+//    layer.shadowOffset = CGSize(width: 0, height: 1.0)
+//    layer.shadowRadius = 10.0
+//    layer.shadowOpacity = 0.1
+//    layer.masksToBounds = false
+//    layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 10).cgPath
+//    layer.cornerRadius = 10
+//
+//    contentView.layer.masksToBounds = true
+//    contentView.layer.cornerRadius = 8
+//    contentView.layer.borderColor = UIColor.clear.cgColor
+//    contentView.layer.borderWidth = 1
+//    layer.backgroundColor = UIColor.clear.cgColor
+//    addShadow(to: .bottom)
   }
   
   private func setupLayout() {
-    addSubview(clothesImageView)
+//    contentView.addSubview(containerView)
+//    containerView.snp.makeConstraints {
+//      $0.edges.equalToSuperview()
+//    }
+    
+    contentView.addSubview(clothesImageView)
     clothesImageView.snp.makeConstraints {
       $0.width.height.equalToSuperview().multipliedBy(0.5)
       $0.centerX.equalToSuperview()
       $0.centerY.equalToSuperview().multipliedBy(0.8)
     }
     
-    addSubview(nameLabel)
+    contentView.addSubview(nameLabel)
     nameLabel.snp.makeConstraints {
       $0.top.equalTo(clothesImageView.snp.bottom)
       $0.bottom.equalToSuperview()
@@ -97,7 +130,8 @@ struct ClothesCellPreview: PreviewProvider {
       clothesCell.configure(with: .mock)
       return clothesCell
     }
-    .frame(width: 150, height: 150)
+    .frame(width: 200, height: 200)
+    .border(.black, width: 1)
     .previewLayout(.sizeThatFits)
   }
 }

@@ -15,7 +15,7 @@ final class ClothesController: UIViewController {
   // MARK: - Constants
   
   private enum Metric {
-    static let collectionViewRowHeight: CGFloat = 160
+    static let collectionViewRowHeight: CGFloat = 180
   }
   
   // MARK: - Properties
