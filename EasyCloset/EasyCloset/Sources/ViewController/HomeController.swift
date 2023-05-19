@@ -42,7 +42,7 @@ extension HomeController {
   }
   
   private func setUI() {
-    navigationItem.title = "HOME"
+    addLeftTitle(with: "HOME")
   }
   
   private func setupLayout() { }

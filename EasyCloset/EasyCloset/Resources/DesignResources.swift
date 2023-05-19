@@ -21,6 +21,24 @@ extension UIImage {
   static let tshirtSelected = UIImage(named: "tshirt-selected")
   
   static let filter = UIImage(named: "filter")
+  
+  // Image
+  static let addPhoto = UIImage(named: "add_photo")
+  
+  enum Sample {
+    static let jacket1 = UIImage(named: "jacket1")
+    static let pants1 = UIImage(named: "pants1")
+    static let pants2 = UIImage(named: "pants2")
+    static let pants3 = UIImage(named: "pants3")
+    static let shortpants = UIImage(named: "shortpants")
+    static let tshirt1 = UIImage(named: "tshirt1")
+    static let tshirt2 = UIImage(named: "tshirt2")
+    static let shirt1 = UIImage(named: "shirts1")
+    static let shirt2 = UIImage(named: "shirts2")
+    static let shoes1 = UIImage(named: "shoes1")
+    static let cap1 = UIImage(named: "cap1")
+    static let socks1 = UIImage(named: "socks1")
+  }
 }
 
 extension UIFont {
@@ -37,11 +55,11 @@ extension UIFont {
   }
   
   static func pretendard(size: CGFloat = 14,
-                         weight: PretendardWeight = .regular) -> UIFont {
-    return UIFont(name: "Pretendard-\(weight.rawValue)", size: size)!
+                         weight: PretendardWeight = .regular) -> UIFont? {
+    return UIFont(name: "Pretendard-\(weight.rawValue)", size: size)
   }
   
-  static let pretendardLargeTitle = UIFont.pretendard(size: 18)
+  static let pretendardLargeTitle = UIFont.pretendard(size: 18, weight: .semiBold)
   static let pretendardMediumTitle = UIFont.pretendard(size: 16)
   static let pretendardContent = UIFont.pretendard(size: 12, weight: .light)
 }
