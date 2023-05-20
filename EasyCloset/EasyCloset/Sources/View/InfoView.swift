@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class InfoView: UIControl {
+final class InfoView: UIControl, Highlightable {
   
   // MARK: - UI Components
   
@@ -38,6 +38,18 @@ final class InfoView: UIControl {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  // MARK: - Touch Events
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesBegan(touches, with: event)
+    highlight()
+  }
+
+  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesEnded(touches, with: event)
+    unHighlight()
   }
   
   // MARK: - Public Methods
