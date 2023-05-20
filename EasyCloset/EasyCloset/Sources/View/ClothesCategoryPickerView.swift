@@ -24,7 +24,8 @@ final class ClothesCategoryPickerView: UIPickerView {
   
   private func setup() {
     dataSource = self
-    
+    backgroundColor = .white.withAlphaComponent(0.5)
+    layer.cornerRadius = 16
   }
 }
 

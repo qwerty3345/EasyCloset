@@ -27,7 +27,7 @@ final class ClothesDetailController: UIViewController {
   private let scrollView = UIScrollView()
   private let contentStackView = UIStackView().then {
     $0.axis = .vertical
-    $0.spacing = 16
+//    $0.spacing = 16
     $0.layoutMargins = UIEdgeInsets(top: 16, left: 20, bottom: 0, right: 20)
     $0.isLayoutMarginsRelativeArrangement = true
   }
@@ -53,6 +53,16 @@ final class ClothesDetailController: UIViewController {
   
   private let categotyPickerView = ClothesCategoryPickerView()
   
+  private lazy var weatherSegmentedControl = UISegmentedControl(
+    items: WeatherType.allCases.map { $0.korean }
+  ).then {
+    $0.addTarget(self, action: #selector(didSelectWeather), for: .valueChanged)
+  }
+  
+  private let descriptionTextField = UITextField().then {
+    $0.placeholder = "설명을 입력해주세요 (선택)"
+  }
+  
   // MARK: - Initialization
   
   init(type: ControllerType) {
@@ -71,6 +81,11 @@ final class ClothesDetailController: UIViewController {
     setup()
   }
   
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesBegan(touches, with: event)
+    descriptionTextField.resignFirstResponder()
+  }
+  
   // MARK: - Public Methods
   
   func configure(with clothes: Clothes) {
@@ -79,6 +94,11 @@ final class ClothesDetailController: UIViewController {
   
   // MARK: - Private Methods
   
+  @objc private func didSelectWeather(_ sender: UISegmentedControl) {
+    guard let weatherType = WeatherType(rawValue: sender.selectedSegmentIndex) else { return }
+  }
+  
+
 }
 
 // MARK: - UI & Layout
@@ -101,6 +121,14 @@ extension ClothesDetailController {
   }
   
   private func setupLayout() {
+    setupScrollViewLayout()
+    setupclothesImageViewLayout()
+    setupSection(with: "카테고리", view: categotyPickerView, viewHeight: 100, spacing: 16)
+    setupSection(with: "계절", view: weatherSegmentedControl, viewHeight: 30, spacing: 40)
+    setupSection(with: "설명", view: descriptionTextField, spacing: 16)
+  }
+  
+  private func setupScrollViewLayout() {
     view.addSubview(scrollView)
     scrollView.snp.makeConstraints {
       $0.edges.equalToSuperview()
@@ -110,30 +138,37 @@ extension ClothesDetailController {
     contentStackView.snp.makeConstraints {
       $0.edges.width.equalToSuperview()
     }
-    
+  }
+  
+  private func setupclothesImageViewLayout() {
     contentStackView.addArrangedSubview(clothesImageView)
+    contentStackView.setCustomSpacing(30, after: clothesImageView)
     clothesImageView.snp.makeConstraints {
       $0.width.equalTo(clothesImageView.snp.height)
     }
-    
-    contentStackView.addArrangedSubview(headerLabel(with: "카테고리"))
-    contentStackView.addArrangedSubview(categotyPickerView)
-    categotyPickerView.snp.makeConstraints {
-      $0.height.equalTo(100)
-    }
-    
-    contentStackView.addArrangedSubview(headerLabel(with: "계절"))
   }
   
-  private func headerLabel(with title: String) -> UILabel {
-    let label = UILabel()
-    label.text = title
-    label.font = .pretendardMediumTitle
-    label.snp.makeConstraints {
-      $0.height.equalTo(60)
+  private func setupSection(with title: String, view: UIView,
+                            viewHeight: CGFloat? = nil, spacing: CGFloat) {
+    addHeaderLabel(with: title)
+    contentStackView.addArrangedSubview(view)
+    contentStackView.setCustomSpacing(spacing, after: view)
+    guard let height = viewHeight else { return }
+    view.snp.makeConstraints {
+      $0.height.equalTo(height)
     }
-    label.backgroundColor = .lightGray
-    return label
+  }
+  
+  private func addHeaderLabel(with title: String) {
+    contentStackView.addArrangedSubview(.seperatorView)
+    let label = UILabel().then { label in
+      label.text = title
+      label.font = .pretendardMediumTitle
+      label.snp.makeConstraints {
+        $0.height.equalTo(60)
+      }
+    }
+    contentStackView.addArrangedSubview(label)
   }
 }
 
