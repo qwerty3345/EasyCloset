@@ -9,32 +9,36 @@ import UIKit
 
 struct Clothes: Hashable {
   let id: UUID
-  var name: String
   let createdAt: Date
   let imageURL: String
   var image: UIImage?
   var category: ClothesCategory
+  var weatherType: WeatherType
+  var description: String?
   
   init(id: UUID = UUID(),
-       name: String,
        createdAt: Date = Date(),
        imageURL: String,
-       image: UIImage?,
-       category: ClothesCategory) {
+       image: UIImage? = nil,
+       category: ClothesCategory,
+       weatherType: WeatherType,
+       description: String? = nil) {
     self.id = id
-    self.name = name
     self.createdAt = createdAt
     self.imageURL = imageURL
     self.image = image
     self.category = category
+    self.weatherType = weatherType
+    self.description = description
   }
   
   static var mock: Clothes {
     Clothes(
-      name: "\(Int.random(in: (1...100)))",
       imageURL: "",
       image: .Sample.cap1,
-      category: .allCases.randomElement()!
+      category: .allCases.randomElement()!,
+      weatherType: .allWeather,
+      description: "\(Int.random(in: (1...100)))"
     )
   }
 }

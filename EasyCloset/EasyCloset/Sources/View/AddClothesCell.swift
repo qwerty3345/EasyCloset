@@ -1,5 +1,5 @@
 //
-//  AddPhotoCell.swift
+//  AddClothesCell.swift
 //  EasyCloset
 //
 //  Created by Mason Kim on 2023/05/19.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AddPhotoCell: UICollectionViewCell {
+final class AddClothesCell: UICollectionViewCell {
   
   // MARK: - UI Components
   
@@ -30,7 +30,7 @@ final class AddPhotoCell: UICollectionViewCell {
 
 // MARK: - UI & Layout
 
-extension AddPhotoCell {
+extension AddClothesCell {
   
   private func setup() {
     setUI()

@@ -15,26 +15,38 @@ struct ClothesList {
       clothesByCategory:
         [
           .top: [
-            Clothes(name: "tshirt1", imageURL: "", image: .Sample.tshirt1, category: .top),
-            Clothes(name: "tshirt2", imageURL: "", image: .Sample.tshirt2, category: .top),
-            Clothes(name: "shirt1", imageURL: "", image: .Sample.shirt1, category: .top),
-            Clothes(name: "shirt2", imageURL: "", image: .Sample.shirt2, category: .top)
+            Clothes(imageURL: "", image: .Sample.tshirt1, category: .top,
+                    weatherType: .allWeather, description: "tshirt1"),
+            Clothes(imageURL: "", image: .Sample.tshirt2, category: .top,
+                    weatherType: .allWeather, description: "tshirt2"),
+            Clothes(imageURL: "", image: .Sample.shirt1, category: .top,
+                    weatherType: .allWeather, description: "shirt1"),
+            Clothes(imageURL: "", image: .Sample.shirt2, category: .top,
+                    weatherType: .allWeather, description: "shirt2")
           ],
           .bottom: [
-            Clothes(name: "pants1", imageURL: "", image: .Sample.pants1, category: .bottom),
-            Clothes(name: "pants2", imageURL: "", image: .Sample.pants2, category: .bottom),
-            Clothes(name: "pants3", imageURL: "", image: .Sample.pants3, category: .bottom),
-            Clothes(name: "shortpants", imageURL: "", image: .Sample.shortpants, category: .bottom)
+            Clothes(imageURL: "", image: .Sample.pants1, category: .bottom,
+                    weatherType: .allWeather, description: "pants1"),
+            Clothes(imageURL: "", image: .Sample.pants2, category: .bottom,
+                    weatherType: .allWeather, description: "pants2"),
+            Clothes(imageURL: "", image: .Sample.pants3, category: .bottom,
+                    weatherType: .allWeather, description: "pants3"),
+            Clothes(imageURL: "", image: .Sample.shortpants, category: .bottom,
+                    weatherType: .allWeather, description: "shortpants")
           ],
           .accessory: [
-            Clothes(name: "cap1", imageURL: "", image: .Sample.cap1, category: .accessory),
-            Clothes(name: "socks1", imageURL: "", image: .Sample.socks1, category: .accessory)
+            Clothes(imageURL: "", image: .Sample.cap1, category: .accessory,
+                    weatherType: .allWeather, description: "cap1"),
+            Clothes(imageURL: "", image: .Sample.socks1, category: .accessory,
+                    weatherType: .allWeather, description: "socks1")
           ],
           .outer: [
-            Clothes(name: "jacket1", imageURL: "", image: .Sample.jacket1, category: .outer)
+            Clothes(imageURL: "", image: .Sample.jacket1, category: .outer,
+                    weatherType: .allWeather, description: "jacket1")
           ],
           .shoes: [
-            Clothes(name: "shoes1", imageURL: "", image: .Sample.shoes1, category: .shoes)
+            Clothes(imageURL: "", image: .Sample.shoes1, category: .shoes,
+                    weatherType: .allWeather, description: "shoes1")
           ]
         ]
     )

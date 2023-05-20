@@ -54,7 +54,7 @@ final class ClothesCell: UICollectionViewCell, Highlightable {
   // MARK: - Public Methods
   
   func configure(with clothes: Clothes) {
-    nameLabel.text = clothes.name
+    nameLabel.text = "#\(clothes.category.korean)"
     clothesImageView.image = clothes.image
   }
   

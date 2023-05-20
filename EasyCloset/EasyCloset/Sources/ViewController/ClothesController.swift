@@ -117,7 +117,7 @@ extension ClothesController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView,
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(cellClass: ClothesCarouselCell.self, for: indexPath)
-    if let category = ClothesCategory.allCases[safe: indexPath.section] {
+    if let category = ClothesCategory(rawValue: indexPath.section) {
       cell.bind(to: viewModel, with: category)
     }
     
@@ -133,7 +133,7 @@ extension ClothesController: UICollectionViewDataSource {
       ofType: ClothesCategoryHeaderView.self,
       for: indexPath)
     
-    if let category = ClothesCategory.allCases[safe: indexPath.section] {
+    if let category = ClothesCategory(rawValue: indexPath.section) {
       headerView.configure(with: category)
     }
     
@@ -156,11 +156,14 @@ extension ClothesController: UICollectionViewDelegateFlowLayout {
 extension ClothesController: ClothesCarouselCellDelegate {
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes) {
-    // TODO: 옷 상세정보 나타내기
+    let detailController = ClothesDetailController(type: .showDetail)
+    detailController.configure(with: clothes)
+    navigationController?.pushViewController(detailController, animated: true)
   }
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory) {
-    // TODO: 옷 추가하기
+    let detailController = ClothesDetailController(type: .add)
+    navigationController?.pushViewController(detailController, animated: true)
   }
 }
 
