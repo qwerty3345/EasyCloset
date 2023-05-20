@@ -10,25 +10,19 @@ import UIKit
 import Then
 import SnapKit
 
-import Combine
-
 final class ClothesDetailController: UIViewController {
   
   // MARK: - Properties
   
   private let type: ClothesDetailControllerType
+  
   private var isEditingClothes = false {
     didSet {
       turnEditMode(isOn: isEditingClothes)
     }
   }
-  private var isPhotoAdded = false {
-    didSet {
-      turnPhotoEditMode(isPhotoAdded: isPhotoAdded)
-    }
-  }
   
-  private var cancellables = Set<AnyCancellable>()
+  private lazy var photoPicker = PhotoPicker(parent: self)
   
   // MARK: - UI Components
   
@@ -39,50 +33,13 @@ final class ClothesDetailController: UIViewController {
     $0.isLayoutMarginsRelativeArrangement = true
   }
   
-  private let clothesImageView = UIImageView().then {
-    $0.contentMode = .scaleAspectFit
-    $0.backgroundColor = .white
-  }
-  
-  private let addPhotoLabel = UILabel().then {
-    $0.text = "사진 등록하기"
-    $0.font = .pretendardLargeTitle
-  }
-  
-  private lazy var cameraButton = AddPhotoButton(
-    title: "카메라",
-    image: UIImage(systemName: "camera.fill")).then {
-      $0.addTarget(self, action: #selector(tappedCameraButton), for: .touchUpInside)
-    }
-  private lazy var galleryButton = AddPhotoButton(
-    title: "사진첩",
-    image: UIImage(systemName: "photo.fill")).then {
-      $0.addTarget(self, action: #selector(tappedGalleryButton), for: .touchUpInside)
-    }
-  
-  private lazy var addPhotoStackView = UIStackView(arrangedSubviews: [
-    cameraButton, galleryButton
-  ]).then {
-    $0.axis = .horizontal
-    $0.spacing = 20
-  }
-  
-  private lazy var photoPicker = PhotoPicker(parent: self)
-  
-  private lazy var photoRemoveButton = UIButton().then {
-    $0.setImage(UIImage(systemName: "trash"), for: .normal)
-    $0.tintColor = .systemRed
-    $0.isHidden = true
-    $0.addTarget(self, action: #selector(didRemovePhoto), for: .valueChanged)
-  }
+  private lazy var photoHandlingView = PhotoHandlingView(with: photoPicker)
   
   private let categotyPickerView = ClothesCategoryPickerView()
   
   private lazy var weatherSegmentedControl = UISegmentedControl(
     items: WeatherType.allCases.map { $0.korean }
-  ).then {
-    $0.addTarget(self, action: #selector(didSelectWeather), for: .valueChanged)
-  }
+  )
   
   private let descriptionTextField = UITextField().then {
     $0.placeholder = "설명을 입력해주세요 (선택)"
@@ -122,7 +79,7 @@ final class ClothesDetailController: UIViewController {
   func configure(with clothes: Clothes) {
     guard type == .showDetail else { return }
     
-    clothesImageView.image = clothes.image
+    photoHandlingView.setImage(clothes.image)
     categotyPickerView.selectRow(clothes.category.rawValue,
                                  inComponent: 0, animated: false)
     weatherSegmentedControl.selectedSegmentIndex = clothes.weatherType.rawValue
@@ -140,16 +97,6 @@ final class ClothesDetailController: UIViewController {
     descriptionTextField.isUserInteractionEnabled = isOn
   }
   
-  private func turnPhotoEditMode(isPhotoAdded: Bool) {
-    addPhotoStackView.isHidden = isPhotoAdded
-    addPhotoLabel.isHidden = isPhotoAdded
-    photoRemoveButton.isHidden = isPhotoAdded == false
-    
-    if isPhotoAdded == false {
-      clothesImageView.image = nil
-    }
-  }
-  
   @objc private func tappedEditAddButton() {
     switch type {
     case .add:
@@ -164,49 +111,9 @@ final class ClothesDetailController: UIViewController {
   }
   
   private func editClothes() {
-    if isEditingClothes {
-      isEditingClothes = false
-      editAddBarButton.title = "편집"
-    } else {
-      isEditingClothes = true
-      editAddBarButton.title = "완료"
-    }
-  }
-  
-  @objc private func didSelectWeather(_ sender: UISegmentedControl) {
-    guard let weatherType = WeatherType(rawValue: sender.selectedSegmentIndex) else { return }
-  }
-  
-  @objc private func tappedCameraButton() {
-    photoPicker.requestCamera()
-      .sink { completion in
-        if case .failure(let error) = completion {
-          // TODO: 실패 alert 띄우기
-          print("실패..... \(error)")
-        }
-      } receiveValue: { [weak self] image in
-        self?.clothesImageView.image = image
-        self?.isPhotoAdded = true
-      }
-      .store(in: &cancellables)
-  }
-  
-  @objc private func tappedGalleryButton() {
-    photoPicker.requestAlbum()
-      .sink { completion in
-        if case .failure(let error) = completion {
-          // TODO: 실패 alert 띄우기
-          print("실패..... \(error)")
-        }
-      } receiveValue: { [weak self] image in
-        self?.clothesImageView.image = image
-        self?.isPhotoAdded = true
-      }
-      .store(in: &cancellables)
-  }
-  
-  @objc private func didRemovePhoto() {
-    isPhotoAdded = false
+    isEditingClothes.toggle()
+    editAddBarButton.title = isEditingClothes ? "완료" : "편집"
+    photoHandlingView.state = isEditingClothes ? .editing : .show
   }
 }
 
@@ -227,15 +134,16 @@ extension ClothesDetailController {
   
   private func setupLayout() {
     setupScrollViewLayout()
-    setupclothesImageViewLayout()
+//    setupclothesImageViewLayout()
+    setupAddPhotoViewLayout()
     setupSection(with: "카테고리", view: categotyPickerView, viewHeight: 100, spacing: 16)
     setupSection(with: "계절", view: weatherSegmentedControl, viewHeight: 30, spacing: 40)
     setupSection(with: "설명", view: descriptionTextField, spacing: 16)
     
-    if type == .add {
-      setupAddPhotoButtonsLayout()
-    }
-    setupPhotoRemoveButtonLayout()
+//    if type == .add {
+//      setupAddPhotoButtonsLayout()
+//    }
+//    setupPhotoRemoveButtonLayout()
   }
   
   private func setupScrollViewLayout() {
@@ -250,40 +158,9 @@ extension ClothesDetailController {
     }
   }
   
-  private func setupclothesImageViewLayout() {
-    contentStackView.addArrangedSubview(clothesImageView)
-    contentStackView.setCustomSpacing(30, after: clothesImageView)
-    clothesImageView.snp.makeConstraints {
-      $0.width.equalTo(clothesImageView.snp.height)
-    }
-  }
-  
-  private func setupAddPhotoButtonsLayout() {
-    [cameraButton, galleryButton].forEach { button in
-      button.snp.makeConstraints {
-        $0.width.equalTo(80)
-        $0.height.equalTo(90)
-      }
-    }
-    view.addSubview(addPhotoStackView)
-    addPhotoStackView.snp.makeConstraints {
-      $0.center.equalTo(clothesImageView)
-    }
-    
-    view.addSubview(addPhotoLabel)
-    addPhotoLabel.snp.makeConstraints {
-      $0.bottom.equalTo(addPhotoStackView.snp.top).inset(-20)
-      $0.centerX.equalTo(addPhotoStackView)
-    }
-  }
-  
-  private func setupPhotoRemoveButtonLayout() {
-    view.addSubview(photoRemoveButton)
-    photoRemoveButton.snp.makeConstraints {
-      $0.bottom.equalTo(clothesImageView.snp.bottom)
-      $0.centerX.equalTo(addPhotoStackView)
-      $0.height.width.equalTo(80)
-    }
+  private func setupAddPhotoViewLayout() {
+    contentStackView.addArrangedSubview(photoHandlingView)
+    contentStackView.setCustomSpacing(30, after: photoHandlingView)
   }
   
   private func setupSection(with title: String, view: UIView,

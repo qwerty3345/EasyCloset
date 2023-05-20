@@ -54,7 +54,7 @@
 		B4F1F4302A18DB2400DA6358 /* UIView+Seperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */; };
 		B4F1F4342A19001200DA6358 /* AddPhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */; };
 		B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */; };
-		B4F1F4382A192B7D00DA6358 /* AddPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4372A192B7D00DA6358 /* AddPhotoView.swift */; };
+		B4F1F4382A192B7D00DA6358 /* PhotoHandlingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4372A192B7D00DA6358 /* PhotoHandlingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,7 +108,7 @@
 		B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Seperator.swift"; sourceTree = "<group>"; };
 		B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoButton.swift; sourceTree = "<group>"; };
 		B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
-		B4F1F4372A192B7D00DA6358 /* AddPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoView.swift; sourceTree = "<group>"; };
+		B4F1F4372A192B7D00DA6358 /* PhotoHandlingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoHandlingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,7 +246,7 @@
 			children = (
 				B4F1F4262A18C34600DA6358 /* Protocol */,
 				B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */,
-				B4F1F4372A192B7D00DA6358 /* AddPhotoView.swift */,
+				B4F1F4372A192B7D00DA6358 /* PhotoHandlingView.swift */,
 				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
 				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
 				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
@@ -460,7 +460,7 @@
 				B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */,
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */,
-				B4F1F4382A192B7D00DA6358 /* AddPhotoView.swift in Sources */,
+				B4F1F4382A192B7D00DA6358 /* PhotoHandlingView.swift in Sources */,
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
 				B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */,
