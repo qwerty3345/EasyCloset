@@ -22,11 +22,11 @@ final class HomeController: UIViewController {
     $0.isLayoutMarginsRelativeArrangement = true
   }
   
-  private lazy var clothesInfoView = InfoView(with: "옷장으로 이동하기", image: .clothesInfo).then {
-    $0.addTarget(self, action: #selector(tappedClothesInfoView), for: .touchUpInside)
-  }
   private lazy var styleInfoView = InfoView(with: "스타일으로 이동하기", image: .styleInfo).then {
     $0.addTarget(self, action: #selector(tappedStyleInfoView), for: .touchUpInside)
+  }
+  private lazy var clothesInfoView = InfoView(with: "옷장으로 이동하기", image: .clothesInfo).then {
+    $0.addTarget(self, action: #selector(tappedClothesInfoView), for: .touchUpInside)
   }
   
   // MARK: - Initialization
@@ -64,7 +64,7 @@ extension HomeController {
   
   private func setUI() {
     addLeftTitle(with: "HOME")
-    [styleInfoView, clothesInfoView].forEach {
+    [clothesInfoView, styleInfoView].forEach {
       $0.addShadow(to: .bottom)
     }
     view.backgroundColor = .background
@@ -81,7 +81,7 @@ extension HomeController {
       $0.edges.width.equalToSuperview()
     }
     
-    [styleInfoView, clothesInfoView].forEach {
+    [clothesInfoView, styleInfoView].forEach {
       contentStackView.addArrangedSubview($0)
       $0.snp.makeConstraints { make in
         make.height.equalTo(250)
