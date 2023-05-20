@@ -1,5 +1,5 @@
 //
-//  PhotoController.swift
+//  PhotoPicker.swift
 //  EasyCloset
 //
 //  Created by Mason Kim on 2023/05/20.
@@ -17,11 +17,13 @@ enum PhotoPickerError: Error {
 
 final class PhotoPicker: NSObject {
   
+  typealias ImageCompletionHandler = (Result<UIImage, PhotoPickerError>) -> Void
+  
   // MARK: - Properties
   
   private weak var viewController: UIViewController?
   
-  private let imageSubject = PassthroughSubject<UIImage, PhotoPickerError>()
+  private var imageCompletionHandler: ImageCompletionHandler?
   
   // MARK: - Initialization
   
@@ -33,25 +35,49 @@ final class PhotoPicker: NSObject {
   // MARK: - Public Methods
   
   func requestCamera() -> AnyPublisher<UIImage, PhotoPickerError> {
-    let picker = UIImagePickerController()
-    picker.sourceType = .camera
-    picker.allowsEditing = true
-    picker.cameraDevice = .rear
-    picker.cameraCaptureMode = .photo
-    picker.delegate = self
-    
-    viewController?.present(picker, animated: true)
-    return imageSubject.eraseToAnyPublisher()
+    return Future { [weak self] promise in
+      guard let self = self else { return }
+      
+      let picker = UIImagePickerController()
+      picker.sourceType = .camera
+      picker.allowsEditing = true
+      picker.cameraDevice = .rear
+      picker.cameraCaptureMode = .photo
+      picker.delegate = self
+      
+      self.viewController?.present(picker, animated: true)
+      
+      self.imageCompletionHandler = { result in
+        switch result {
+        case .success(let image):
+          promise(.success(image))
+        case .failure(let error):
+          promise(.failure(error))
+        }
+      }
+    }.eraseToAnyPublisher()
   }
   
   func requestAlbum() -> AnyPublisher<UIImage, PhotoPickerError> {
-    var configuration = PHPickerConfiguration()
-    configuration.filter = .images
-    let picker = PHPickerViewController(configuration: configuration)
-    picker.delegate = self
-    
-    viewController?.present(picker, animated: true)
-    return imageSubject.eraseToAnyPublisher()
+    return Future { [weak self] promise in
+      guard let self = self else { return }
+      
+      var configuration = PHPickerConfiguration()
+      configuration.filter = .images
+      let picker = PHPickerViewController(configuration: configuration)
+      picker.delegate = self
+      
+      self.viewController?.present(picker, animated: true)
+      
+      self.imageCompletionHandler = { result in
+        switch result {
+        case .success(let image):
+          promise(.success(image))
+        case .failure(let error):
+          promise(.failure(error))
+        }
+      }
+    }.eraseToAnyPublisher()
   }
   
   // MARK: - Private Methods
@@ -67,11 +93,10 @@ extension PhotoPicker: UIImagePickerControllerDelegate, UINavigationControllerDe
   func imagePickerController(_ picker: UIImagePickerController,
                              didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
     guard let image = info[.editedImage] as? UIImage else {
-      imageSubject.send(completion: .failure(.invalidImage))
+      imageCompletionHandler?(.failure(.invalidImage))
       return
     }
-    
-    imageSubject.send(image)
+    imageCompletionHandler?(.success(image))
     picker.dismiss(animated: true)
   }
 }
@@ -90,15 +115,15 @@ extension PhotoPicker: PHPickerViewControllerDelegate {
       guard let self = self else { return }
       
       if let error = error {
-        self.imageSubject.send(completion: .failure(.transferError(error: error)))
+        self.imageCompletionHandler?(.failure(.transferError(error: error)))
       }
       
       DispatchQueue.main.async {
         guard let image = image as? UIImage else {
-          self.imageSubject.send(completion: .failure(.invalidImage))
+          self.imageCompletionHandler?(.failure(.invalidImage))
           return
         }
-        self.imageSubject.send(image)
+        self.imageCompletionHandler?(.success(image))
       }
     }
   }
