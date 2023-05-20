@@ -156,11 +156,14 @@ extension ClothesController: UICollectionViewDelegateFlowLayout {
 extension ClothesController: ClothesCarouselCellDelegate {
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes) {
-    // TODO: 옷 상세정보 나타내기
+    let detailController = ClothesDetailController(type: .showDetail)
+    detailController.configure(with: clothes)
+    navigationController?.pushViewController(detailController, animated: true)
   }
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory) {
-    // TODO: 옷 추가하기
+    let detailController = ClothesDetailController(type: .add)
+    navigationController?.pushViewController(detailController, animated: true)
   }
 }
 
