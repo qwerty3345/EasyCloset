@@ -21,10 +21,6 @@ final class InfoView: UIControl, Highlightable {
     $0.contentMode = .scaleAspectFit
   }
   
-  private let seperatorView = UIView().then {
-    $0.backgroundColor = .seperator
-  }
-  
   private let infoLabel = UILabel()
   
   // MARK: - Initialization
@@ -90,9 +86,9 @@ extension InfoView {
       $0.top.horizontalEdges.equalToSuperview()
     }
     
+    let seperatorView = UIView.seperatorView
     containerView.addSubview(seperatorView)
     seperatorView.snp.makeConstraints {
-      $0.height.equalTo(1)
       $0.horizontalEdges.equalToSuperview()
       $0.bottom.equalTo(infoImageView.snp.bottom)
     }

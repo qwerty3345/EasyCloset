@@ -24,6 +24,7 @@ final class ClothesCategoryPickerView: UIPickerView {
   
   private func setup() {
     dataSource = self
+    delegate = self
     backgroundColor = .white.withAlphaComponent(0.5)
     layer.cornerRadius = 16
   }
@@ -32,9 +33,14 @@ final class ClothesCategoryPickerView: UIPickerView {
 // MARK: - UIPickerViewDelegate
 
 extension ClothesCategoryPickerView: UIPickerViewDelegate {
-  override func selectRow(_ row: Int, inComponent component: Int, animated: Bool) {
-    guard let category = ClothesCategory.allCases[safe: row] else { return }
-    // TODO: 카테고리 선택 넘기기
+  
+  func pickerView(_ pickerView: UIPickerView, viewForRow row: Int,
+                  forComponent component: Int, reusing view: UIView?) -> UIView {
+    let label = (view as? UILabel) ?? UILabel()
+    label.font = .pretendardContent
+    label.textAlignment = .center
+    label.text = ClothesCategory.allCases[safe: row]?.korean ?? ""
+    return label
   }
 }
 
@@ -49,9 +55,4 @@ extension ClothesCategoryPickerView: UIPickerViewDataSource {
   func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
     return ClothesCategory.allCases.count
   }
-  
-  func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-    return ClothesCategory.allCases[safe: row]?.korean ?? ""
-  }
-  
 }
