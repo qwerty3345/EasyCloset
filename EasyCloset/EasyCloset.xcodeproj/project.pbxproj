@@ -45,7 +45,7 @@
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
 		B46CB8BF2A1473A000039F72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8BE2A1473A000039F72 /* Assets.xcassets */; };
 		B46CB8C22A1473A000039F72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8C02A1473A000039F72 /* LaunchScreen.storyboard */; };
-		B4F1F41D2A17AB5000DA6358 /* UIView+Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F41C2A17AB5000DA6358 /* UIView+Border.swift */; };
+		B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F41A2A17A90F00DA6358 /* InfoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,7 +90,7 @@
 		B46CB8DF2A148B3700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8E32A148B4400039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8E52A148B4800039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
-		B4F1F41C2A17AB5000DA6358 /* UIView+Border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Border.swift"; sourceTree = "<group>"; };
+		B4F1F41A2A17A90F00DA6358 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,6 +229,7 @@
 				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
 				B4470B572A17461E0024B2B7 /* AddPhotoCell.swift */,
 				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
+				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -285,7 +286,6 @@
 				B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */,
 				B4470B592A1766040024B2B7 /* UIView+Shadow.swift */,
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
-				B4F1F41C2A17AB5000DA6358 /* UIView+Border.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -402,7 +402,6 @@
 			files = (
 				B438899E2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift in Sources */,
 				B4470B522A1740AD0024B2B7 /* Array+SafeIndex.swift in Sources */,
-				B4F1F41D2A17AB5000DA6358 /* UIView+Border.swift in Sources */,
 				B43889782A14934600476BFC /* ClothesController.swift in Sources */,
 				B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */,
 				B4470B5C2A176C3A0024B2B7 /* ShadowableCellType.swift in Sources */,
@@ -416,6 +415,7 @@
 				B438897E2A1496C300476BFC /* DesignResources.swift in Sources */,
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,
 				B43889A42A14B16D00476BFC /* UIViewPreview.swift in Sources */,
+				B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,

@@ -41,7 +41,7 @@ extension MainTabBarController {
   }
   
   private func setUI() {
-    view.backgroundColor = .systemBackground
+    view.backgroundColor = .background
   }
   
   private func setupLayout() {
@@ -70,6 +70,7 @@ extension MainTabBarController {
       viewController: StyleController())
     
     viewControllers = [clothesController, homeController, styleController]
+    selectedIndex = 1
   }
   
   private func navigationController(image: UIImage?,

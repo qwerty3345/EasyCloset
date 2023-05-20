@@ -78,6 +78,8 @@ extension ClothesController {
   private func setUI() {
     addLeftTitle(with: "MY CLOSET")
     setupFilterButton()
+    view.backgroundColor = .background
+    containerCollectionView.backgroundColor = .clear
   }
   
   private func setupLayout() {

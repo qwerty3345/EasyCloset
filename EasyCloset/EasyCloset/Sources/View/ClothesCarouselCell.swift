@@ -102,6 +102,7 @@ extension ClothesCarouselCell {
   }
   
   private func setUI() {
+    collectionView.backgroundColor = .clear
   }
   
   private func setupLayout() {

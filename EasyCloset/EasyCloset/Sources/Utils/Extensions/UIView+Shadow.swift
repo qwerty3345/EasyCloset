@@ -32,16 +32,6 @@ extension UIView {
     }
   }
   
-  func addShadow(to locations: [ShadowLocation],
-                 length: CGFloat = 5,
-                 color: UIColor = .black,
-                 opacity: Float = 0.2,
-                 radius: CGFloat = 5.0) {
-    Set(locations).forEach { location in
-      addShadow(to: location, length: length, color: color, opacity: opacity, radius: radius)
-    }
-  }
-  
   private func addShadow(offset: CGSize,
                          color: UIColor,
                          opacity: Float,
