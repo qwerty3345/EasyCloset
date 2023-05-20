@@ -27,6 +27,9 @@ extension UIImage {
   // Image
   static let addPhoto = UIImage(named: "add_photo")
   
+  static let clothesInfo = UIImage(named: "jacket1")
+  static let styleInfo = UIImage(named: "style_info")
+  
   enum Sample {
     static let jacket1 = UIImage(named: "jacket1")
     static let pants1 = UIImage(named: "pants1")

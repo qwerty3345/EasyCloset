@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum TabBarIndex: Int {
+  case clothes
+  case home
+  case style
+}
+
 final class MainTabBarController: UITabBarController {
   
   // MARK: - Constants
@@ -27,6 +33,10 @@ final class MainTabBarController: UITabBarController {
   }
   
   // MARK: - Public Methods
+  
+  func moveWithAnimation(to index: TabBarIndex) {
+    moveWithAnimation(to: index.rawValue)
+  }
   
   // MARK: - Private Methods
   
@@ -70,7 +80,7 @@ extension MainTabBarController {
       viewController: StyleController())
     
     viewControllers = [clothesController, homeController, styleController]
-    selectedIndex = 1
+    selectedIndex = TabBarIndex.home.rawValue
   }
   
   private func navigationController(image: UIImage?,

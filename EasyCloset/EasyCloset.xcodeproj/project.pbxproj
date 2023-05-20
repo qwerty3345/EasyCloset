@@ -46,6 +46,7 @@
 		B46CB8BF2A1473A000039F72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8BE2A1473A000039F72 /* Assets.xcassets */; };
 		B46CB8C22A1473A000039F72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8C02A1473A000039F72 /* LaunchScreen.storyboard */; };
 		B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F41A2A17A90F00DA6358 /* InfoView.swift */; };
+		B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +92,7 @@
 		B46CB8E32A148B4400039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8E52A148B4800039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B4F1F41A2A17A90F00DA6358 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+Transition.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,6 +288,7 @@
 				B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */,
 				B4470B592A1766040024B2B7 /* UIView+Shadow.swift */,
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
+				B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 				B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
+				B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */,
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */,
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,

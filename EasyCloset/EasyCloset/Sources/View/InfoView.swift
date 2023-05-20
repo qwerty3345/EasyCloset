@@ -7,13 +7,14 @@
 
 import UIKit
 
-final class InfoView: UIView {
+final class InfoView: UIControl {
   
   // MARK: - UI Components
   
   private let containerView = UIView().then {
     $0.layer.cornerRadius = 16
     $0.layer.masksToBounds = true
+    $0.isUserInteractionEnabled = false
   }
   
   private let infoImageView = UIImageView().then {
@@ -28,10 +29,11 @@ final class InfoView: UIView {
   
   // MARK: - Initialization
   
-  init(with title: String, fontSize: UIFont? = .pretendardMediumTitle) {
+  init(with title: String, image: UIImage? = nil, fontSize: UIFont? = .pretendardMediumTitle) {
     super.init(frame: .zero)
     setup()
     setupInfoLabel(with: title, fontSize: fontSize)
+    configure(with: image)
   }
   
   required init?(coder: NSCoder) {

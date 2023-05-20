@@ -12,12 +12,6 @@ import Then
 
 final class HomeController: UIViewController {
   
-  // MARK: - Constants
-  
-  private enum Metric { }
-  
-  // MARK: - Properties
-  
   // MARK: - UI Components
   
   private let scrollView = UIScrollView()
@@ -28,8 +22,12 @@ final class HomeController: UIViewController {
     $0.isLayoutMarginsRelativeArrangement = true
   }
   
-  private let clothesInfoView = InfoView(with: "옷장으로 이동하기")
-  private let styleInfoView = InfoView(with: "스타일으로 이동하기")
+  private lazy var clothesInfoView = InfoView(with: "옷장으로 이동하기", image: .clothesInfo).then {
+    $0.addTarget(self, action: #selector(tappedClothesInfoView), for: .touchUpInside)
+  }
+  private lazy var styleInfoView = InfoView(with: "스타일으로 이동하기", image: .styleInfo).then {
+    $0.addTarget(self, action: #selector(tappedStyleInfoView), for: .touchUpInside)
+  }
   
   // MARK: - Initialization
   
@@ -44,6 +42,15 @@ final class HomeController: UIViewController {
   
   // MARK: - Private Methods
   
+  @objc private func tappedClothesInfoView() {
+    guard let tabBar = tabBarController as? MainTabBarController else { return }
+    tabBar.moveWithAnimation(to: .clothes)
+  }
+  
+  @objc private func tappedStyleInfoView() {
+    guard let tabBar = tabBarController as? MainTabBarController else { return }
+    tabBar.moveWithAnimation(to: .style)
+  }
 }
 
 // MARK: - UI & Layout
