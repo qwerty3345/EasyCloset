@@ -148,7 +148,11 @@ extension ClothesCarouselCell: UICollectionViewDelegate {
     case .clothes(let clothes):
       delegate?.clothesCarouselCell(self, showClothesDetail: clothes)
     }
-    
+
+    // 자연스럽게 보이도록 0.5초 후에 해당 위치로 scroll
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+      self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    }
   }
 }
 
