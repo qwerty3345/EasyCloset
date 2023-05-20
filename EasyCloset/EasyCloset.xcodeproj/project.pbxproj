@@ -48,6 +48,8 @@
 		B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F41A2A17A90F00DA6358 /* InfoView.swift */; };
 		B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */; };
 		B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */; };
+		B4F1F4282A18C84D00DA6358 /* ClothesDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4272A18C84D00DA6358 /* ClothesDetailController.swift */; };
+		B4F1F42C2A18D3E400DA6358 /* ClothesCategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +97,8 @@
 		B4F1F41A2A17A90F00DA6358 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+Transition.swift"; sourceTree = "<group>"; };
 		B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlightable.swift; sourceTree = "<group>"; };
+		B4F1F4272A18C84D00DA6358 /* ClothesDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesDetailController.swift; sourceTree = "<group>"; };
+		B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCategoryPickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +207,7 @@
 				B43889772A14934600476BFC /* ClothesController.swift */,
 				B438897B2A1493B400476BFC /* HomeController.swift */,
 				B43889792A14935200476BFC /* StyleController.swift */,
+				B4F1F4272A18C84D00DA6358 /* ClothesDetailController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -235,6 +240,7 @@
 				B4470B572A17461E0024B2B7 /* AddPhotoCell.swift */,
 				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
 				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
+				B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -430,6 +436,7 @@
 				B438897E2A1496C300476BFC /* DesignResources.swift in Sources */,
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,
 				B43889A42A14B16D00476BFC /* UIViewPreview.swift in Sources */,
+				B4F1F4282A18C84D00DA6358 /* ClothesDetailController.swift in Sources */,
 				B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
@@ -440,6 +447,7 @@
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
 				B43889A22A14AD8800476BFC /* Clothes.swift in Sources */,
 				B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */,
+				B4F1F42C2A18D3E400DA6358 /* ClothesCategoryPickerView.swift in Sources */,
 				B4470B5A2A1766040024B2B7 /* UIView+Shadow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
