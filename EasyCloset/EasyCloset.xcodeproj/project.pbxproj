@@ -53,6 +53,7 @@
 		B4F1F42E2A18D81000DA6358 /* WeatherType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F42D2A18D81000DA6358 /* WeatherType.swift */; };
 		B4F1F4302A18DB2400DA6358 /* UIView+Seperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */; };
 		B4F1F4342A19001200DA6358 /* AddPhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */; };
+		B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,6 +106,7 @@
 		B4F1F42D2A18D81000DA6358 /* WeatherType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherType.swift; sourceTree = "<group>"; };
 		B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Seperator.swift"; sourceTree = "<group>"; };
 		B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoButton.swift; sourceTree = "<group>"; };
+		B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,6 +292,7 @@
 		B46CB8E72A148CE000039F72 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */,
 				B43889A72A14B28D00476BFC /* Preview */,
 				B46CB8E82A148D0B00039F72 /* Extensions */,
 			);
@@ -456,6 +459,7 @@
 				B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */,
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
+				B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */,
 				B43889A22A14AD8800476BFC /* Clothes.swift in Sources */,
 				B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */,
 				B4F1F42C2A18D3E400DA6358 /* ClothesCategoryPickerView.swift in Sources */,
