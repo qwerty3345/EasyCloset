@@ -9,6 +9,11 @@ import UIKit
 
 import Combine
 
+protocol ClothesCarouselCellDelegate: AnyObject {
+  func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes)
+  func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory)
+}
+
 final class ClothesCarouselCell: UICollectionViewCell {
   
   enum Section: CaseIterable {
@@ -32,9 +37,11 @@ final class ClothesCarouselCell: UICollectionViewCell {
   
   // MARK: - Properties
   
+  weak var delegate: ClothesCarouselCellDelegate?
   private lazy var dataSource: DataSource = makeDataSource()
-  private var clothes: [Clothes] = []
   private var cancellables = Set<AnyCancellable>()
+  
+  private var category: ClothesCategory?
   
   // MARK: - UI Components
   
@@ -62,6 +69,8 @@ final class ClothesCarouselCell: UICollectionViewCell {
   // MARK: - Public Methods
   
   func bind(to viewModel: ClothesViewModel, with category: ClothesCategory) {
+    self.category = category
+    
     viewModel.clothes(of: category)
       .sink { [weak self] clothes in
         guard let self = self else { return }
@@ -93,6 +102,7 @@ extension ClothesCarouselCell {
   }
   
   private func setUI() {
+    collectionView.backgroundColor = .clear
   }
   
   private func setupLayout() {
@@ -105,6 +115,7 @@ extension ClothesCarouselCell {
   private func setupCollectionView() {
     collectionView.registerCell(cellClass: ClothesCell.self)
     collectionView.registerCell(cellClass: AddPhotoCell.self)
+    collectionView.delegate = self
   }
   
   private func makeDataSource() -> DataSource {
@@ -120,6 +131,25 @@ extension ClothesCarouselCell {
     }
   }
   
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension ClothesCarouselCell: UICollectionViewDelegate {
+  
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    guard let item = dataSource.itemIdentifier(for: indexPath),
+          let category = category else { return }
+    
+    // 셀 아이템의 종류가 옷 추가였는지, 옷 상세정보 였는지를 판별해 delegate에 위임
+    switch item {
+    case .addClothes:
+      delegate?.clothesCarouselCell(self, addClothesOf: category)
+    case .clothes(let clothes):
+      delegate?.clothesCarouselCell(self, showClothesDetail: clothes)
+    }
+    
+  }
 }
 
 // MARK: - Preview

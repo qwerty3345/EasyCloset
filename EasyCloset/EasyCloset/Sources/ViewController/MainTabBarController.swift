@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum TabBarItems: Int {
+  case clothes
+  case home
+  case style
+}
+
 final class MainTabBarController: UITabBarController {
   
   // MARK: - Constants
@@ -28,8 +34,9 @@ final class MainTabBarController: UITabBarController {
   
   // MARK: - Public Methods
   
-  // MARK: - Private Methods
-  
+  func moveWithAnimation(to index: TabBarItems) {
+    moveWithAnimation(to: index.rawValue)
+  }
 }
 
 // MARK: - UI & Layout
@@ -37,20 +44,16 @@ final class MainTabBarController: UITabBarController {
 extension MainTabBarController {
   private func setup() {
     setUI()
-    setupLayout()
+    setupViewControllers()
+    delegate = self
   }
   
   private func setUI() {
-    view.backgroundColor = .systemBackground
-  }
-  
-  private func setupLayout() {
-    setupViewControllers()
+    view.backgroundColor = .background
+    tabBar.tintColor = .accentColor
   }
   
   private func setupViewControllers() {
-    tabBar.tintColor = .accentColor
-    
     let clothesController = navigationController(
       image: .tshirt,
       selectedImage: .tshirtSelected,
@@ -70,6 +73,7 @@ extension MainTabBarController {
       viewController: StyleController())
     
     viewControllers = [clothesController, homeController, styleController]
+    selectedIndex = TabBarItems.home.rawValue
   }
   
   private func navigationController(image: UIImage?,
@@ -82,5 +86,13 @@ extension MainTabBarController {
     navigationController.tabBarItem.title = title
     navigationController.navigationBar.tintColor = .accentColor
     return navigationController
+  }
+}
+
+extension MainTabBarController: UITabBarControllerDelegate {
+  func tabBarController(_ tabBarController: UITabBarController,
+                        shouldSelect viewController: UIViewController) -> Bool {
+    moveWithAnimation(to: viewController)
+    return false
   }
 }

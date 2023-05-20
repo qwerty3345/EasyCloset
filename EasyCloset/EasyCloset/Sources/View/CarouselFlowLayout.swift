@@ -27,7 +27,6 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
       self.setupCollectionView()
       self.updateLayout()
       self.size = currentSize
-      print("preprepapreparpap")
     }
   }
   

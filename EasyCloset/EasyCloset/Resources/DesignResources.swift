@@ -8,7 +8,9 @@
 import UIKit
 
 extension UIColor {
+  static let background = UIColor(white: 0.97, alpha: 1)
   static let accentColor = UIColor(named: "AccentColor") ?? .systemBlue
+  static let seperator = UIColor.lightGray.withAlphaComponent(0.3)
 }
 
 extension UIImage {
@@ -24,6 +26,9 @@ extension UIImage {
   
   // Image
   static let addPhoto = UIImage(named: "add_photo")
+  
+  static let clothesInfo = UIImage(named: "jacket1")
+  static let styleInfo = UIImage(named: "style_info")
   
   enum Sample {
     static let jacket1 = UIImage(named: "jacket1")
@@ -60,6 +65,7 @@ extension UIFont {
   }
   
   static let pretendardLargeTitle = UIFont.pretendard(size: 18, weight: .semiBold)
-  static let pretendardMediumTitle = UIFont.pretendard(size: 16)
+  static let pretendardMediumTitle = UIFont.pretendard(size: 16, weight: .semiBold)
+  static let pretendardSmallTitle = UIFont.pretendard(size: 14, weight: .semiBold)
   static let pretendardContent = UIFont.pretendard(size: 12, weight: .light)
 }

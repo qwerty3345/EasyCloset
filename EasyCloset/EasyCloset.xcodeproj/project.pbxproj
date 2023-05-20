@@ -45,6 +45,9 @@
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
 		B46CB8BF2A1473A000039F72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8BE2A1473A000039F72 /* Assets.xcassets */; };
 		B46CB8C22A1473A000039F72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8C02A1473A000039F72 /* LaunchScreen.storyboard */; };
+		B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F41A2A17A90F00DA6358 /* InfoView.swift */; };
+		B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */; };
+		B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,10 +89,12 @@
 		B46CB8BE2A1473A000039F72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B46CB8C12A1473A000039F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B46CB8C32A1473A000039F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B46CB8DB2A148AE700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8DF2A148B3700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8E32A148B4400039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B46CB8E52A148B4800039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		B4F1F41A2A17A90F00DA6358 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+Transition.swift"; sourceTree = "<group>"; };
+		B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlightable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,7 +220,6 @@
 		B46CB8D02A1488A100039F72 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				B46CB8DB2A148AE700039F72 /* .gitkeep */,
 				B4470B532A1741160024B2B7 /* ClothesViewModel.swift */,
 			);
 			path = ViewModel;
@@ -224,11 +228,13 @@
 		B46CB8D12A1488AD00039F72 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B4F1F4262A18C34600DA6358 /* Protocol */,
 				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
 				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
 				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
 				B4470B572A17461E0024B2B7 /* AddPhotoCell.swift */,
 				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
+				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -270,8 +276,6 @@
 		B46CB8E72A148CE000039F72 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				B43889AA2A14B8F300476BFC /* ReusableView.swift */,
-				B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */,
 				B43889A72A14B28D00476BFC /* Preview */,
 				B46CB8E82A148D0B00039F72 /* Extensions */,
 			);
@@ -283,10 +287,21 @@
 			children = (
 				B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */,
 				B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */,
+				B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */,
 				B4470B592A1766040024B2B7 /* UIView+Shadow.swift */,
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B4F1F4262A18C34600DA6358 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */,
+				B43889AA2A14B8F300476BFC /* ReusableView.swift */,
+				B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -407,6 +422,7 @@
 				B4470B562A1743130024B2B7 /* ClothesList.swift in Sources */,
 				B43889A92A14B7E600476BFC /* ClothesCell.swift in Sources */,
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
+				B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */,
 				B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */,
 				B4470B582A17461E0024B2B7 /* AddPhotoCell.swift in Sources */,
 				B43889AD2A14B92600476BFC /* UICollectionView+RegisterDeque.swift in Sources */,
@@ -414,8 +430,10 @@
 				B438897E2A1496C300476BFC /* DesignResources.swift in Sources */,
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,
 				B43889A42A14B16D00476BFC /* UIViewPreview.swift in Sources */,
+				B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
+				B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */,
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */,
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
