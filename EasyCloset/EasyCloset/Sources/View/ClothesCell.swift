@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ClothesCell: UICollectionViewCell {
+final class ClothesCell: UICollectionViewCell, Highlightable {
   
   // MARK: - UI Components
   
@@ -19,6 +19,18 @@ final class ClothesCell: UICollectionViewCell {
     $0.text = "#티셔츠"
     $0.font = .pretendard()
     $0.textColor = .lightGray
+  }
+  
+  // MARK: - Touch Events
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesBegan(touches, with: event)
+    highlight()
+  }
+  
+  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesEnded(touches, with: event)
+    unHighlight()
   }
   
   // MARK: - Initialization
