@@ -58,7 +58,7 @@ final class AddPhotoButton: UIButton {
     addSubview(bottomLabel)
     bottomLabel.snp.makeConstraints {
       $0.centerX.width.equalToSuperview()
-      $0.top.equalTo(iconImageView.snp.bottom)//.offset(8)
+      $0.top.equalTo(iconImageView.snp.bottom)
       $0.bottom.equalToSuperview().inset(spacing)
     }
   }

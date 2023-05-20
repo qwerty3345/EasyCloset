@@ -9,14 +9,14 @@ import UIKit
 
 final class ClothesDetailController: UIViewController {
   
-  enum ControllerType {
-    case add
-    case showDetail
-  }
-  
   // MARK: - Properties
   
-  private let type: ControllerType
+  private let type: ClothesDetailControllerType
+  private var isEditingClothes = false {
+    didSet {
+      turnEditMode(isOn: isEditingClothes)
+    }
+  }
   
   // MARK: - UI Components
   
@@ -62,9 +62,15 @@ final class ClothesDetailController: UIViewController {
     $0.placeholder = "설명을 입력해주세요 (선택)"
   }
   
+  private lazy var editAddBarButton = UIBarButtonItem(
+    title: type.rightBarButtonTitle,
+    style: .plain,
+    target: self,
+    action: #selector(tappedEditAddButton))
+  
   // MARK: - Initialization
   
-  init(type: ControllerType) {
+  init(type: ClothesDetailControllerType) {
     self.type = type
     super.init(nibName: nil, bundle: nil)
   }
@@ -90,16 +96,13 @@ final class ClothesDetailController: UIViewController {
   func configure(with clothes: Clothes) {
     guard type == .showDetail else { return }
     
+    clothesImageView.image = clothes.image
     categotyPickerView.selectRow(clothes.category.rawValue,
                                  inComponent: 0, animated: false)
-    clothesImageView.image = clothes.image
-    if let weatherType = clothes.weatherType {
-      weatherSegmentedControl.selectedSegmentIndex = weatherType.rawValue
-    }
+    weatherSegmentedControl.selectedSegmentIndex = clothes.weatherType.rawValue
     if let description = clothes.description {
       descriptionTextField.text = description
     }
-    
     turnEditMode(isOn: false)
   }
   
@@ -109,6 +112,29 @@ final class ClothesDetailController: UIViewController {
     categotyPickerView.isUserInteractionEnabled = isOn
     weatherSegmentedControl.isUserInteractionEnabled = isOn
     descriptionTextField.isUserInteractionEnabled = isOn
+  }
+  
+  @objc private func tappedEditAddButton() {
+    switch type {
+    case .add:
+      addClothes()
+    case .showDetail:
+      editClothes()
+    }
+  }
+  
+  private func addClothes() {
+    navigationController?.popViewController(animated: true)
+  }
+  
+  private func editClothes() {
+    if isEditingClothes {
+      isEditingClothes = false
+      editAddBarButton.title = "편집"
+    } else {
+      isEditingClothes = true
+      editAddBarButton.title = "완료"
+    }
   }
   
   @objc private func didSelectWeather(_ sender: UISegmentedControl) {
@@ -126,12 +152,8 @@ extension ClothesDetailController {
   }
   
   private func setUI() {
-    switch type {
-    case .add:
-      title = "옷 추가하기"
-    case .showDetail:
-      title = "옷 상세보기"
-    }
+    title = type.title
+    navigationItem.rightBarButtonItem = editAddBarButton
     view.backgroundColor = .background
   }
   
@@ -207,6 +229,31 @@ extension ClothesDetailController {
       }
     }
     contentStackView.addArrangedSubview(label)
+  }
+}
+
+// MARK: - ClothesDetailControllerType
+
+enum ClothesDetailControllerType {
+  case add
+  case showDetail
+  
+  var title: String {
+    switch self {
+    case .add:
+      return "옷 추가하기"
+    case .showDetail:
+      return "옷 상세하기"
+    }
+  }
+  
+  var rightBarButtonTitle: String {
+    switch self {
+    case .add:
+      return "추가"
+    case .showDetail:
+      return "편집"
+    }
   }
 }
 

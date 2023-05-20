@@ -211,9 +211,9 @@
 			children = (
 				B46CB8B92A14739F00039F72 /* MainTabBarController.swift */,
 				B43889772A14934600476BFC /* ClothesController.swift */,
+				B4F1F4272A18C84D00DA6358 /* ClothesDetailController.swift */,
 				B438897B2A1493B400476BFC /* HomeController.swift */,
 				B43889792A14935200476BFC /* StyleController.swift */,
-				B4F1F4272A18C84D00DA6358 /* ClothesDetailController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -241,14 +241,14 @@
 			isa = PBXGroup;
 			children = (
 				B4F1F4262A18C34600DA6358 /* Protocol */,
-				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
-				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
-				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
+				B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */,
 				B4470B572A17461E0024B2B7 /* AddPhotoCell.swift */,
 				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
-				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
+				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
+				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
 				B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */,
-				B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */,
+				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
+				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

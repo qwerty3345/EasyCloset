@@ -13,7 +13,7 @@ struct Clothes: Hashable {
   let imageURL: String
   var image: UIImage?
   var category: ClothesCategory
-  var weatherType: WeatherType?
+  var weatherType: WeatherType
   var description: String?
   
   init(id: UUID = UUID(),
@@ -21,7 +21,7 @@ struct Clothes: Hashable {
        imageURL: String,
        image: UIImage? = nil,
        category: ClothesCategory,
-       weatherType: WeatherType? = nil,
+       weatherType: WeatherType,
        description: String? = nil) {
     self.id = id
     self.createdAt = createdAt
