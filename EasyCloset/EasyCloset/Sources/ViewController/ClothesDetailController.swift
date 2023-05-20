@@ -243,7 +243,7 @@ enum ClothesDetailControllerType {
     case .add:
       return "옷 추가하기"
     case .showDetail:
-      return "옷 상세하기"
+      return "옷 상세보기"
     }
   }
   
