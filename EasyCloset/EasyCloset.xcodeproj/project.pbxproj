@@ -52,6 +52,7 @@
 		B4F1F42C2A18D3E400DA6358 /* ClothesCategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */; };
 		B4F1F42E2A18D81000DA6358 /* WeatherType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F42D2A18D81000DA6358 /* WeatherType.swift */; };
 		B4F1F4302A18DB2400DA6358 /* UIView+Seperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */; };
+		B4F1F4342A19001200DA6358 /* AddPhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,6 +104,7 @@
 		B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCategoryPickerView.swift; sourceTree = "<group>"; };
 		B4F1F42D2A18D81000DA6358 /* WeatherType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherType.swift; sourceTree = "<group>"; };
 		B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Seperator.swift"; sourceTree = "<group>"; };
+		B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +248,7 @@
 				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
 				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
 				B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */,
+				B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				B4F1F42E2A18D81000DA6358 /* WeatherType.swift in Sources */,
 				B4470B582A17461E0024B2B7 /* AddPhotoCell.swift in Sources */,
 				B43889AD2A14B92600476BFC /* UICollectionView+RegisterDeque.swift in Sources */,
+				B4F1F4342A19001200DA6358 /* AddPhotoButton.swift in Sources */,
 				B43889AB2A14B8F300476BFC /* ReusableView.swift in Sources */,
 				B438897E2A1496C300476BFC /* DesignResources.swift in Sources */,
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,

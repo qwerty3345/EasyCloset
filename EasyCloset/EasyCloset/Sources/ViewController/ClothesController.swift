@@ -117,7 +117,7 @@ extension ClothesController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView,
                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(cellClass: ClothesCarouselCell.self, for: indexPath)
-    if let category = ClothesCategory.allCases[safe: indexPath.section] {
+    if let category = ClothesCategory(rawValue: indexPath.section) {
       cell.bind(to: viewModel, with: category)
     }
     
@@ -133,7 +133,7 @@ extension ClothesController: UICollectionViewDataSource {
       ofType: ClothesCategoryHeaderView.self,
       for: indexPath)
     
-    if let category = ClothesCategory.allCases[safe: indexPath.section] {
+    if let category = ClothesCategory(rawValue: indexPath.section) {
       headerView.configure(with: category)
     }
     

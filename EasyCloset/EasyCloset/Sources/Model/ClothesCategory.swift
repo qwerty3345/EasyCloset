@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ClothesCategory: CaseIterable {
+enum ClothesCategory: Int, CaseIterable {
   case top
   case bottom
   case shoes

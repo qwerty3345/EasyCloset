@@ -34,12 +34,13 @@ final class ClothesCategoryPickerView: UIPickerView {
 
 extension ClothesCategoryPickerView: UIPickerViewDelegate {
   
+  // 폰트를 설정하기 위해 viewForRow 로 설정해줌
   func pickerView(_ pickerView: UIPickerView, viewForRow row: Int,
                   forComponent component: Int, reusing view: UIView?) -> UIView {
     let label = (view as? UILabel) ?? UILabel()
     label.font = .pretendardContent
     label.textAlignment = .center
-    label.text = ClothesCategory.allCases[safe: row]?.korean ?? ""
+    label.text = ClothesCategory(rawValue: row)?.korean ?? ""
     return label
   }
 }

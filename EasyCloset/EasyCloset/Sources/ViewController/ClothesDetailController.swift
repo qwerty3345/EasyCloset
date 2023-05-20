@@ -14,10 +14,6 @@ final class ClothesDetailController: UIViewController {
     case showDetail
   }
   
-  // MARK: - Constants
-  
-  private enum Metric { }
-  
   // MARK: - Properties
   
   private let type: ControllerType
@@ -27,7 +23,6 @@ final class ClothesDetailController: UIViewController {
   private let scrollView = UIScrollView()
   private let contentStackView = UIStackView().then {
     $0.axis = .vertical
-//    $0.spacing = 16
     $0.layoutMargins = UIEdgeInsets(top: 16, left: 20, bottom: 0, right: 20)
     $0.isLayoutMarginsRelativeArrangement = true
   }
@@ -39,11 +34,15 @@ final class ClothesDetailController: UIViewController {
   
   private let addPhotoLabel = UILabel().then {
     $0.text = "사진 등록하기"
-    $0.font = .pretendardMediumTitle
+    $0.font = .pretendardLargeTitle
   }
   
-  private let cameraButton = UIButton()
-  private let galleryButton = UIButton()
+  private let cameraButton = AddPhotoButton(
+    title: "카메라",
+    image: UIImage(systemName: "camera.fill"))
+  private let galleryButton = AddPhotoButton(
+    title: "사진첩",
+    image: UIImage(systemName: "photo.fill"))
   private lazy var addPhotoStackView = UIStackView(arrangedSubviews: [
     cameraButton, galleryButton
   ]).then {
@@ -90,15 +89,31 @@ final class ClothesDetailController: UIViewController {
   
   func configure(with clothes: Clothes) {
     guard type == .showDetail else { return }
+    
+    categotyPickerView.selectRow(clothes.category.rawValue,
+                                 inComponent: 0, animated: false)
+    clothesImageView.image = clothes.image
+    if let weatherType = clothes.weatherType {
+      weatherSegmentedControl.selectedSegmentIndex = weatherType.rawValue
+    }
+    if let description = clothes.description {
+      descriptionTextField.text = description
+    }
+    
+    turnEditMode(isOn: false)
   }
   
   // MARK: - Private Methods
   
+  private func turnEditMode(isOn: Bool) {
+    categotyPickerView.isUserInteractionEnabled = isOn
+    weatherSegmentedControl.isUserInteractionEnabled = isOn
+    descriptionTextField.isUserInteractionEnabled = isOn
+  }
+  
   @objc private func didSelectWeather(_ sender: UISegmentedControl) {
     guard let weatherType = WeatherType(rawValue: sender.selectedSegmentIndex) else { return }
   }
-  
-
 }
 
 // MARK: - UI & Layout
@@ -126,6 +141,10 @@ extension ClothesDetailController {
     setupSection(with: "카테고리", view: categotyPickerView, viewHeight: 100, spacing: 16)
     setupSection(with: "계절", view: weatherSegmentedControl, viewHeight: 30, spacing: 40)
     setupSection(with: "설명", view: descriptionTextField, spacing: 16)
+    
+    if type == .add {
+      setupAddPhotoButtons()
+    }
   }
   
   private func setupScrollViewLayout() {
@@ -145,6 +164,25 @@ extension ClothesDetailController {
     contentStackView.setCustomSpacing(30, after: clothesImageView)
     clothesImageView.snp.makeConstraints {
       $0.width.equalTo(clothesImageView.snp.height)
+    }
+  }
+  
+  private func setupAddPhotoButtons() {
+    [cameraButton, galleryButton].forEach { button in
+      button.snp.makeConstraints {
+        $0.width.equalTo(80)
+        $0.height.equalTo(90)
+      }
+    }
+    view.addSubview(addPhotoStackView)
+    addPhotoStackView.snp.makeConstraints {
+      $0.center.equalTo(clothesImageView)
+    }
+    
+    view.addSubview(addPhotoLabel)
+    addPhotoLabel.snp.makeConstraints {
+      $0.bottom.equalTo(addPhotoStackView.snp.top).inset(-20)
+      $0.centerX.equalTo(addPhotoStackView)
     }
   }
   
@@ -179,9 +217,9 @@ import SwiftUI
 
 struct ClothesDetailControllerPreview: PreviewProvider {
   static var previews: some View {
-    UINavigationController(
-      rootViewController: ClothesDetailController(type: .add)
-    ).toPreview()
+    let vc = ClothesDetailController(type: .showDetail)
+    vc.configure(with: Clothes.mock)
+    return UINavigationController(rootViewController: vc).toPreview()
   }
 }
 #endif
