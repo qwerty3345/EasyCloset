@@ -52,7 +52,6 @@ final class ClothesCell: UICollectionViewCell {
     nameLabel.text = ""
     clothesImageView.image = nil
   }
-  
 }
 
 // MARK: - UI & Layout

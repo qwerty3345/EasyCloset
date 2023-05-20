@@ -24,16 +24,14 @@ final class InfoView: UIView {
     $0.backgroundColor = .seperator
   }
   
-  private let infoLabel = UILabel().then {
-    $0.font = .pretendardMediumTitle
-  }
+  private let infoLabel = UILabel()
   
   // MARK: - Initialization
   
-  init(with title: String) {
+  init(with title: String, fontSize: UIFont? = .pretendardMediumTitle) {
     super.init(frame: .zero)
     setup()
-    infoLabel.text = title
+    setupInfoLabel(with: title, fontSize: fontSize)
   }
   
   required init?(coder: NSCoder) {
@@ -42,15 +40,12 @@ final class InfoView: UIView {
   
   // MARK: - Public Methods
   
-  func set(image: UIImage?) {
+  func configure(with image: UIImage?) {
     infoImageView.image = image
   }
-  
-  // MARK: - Private Methods
-  
 }
 
-// MARK: - Layout
+// MARK: - UI & Layout
 
 extension InfoView {
   
@@ -63,6 +58,11 @@ extension InfoView {
     backgroundColor = .white
     layer.cornerRadius = 16
     layer.masksToBounds = true
+  }
+  
+  private func setupInfoLabel(with title: String, fontSize: UIFont?) {
+    infoLabel.text = title
+    infoLabel.font = fontSize
   }
   
   private func setupLayout() {
