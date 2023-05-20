@@ -37,7 +37,7 @@
 		B4470B522A1740AD0024B2B7 /* Array+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */; };
 		B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B532A1741160024B2B7 /* ClothesViewModel.swift */; };
 		B4470B562A1743130024B2B7 /* ClothesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B552A1743130024B2B7 /* ClothesList.swift */; };
-		B4470B582A17461E0024B2B7 /* AddPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B572A17461E0024B2B7 /* AddPhotoCell.swift */; };
+		B4470B582A17461E0024B2B7 /* AddClothesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B572A17461E0024B2B7 /* AddClothesCell.swift */; };
 		B4470B5A2A1766040024B2B7 /* UIView+Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B592A1766040024B2B7 /* UIView+Shadow.swift */; };
 		B4470B5C2A176C3A0024B2B7 /* ShadowableCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
@@ -54,6 +54,7 @@
 		B4F1F4302A18DB2400DA6358 /* UIView+Seperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */; };
 		B4F1F4342A19001200DA6358 /* AddPhotoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */; };
 		B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */; };
+		B4F1F4382A192B7D00DA6358 /* AddPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4372A192B7D00DA6358 /* AddPhotoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,7 +86,7 @@
 		B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeIndex.swift"; sourceTree = "<group>"; };
 		B4470B532A1741160024B2B7 /* ClothesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesViewModel.swift; sourceTree = "<group>"; };
 		B4470B552A1743130024B2B7 /* ClothesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesList.swift; sourceTree = "<group>"; };
-		B4470B572A17461E0024B2B7 /* AddPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoCell.swift; sourceTree = "<group>"; };
+		B4470B572A17461E0024B2B7 /* AddClothesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClothesCell.swift; sourceTree = "<group>"; };
 		B4470B592A1766040024B2B7 /* UIView+Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shadow.swift"; sourceTree = "<group>"; };
 		B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowableCellType.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +108,7 @@
 		B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Seperator.swift"; sourceTree = "<group>"; };
 		B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoButton.swift; sourceTree = "<group>"; };
 		B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		B4F1F4372A192B7D00DA6358 /* AddPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,12 +246,13 @@
 			children = (
 				B4F1F4262A18C34600DA6358 /* Protocol */,
 				B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */,
-				B4470B572A17461E0024B2B7 /* AddPhotoCell.swift */,
+				B4F1F4372A192B7D00DA6358 /* AddPhotoView.swift */,
 				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
 				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
 				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
 				B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */,
 				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
+				B4470B572A17461E0024B2B7 /* AddClothesCell.swift */,
 				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
 			);
 			path = View;
@@ -443,7 +446,7 @@
 				B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */,
 				B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */,
 				B4F1F42E2A18D81000DA6358 /* WeatherType.swift in Sources */,
-				B4470B582A17461E0024B2B7 /* AddPhotoCell.swift in Sources */,
+				B4470B582A17461E0024B2B7 /* AddClothesCell.swift in Sources */,
 				B43889AD2A14B92600476BFC /* UICollectionView+RegisterDeque.swift in Sources */,
 				B4F1F4342A19001200DA6358 /* AddPhotoButton.swift in Sources */,
 				B43889AB2A14B8F300476BFC /* ReusableView.swift in Sources */,
@@ -457,6 +460,7 @@
 				B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */,
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */,
+				B4F1F4382A192B7D00DA6358 /* AddPhotoView.swift in Sources */,
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
 				B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */,

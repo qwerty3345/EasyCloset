@@ -114,7 +114,7 @@ extension ClothesCarouselCell {
   
   private func setupCollectionView() {
     collectionView.registerCell(cellClass: ClothesCell.self)
-    collectionView.registerCell(cellClass: AddPhotoCell.self)
+    collectionView.registerCell(cellClass: AddClothesCell.self)
     collectionView.delegate = self
   }
   
@@ -122,7 +122,7 @@ extension ClothesCarouselCell {
     DataSource(collectionView: collectionView) { collectionView, indexPath, item in
       switch item {
       case .addClothes:
-        return collectionView.dequeueReusableCell(cellClass: AddPhotoCell.self, for: indexPath)
+        return collectionView.dequeueReusableCell(cellClass: AddClothesCell.self, for: indexPath)
       case .clothes(let clothes):
         let cell = collectionView.dequeueReusableCell(cellClass: ClothesCell.self, for: indexPath)
         cell.configure(with: clothes)
