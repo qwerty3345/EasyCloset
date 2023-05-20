@@ -276,8 +276,6 @@
 		B46CB8E72A148CE000039F72 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				B43889AA2A14B8F300476BFC /* ReusableView.swift */,
-				B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */,
 				B43889A72A14B28D00476BFC /* Preview */,
 				B46CB8E82A148D0B00039F72 /* Extensions */,
 			);
@@ -289,9 +287,9 @@
 			children = (
 				B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */,
 				B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */,
+				B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */,
 				B4470B592A1766040024B2B7 /* UIView+Shadow.swift */,
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
-				B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -300,6 +298,8 @@
 			isa = PBXGroup;
 			children = (
 				B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */,
+				B43889AA2A14B8F300476BFC /* ReusableView.swift */,
+				B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
