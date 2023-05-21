@@ -12,6 +12,10 @@ import Then
 
 import Combine
 
+protocol PhotoHandlingViewDelegate: AnyObject {
+  func photoHandlingView(_ view: PhotoHandlingView, didFailToAddPhotoWith error: PhotoPickerError)
+}
+
 final class PhotoHandlingView: UIStackView {
   
   enum PhotoState {
@@ -30,6 +34,8 @@ final class PhotoHandlingView: UIStackView {
   }
   
   private let photoPicker: PhotoPicker
+  
+  weak var delegate: PhotoHandlingViewDelegate?
   
   private var cancellables = Set<AnyCancellable>()
 

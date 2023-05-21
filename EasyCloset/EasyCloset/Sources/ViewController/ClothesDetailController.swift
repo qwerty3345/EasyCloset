@@ -33,7 +33,9 @@ final class ClothesDetailController: UIViewController {
     $0.isLayoutMarginsRelativeArrangement = true
   }
   
-  private lazy var photoHandlingView = PhotoHandlingView(with: photoPicker)
+  private lazy var photoHandlingView = PhotoHandlingView(with: photoPicker).then {
+    $0.delegate = self
+  }
   
   private let categotyPickerView = ClothesCategoryPickerView()
   
@@ -115,6 +117,29 @@ final class ClothesDetailController: UIViewController {
     editAddBarButton.title = isEditingClothes ? "완료" : "편집"
     photoHandlingView.state = isEditingClothes ? .editing : .show
   }
+  
+  private func showAlert(of error: PhotoPickerError, isCancellable: Bool = false) {
+    let alert = UIAlertController(title: error.localizedDescription,
+                                  message: nil, preferredStyle: .alert)
+    if case .authorizationDenied = error {
+      configureAccessDeniedAlert(alert)
+    } else {
+      let confirmAction = UIAlertAction(title: "확인", style: .default)
+      alert.addAction(confirmAction)
+    }
+    
+    present(alert, animated: true)
+  }
+  
+  private func configureAccessDeniedAlert(_ alert: UIAlertController) {
+    let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+      guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+      UIApplication.shared.open(settingsURL)
+    }
+    let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+    alert.addAction(confirmAction)
+    alert.addAction(cancelAction)
+  }
 }
 
 // MARK: - UI & Layout
@@ -134,16 +159,10 @@ extension ClothesDetailController {
   
   private func setupLayout() {
     setupScrollViewLayout()
-//    setupclothesImageViewLayout()
     setupAddPhotoViewLayout()
     setupSection(with: "카테고리", view: categotyPickerView, viewHeight: 100, spacing: 16)
     setupSection(with: "계절", view: weatherSegmentedControl, viewHeight: 30, spacing: 40)
     setupSection(with: "설명", view: descriptionTextField, spacing: 16)
-    
-//    if type == .add {
-//      setupAddPhotoButtonsLayout()
-//    }
-//    setupPhotoRemoveButtonLayout()
   }
   
   private func setupScrollViewLayout() {
@@ -184,6 +203,14 @@ extension ClothesDetailController {
       }
     }
     contentStackView.addArrangedSubview(label)
+  }
+}
+
+// MARK: - PhotoHandlingViewDelegate
+
+extension ClothesDetailController: PhotoHandlingViewDelegate {
+  func photoHandlingView(_ view: PhotoHandlingView, didFailToAddPhotoWith error: PhotoPickerError) {
+    showAlert(of: error)
   }
 }
 
