@@ -10,9 +10,21 @@ import UIKit
 import PhotosUI
 import Combine
 
-enum PhotoPickerError: Error {
+enum PhotoPickerError: LocalizedError {
   case transferError(error: Error)
   case invalidImage
+  case authorizationDenied
+  
+  var errorDescription: String? {
+    switch self {
+    case .transferError(let error):
+      return "에러가 발생했습니다. \(error)"
+    case .invalidImage:
+      return "이미지를 불러오는데 실패했습니다."
+    case .authorizationDenied:
+      return "카메라 접근 권한이 없습니다. \n설정으로 이동하시겠어요?"
+    }
+  }
 }
 
 final class PhotoPicker: NSObject {
@@ -38,21 +50,28 @@ final class PhotoPicker: NSObject {
     return Future { [weak self] promise in
       guard let self = self else { return }
       
-      let picker = UIImagePickerController()
-      picker.sourceType = .camera
-      picker.allowsEditing = true
-      picker.cameraDevice = .rear
-      picker.cameraCaptureMode = .photo
-      picker.delegate = self
-      
-      self.viewController?.present(picker, animated: true)
-      
-      self.imageCompletionHandler = { result in
-        switch result {
-        case .success(let image):
-          promise(.success(image))
-        case .failure(let error):
-          promise(.failure(error))
+      self.checkAndRequestCameraPermission { isGranted in
+        guard isGranted else {
+          promise(.failure(.authorizationDenied))
+          return
+        }
+        
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.allowsEditing = true
+        picker.cameraDevice = .rear
+        picker.cameraCaptureMode = .photo
+        picker.delegate = self
+        
+        self.viewController?.present(picker, animated: true)
+        
+        self.imageCompletionHandler = { result in
+          switch result {
+          case .success(let image):
+            promise(.success(image))
+          case .failure(let error):
+            promise(.failure(error))
+          }
         }
       }
     }.eraseToAnyPublisher()
@@ -81,10 +100,23 @@ final class PhotoPicker: NSObject {
   }
   
   // MARK: - Private Methods
-  func getDocumentsDirectory() -> URL? {
-    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-    return paths.first
-  }
+  private func checkAndRequestCameraPermission(completion: @escaping (Bool) -> Void) {
+      let status = AVCaptureDevice.authorizationStatus(for: .video)
+      switch status {
+      case .notDetermined:
+        AVCaptureDevice.requestAccess(for: .video) { isGranted in
+          completion(isGranted)
+        }
+      case .authorized:
+        completion(true)
+      case .denied:
+        completion(false)
+      case .restricted:
+        completion(false)
+      @unknown default:
+        break
+      }
+    }
 }
 
 // MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate

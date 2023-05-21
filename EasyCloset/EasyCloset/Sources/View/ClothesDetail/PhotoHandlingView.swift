@@ -111,12 +111,10 @@ final class PhotoHandlingView: UIStackView {
       .sink { completion in
         if case .failure(let error) = completion {
           // TODO: 실패 alert 띄우기
-          print("실패..... \(error)")
         }
       } receiveValue: { [weak self] image in
         self?.clothesImageView.image = image
         self?.state = .added
-//        self?.isPhotoAdded = true
       }
       .store(in: &cancellables)
   }
@@ -126,7 +124,6 @@ final class PhotoHandlingView: UIStackView {
       .sink { completion in
         if case .failure(let error) = completion {
           // TODO: 실패 alert 띄우기
-          print("실패..... \(error)")
         }
       } receiveValue: { [weak self] image in
         self?.clothesImageView.image = image
