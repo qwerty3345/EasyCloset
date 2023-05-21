@@ -109,36 +109,11 @@ final class PhotoHandlingView: UIStackView {
   @objc private func tappedCameraButton() {
     let cameraPublisher = photoPicker.requestCamera()
     handlePhoto(with: cameraPublisher)
-    
-//    photoPicker.requestCamera()
-//      .sink { [weak self] completion in
-//        guard let self = self else { return }
-//
-//        if case .failure(let error) = completion {
-//          delegate?.photoHandlingView(self, didFailToAddPhotoWith: error)
-//        }
-//      } receiveValue: { [weak self] image in
-//        self?.clothesImageView.image = image
-//        self?.state = .added
-//      }
-//      .store(in: &cancellables)
   }
   
   @objc private func tappedGalleryButton() {
     let albumPublisher = photoPicker.requestAlbum()
     handlePhoto(with: albumPublisher)
-//    photoPicker.requestAlbum()
-//      .sink { [weak self] completion in
-//        guard let self = self else { return }
-//
-//        if case .failure(let error) = completion {
-//          delegate?.photoHandlingView(self, didFailToAddPhotoWith: error)
-//        }
-//      } receiveValue: { [weak self] image in
-//        self?.clothesImageView.image = image
-//        self?.state = .added
-//      }
-//      .store(in: &cancellables)
   }
   
   private func handlePhoto(with publisher: AnyPublisher<UIImage, PhotoPickerError>) {
