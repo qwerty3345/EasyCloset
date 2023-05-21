@@ -12,10 +12,6 @@ import Then
 
 import Combine
 
-protocol PhotoHandlingViewDelegate: AnyObject {
-  func photoHandlingView(_ view: PhotoHandlingView, didFailToAddPhotoWith error: PhotoPickerError)
-}
-
 final class PhotoHandlingView: UIStackView {
   
   enum PhotoState {
@@ -34,15 +30,15 @@ final class PhotoHandlingView: UIStackView {
   }
   
   private let photoPicker: PhotoPicker
-  
-  weak var delegate: PhotoHandlingViewDelegate?
+  private weak var parentController: UIViewController?
   
   private var cancellables = Set<AnyCancellable>()
 
   // MARK: - Initialization
   
-  init(with photoPicker: PhotoPicker) {
-    self.photoPicker = photoPicker
+  init(parentController: UIViewController) {
+    self.parentController = parentController
+    self.photoPicker = PhotoPicker(parent: parentController)
     super.init(frame: .zero)
     setupLayout()
   }
@@ -85,7 +81,7 @@ final class PhotoHandlingView: UIStackView {
     $0.setImage(UIImage(systemName: "trash"), for: .normal)
     $0.tintColor = .systemRed
     $0.isHidden = true
-    $0.addTarget(self, action: #selector(didRemovePhoto), for: .valueChanged)
+    $0.addTarget(self, action: #selector(didRemovePhoto), for: .touchUpInside)
   }
   
   // MARK: - Public Methods
@@ -122,11 +118,12 @@ final class PhotoHandlingView: UIStackView {
     handlePhoto(with: albumPublisher)
   }
   
+  // 카메라, 앨범으로 가져온 publisher의 sink 구독 처리가 동일하여 메서드 분리
   private func handlePhoto(with publisher: AnyPublisher<UIImage, PhotoPickerError>) {
     publisher.sink { [weak self] completion in
       guard let self = self else { return }
       if case .failure(let error) = completion {
-        delegate?.photoHandlingView(self, didFailToAddPhotoWith: error)
+        showFailAlert(of: error)
       }
     } receiveValue: { [weak self] image in
       guard let self = self else { return }
@@ -137,7 +134,52 @@ final class PhotoHandlingView: UIStackView {
   }
   
   @objc private func didRemovePhoto() {
-    state = .empty
+    showAskDeletePhotoAlert { [weak self] isDelete in
+      guard isDelete,
+            let self = self else { return }
+    
+      self.state = .empty
+      self.clothesImageView.image = nil
+    }
+  }
+  
+  private func showAskDeletePhotoAlert(completion: @escaping (Bool) -> Void) {
+    let alert = UIAlertController(title: "정말로 사진을 삭제하시겠습니까?",
+                                  message: nil, preferredStyle: .alert)
+    
+    let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+      completion(true)
+    }
+    let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+      completion(false)
+    }
+    alert.addAction(confirmAction)
+    alert.addAction(cancelAction)
+    
+    parentController?.present(alert, animated: true)
+  }
+  
+  private func showFailAlert(of error: PhotoPickerError, isCancellable: Bool = false) {
+    let alert = UIAlertController(title: error.localizedDescription,
+                                  message: nil, preferredStyle: .alert)
+    if case .authorizationDenied = error {
+      configureAccessDeniedAlert(alert)
+    } else {
+      let confirmAction = UIAlertAction(title: "확인", style: .default)
+      alert.addAction(confirmAction)
+    }
+    
+    parentController?.present(alert, animated: true)
+  }
+  
+  private func configureAccessDeniedAlert(_ alert: UIAlertController) {
+    let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+      guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+      UIApplication.shared.open(settingsURL)
+    }
+    let cancelAction = UIAlertAction(title: "취소", style: .cancel)
+    alert.addAction(confirmAction)
+    alert.addAction(cancelAction)
   }
 }
 
@@ -195,7 +237,7 @@ import SwiftUI
 struct AddPhotoViewPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
-      PhotoHandlingView(with: .init(parent: UIViewController()))
+      PhotoHandlingView(parentController: UIViewController())
     }
     .frame(height: 180)
     .previewLayout(.sizeThatFits)

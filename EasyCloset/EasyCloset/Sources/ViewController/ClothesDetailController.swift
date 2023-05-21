@@ -22,8 +22,6 @@ final class ClothesDetailController: UIViewController {
     }
   }
   
-  private lazy var photoPicker = PhotoPicker(parent: self)
-  
   // MARK: - UI Components
   
   private let scrollView = UIScrollView()
@@ -33,9 +31,7 @@ final class ClothesDetailController: UIViewController {
     $0.isLayoutMarginsRelativeArrangement = true
   }
   
-  private lazy var photoHandlingView = PhotoHandlingView(with: photoPicker).then {
-    $0.delegate = self
-  }
+  private lazy var photoHandlingView = PhotoHandlingView(parentController: self)
   
   private let categotyPickerView = ClothesCategoryPickerView()
   
@@ -117,29 +113,6 @@ final class ClothesDetailController: UIViewController {
     editAddBarButton.title = isEditingClothes ? "완료" : "편집"
     photoHandlingView.state = isEditingClothes ? .editing : .show
   }
-  
-  private func showAlert(of error: PhotoPickerError, isCancellable: Bool = false) {
-    let alert = UIAlertController(title: error.localizedDescription,
-                                  message: nil, preferredStyle: .alert)
-    if case .authorizationDenied = error {
-      configureAccessDeniedAlert(alert)
-    } else {
-      let confirmAction = UIAlertAction(title: "확인", style: .default)
-      alert.addAction(confirmAction)
-    }
-    
-    present(alert, animated: true)
-  }
-  
-  private func configureAccessDeniedAlert(_ alert: UIAlertController) {
-    let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-      guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-      UIApplication.shared.open(settingsURL)
-    }
-    let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-    alert.addAction(confirmAction)
-    alert.addAction(cancelAction)
-  }
 }
 
 // MARK: - UI & Layout
@@ -203,14 +176,6 @@ extension ClothesDetailController {
       }
     }
     contentStackView.addArrangedSubview(label)
-  }
-}
-
-// MARK: - PhotoHandlingViewDelegate
-
-extension ClothesDetailController: PhotoHandlingViewDelegate {
-  func photoHandlingView(_ view: PhotoHandlingView, didFailToAddPhotoWith error: PhotoPickerError) {
-    showAlert(of: error)
   }
 }
 
