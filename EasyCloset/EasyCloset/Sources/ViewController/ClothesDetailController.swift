@@ -22,8 +22,6 @@ final class ClothesDetailController: UIViewController {
     }
   }
   
-  private lazy var photoPicker = PhotoPicker(parent: self)
-  
   // MARK: - UI Components
   
   private let scrollView = UIScrollView()
@@ -33,7 +31,7 @@ final class ClothesDetailController: UIViewController {
     $0.isLayoutMarginsRelativeArrangement = true
   }
   
-  private lazy var photoHandlingView = PhotoHandlingView(with: photoPicker)
+  private lazy var photoHandlingView = PhotoHandlingView(parentController: self)
   
   private let categotyPickerView = ClothesCategoryPickerView()
   
@@ -134,16 +132,10 @@ extension ClothesDetailController {
   
   private func setupLayout() {
     setupScrollViewLayout()
-//    setupclothesImageViewLayout()
     setupAddPhotoViewLayout()
     setupSection(with: "카테고리", view: categotyPickerView, viewHeight: 100, spacing: 16)
     setupSection(with: "계절", view: weatherSegmentedControl, viewHeight: 30, spacing: 40)
     setupSection(with: "설명", view: descriptionTextField, spacing: 16)
-    
-//    if type == .add {
-//      setupAddPhotoButtonsLayout()
-//    }
-//    setupPhotoRemoveButtonLayout()
   }
   
   private func setupScrollViewLayout() {
