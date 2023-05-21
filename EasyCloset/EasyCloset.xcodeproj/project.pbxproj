@@ -245,15 +245,9 @@
 			isa = PBXGroup;
 			children = (
 				B4F1F4262A18C34600DA6358 /* Protocol */,
-				B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */,
-				B4F1F4372A192B7D00DA6358 /* PhotoHandlingView.swift */,
-				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
-				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
-				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
-				B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */,
-				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
-				B4470B572A17461E0024B2B7 /* AddClothesCell.swift */,
-				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
+				B4D95D492A19E161009C8931 /* Clothes */,
+				B4D95D4A2A19E164009C8931 /* ClothesDetail */,
+				B4D95D4B2A19E1FF009C8931 /* Home */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -313,6 +307,36 @@
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B4D95D492A19E161009C8931 /* Clothes */ = {
+			isa = PBXGroup;
+			children = (
+				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
+				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
+				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
+				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
+			);
+			path = Clothes;
+			sourceTree = "<group>";
+		};
+		B4D95D4A2A19E164009C8931 /* ClothesDetail */ = {
+			isa = PBXGroup;
+			children = (
+				B4470B572A17461E0024B2B7 /* AddClothesCell.swift */,
+				B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */,
+				B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */,
+				B4F1F4372A192B7D00DA6358 /* PhotoHandlingView.swift */,
+			);
+			path = ClothesDetail;
+			sourceTree = "<group>";
+		};
+		B4D95D4B2A19E1FF009C8931 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				B4F1F41A2A17A90F00DA6358 /* InfoView.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		B4F1F4262A18C34600DA6358 /* Protocol */ = {
