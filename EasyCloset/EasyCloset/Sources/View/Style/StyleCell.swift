@@ -51,6 +51,9 @@ final class StyleCell: UICollectionViewCell, Highlightable {
     infoView.configure(title: style.name ?? "")
     
     let collageImage = style.clothes
+      .sorted {
+        $0.key.rawValue < $1.key.rawValue
+      }
       .compactMap { $1.image }
       .collage(withSize: frame.size, rows: 2)
     infoView.configure(with: collageImage)

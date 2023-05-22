@@ -11,9 +11,9 @@ extension Array where Element == UIImage {
   func collage(withSize size: CGSize, rows: Int, isKeepingRatio: Bool = true) -> UIImage {
     guard count > 1 else { return self.first ?? UIImage() }
     
-    let columns = count > rows ? count / rows : 1
-    let tileSize = CGSize(width: size.width / CGFloat(rows),
-                          height: size.height / CGFloat(columns))
+    let columns = Int(round(Double(count) / Double(rows)))
+    let tileSize = CGSize(width: size.width / CGFloat(columns),
+                          height: size.height / CGFloat(rows))
     
     let renderer = UIGraphicsImageRenderer(size: size)
     let collageImage = renderer.image { _ in
