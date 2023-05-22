@@ -32,7 +32,7 @@ final class ClothesEntity: Object {
   }
 }
 
-// ViewModel에서 사용하기 위한 Mapping
+// MARK: - Model Mapping
 extension ClothesEntity {
   func toModel() -> Clothes {
     Clothes(id: UUID(uuidString: id) ?? UUID(),

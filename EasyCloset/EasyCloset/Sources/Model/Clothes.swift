@@ -43,6 +43,8 @@ struct Clothes: Hashable {
   }
 }
 
+// MARK: - Entity Mapping
+
 extension Clothes {
   func toEntity() -> ClothesEntity {
     ClothesEntity(id: id.uuidString,

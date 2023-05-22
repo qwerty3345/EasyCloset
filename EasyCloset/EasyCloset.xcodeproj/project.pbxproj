@@ -160,6 +160,7 @@
 		B44EA8A12A1B2545008A83FF /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B44EA8B82A1B311F008A83FF /* ClothesEntity.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -306,7 +307,6 @@
 			isa = PBXGroup;
 			children = (
 				B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */,
-				B44EA8B82A1B311F008A83FF /* ClothesEntity.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
