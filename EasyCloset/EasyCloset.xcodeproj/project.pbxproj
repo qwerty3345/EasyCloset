@@ -53,6 +53,7 @@
 		B46CB8C22A1473A000039F72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8C02A1473A000039F72 /* LaunchScreen.storyboard */; };
 		B49CAACF2A1B5169008254C7 /* StyleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAACE2A1B5169008254C7 /* StyleCell.swift */; };
 		B49CAAD12A1B5455008254C7 /* StyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */; };
+		B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */; };
 		B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F41A2A17A90F00DA6358 /* InfoView.swift */; };
 		B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */; };
 		B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */; };
@@ -111,6 +112,7 @@
 		B46CB8DF2A148B3700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B49CAACE2A1B5169008254C7 /* StyleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleCell.swift; sourceTree = "<group>"; };
 		B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleViewModel.swift; sourceTree = "<group>"; };
+		B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
 		B4F1F41A2A17A90F00DA6358 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+Transition.swift"; sourceTree = "<group>"; };
 		B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlightable.swift; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 				B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */,
 				B4470B592A1766040024B2B7 /* UIView+Shadow.swift */,
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
+				B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
 				B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */,
 				B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */,
+				B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */,
 				B4F1F42E2A18D81000DA6358 /* WeatherType.swift in Sources */,
 				B4470B582A17461E0024B2B7 /* AddClothesCell.swift in Sources */,
 				B43889AD2A14B92600476BFC /* UICollectionView+RegisterDeque.swift in Sources */,
