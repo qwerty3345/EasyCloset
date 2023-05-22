@@ -70,7 +70,7 @@ extension MainTabBarController {
       image: .closet,
       selectedImage: .closetSelected,
       title: "스타일",
-      viewController: StyleController())
+      viewController: StyleController(collectionViewLayout: UICollectionViewFlowLayout()))
     
     viewControllers = [clothesController, homeController, styleController]
     selectedIndex = TabBarItems.home.rawValue

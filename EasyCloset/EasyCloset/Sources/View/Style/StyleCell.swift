@@ -13,7 +13,7 @@ final class StyleCell: UICollectionViewCell, Highlightable {
   
   // MARK: - UI Components
   
-  private let infoView = InfoView(with: "")
+  private let infoView = InfoView(with: "", fontSize: .pretendardSmallTitle)
   
   // MARK: - Touch Events
   
@@ -48,7 +48,8 @@ final class StyleCell: UICollectionViewCell, Highlightable {
   // MARK: - Public Methods
   
   func configure(with style: Style) {
-    
+    infoView.configure(title: style.name ?? "")
+    infoView.configure(with: style.collageImage)
   }
   
   // MARK: - Private Methods

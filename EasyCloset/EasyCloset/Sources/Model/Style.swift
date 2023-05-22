@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Style {
+struct Style: Hashable {
   let uuid: UUID
   var createdAt: Date
   var clothes: [ClothesCategory: Clothes]
@@ -112,6 +112,34 @@ extension Style {
                         weatherType: .allWeather,
                         description: "shoes1")
       ], weather: .summer, name: "여름용 옷"),
+      
+      Style(clothes: [
+        .top: Clothes(imageURL: "",
+                      image: .Sample.shirt2,
+                      category: .top,
+                      weatherType: .allWeather,
+                      description: "shirt2"),
+        .bottom: Clothes(imageURL: "",
+                         image: .Sample.pants3,
+                         category: .bottom,
+                         weatherType: .allWeather,
+                         description: "pants3"),
+        .outer: Clothes(imageURL: "",
+                        image: .Sample.jacket1,
+                        category: .outer,
+                        weatherType: .allWeather,
+                        description: "jacket1"),
+        .accessory: Clothes(imageURL: "",
+                            image: .Sample.socks1,
+                            category: .accessory,
+                            weatherType: .allWeather,
+                            description: "socks1"),
+        .shoes: Clothes(imageURL: "",
+                        image: .Sample.shoes1,
+                        category: .shoes,
+                        weatherType: .allWeather,
+                        description: "shoes1")
+      ], weather: .spring, name: "봄용 옷"),
       
       Style(clothes: [
         .top: Clothes(imageURL: "",
