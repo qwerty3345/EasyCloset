@@ -49,7 +49,11 @@ final class StyleCell: UICollectionViewCell, Highlightable {
   
   func configure(with style: Style) {
     infoView.configure(title: style.name ?? "")
-    infoView.configure(with: style.collageImage)
+    
+    let collageImage = style.clothes
+      .compactMap { $1.image }
+      .collage(withSize: frame.size, rows: 2)
+    infoView.configure(with: collageImage)
   }
   
   // MARK: - Private Methods
@@ -90,7 +94,9 @@ import SwiftUI
 struct StyleCellPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
-      return StyleCell()
+      let cell = StyleCell()
+      cell.configure(with: .mocks.first!)
+      return cell
     }
     .frame(width: 200, height: 200)
     .border(.black, width: 1)

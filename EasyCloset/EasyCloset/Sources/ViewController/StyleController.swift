@@ -134,3 +134,16 @@ extension StyleController {
     print("\(indexPath) 셀 선택!")
   }
 }
+
+// MARK: - Preview
+
+#if DEBUG
+import SwiftUI
+
+struct StyleControllerPreview: PreviewProvider {
+  static var previews: some View {
+    let vc = StyleController(collectionViewLayout: UICollectionViewFlowLayout())
+    return UINavigationController(rootViewController: vc).toPreview()
+  }
+}
+#endif
