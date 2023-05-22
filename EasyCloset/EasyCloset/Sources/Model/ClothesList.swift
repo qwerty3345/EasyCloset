@@ -9,7 +9,11 @@ import Foundation
 
 struct ClothesList {
   var clothesByCategory: [ClothesCategory: [Clothes]]
-  
+}
+
+// MARK: - Mock Data
+
+extension ClothesList {
   static var mock: ClothesList {
     ClothesList(
       clothesByCategory:
