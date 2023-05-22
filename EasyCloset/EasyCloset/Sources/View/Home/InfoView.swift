@@ -53,6 +53,10 @@ final class InfoView: UIControl, Highlightable {
   func configure(with image: UIImage?) {
     infoImageView.image = image
   }
+  
+  func configure(title: String) {
+    infoLabel.text = title
+  }
 }
 
 // MARK: - UI & Layout

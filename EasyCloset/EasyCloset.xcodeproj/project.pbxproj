@@ -51,6 +51,7 @@
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
 		B46CB8BF2A1473A000039F72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8BE2A1473A000039F72 /* Assets.xcassets */; };
 		B46CB8C22A1473A000039F72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8C02A1473A000039F72 /* LaunchScreen.storyboard */; };
+		B49CAACF2A1B5169008254C7 /* StyleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAACE2A1B5169008254C7 /* StyleCell.swift */; };
 		B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F41A2A17A90F00DA6358 /* InfoView.swift */; };
 		B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */; };
 		B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */; };
@@ -107,6 +108,7 @@
 		B46CB8C12A1473A000039F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B46CB8C32A1473A000039F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B46CB8DF2A148B3700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		B49CAACE2A1B5169008254C7 /* StyleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleCell.swift; sourceTree = "<group>"; };
 		B4F1F41A2A17A90F00DA6358 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+Transition.swift"; sourceTree = "<group>"; };
 		B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlightable.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				B4F1F4262A18C34600DA6358 /* Protocol */,
 				B4D95D492A19E161009C8931 /* Clothes */,
 				B4D95D4A2A19E164009C8931 /* ClothesDetail */,
+				B49CAACD2A1B5153008254C7 /* Style */,
 				B4D95D4B2A19E1FF009C8931 /* Home */,
 			);
 			path = View;
@@ -337,6 +340,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		B49CAACD2A1B5153008254C7 /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				B49CAACE2A1B5169008254C7 /* StyleCell.swift */,
+			);
+			path = Style;
+			sourceTree = "<group>";
+		};
 		B4D95D492A19E161009C8931 /* Clothes */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +355,7 @@
 				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
 				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
 				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
+				B4470B572A17461E0024B2B7 /* AddClothesCell.swift */,
 			);
 			path = Clothes;
 			sourceTree = "<group>";
@@ -351,7 +363,6 @@
 		B4D95D4A2A19E164009C8931 /* ClothesDetail */ = {
 			isa = PBXGroup;
 			children = (
-				B4470B572A17461E0024B2B7 /* AddClothesCell.swift */,
 				B4F1F4332A19001200DA6358 /* AddPhotoButton.swift */,
 				B4F1F42B2A18D3E400DA6358 /* ClothesCategoryPickerView.swift */,
 				B4F1F4372A192B7D00DA6358 /* PhotoHandlingView.swift */,
@@ -495,6 +506,7 @@
 				B44EA89C2A1B20C7008A83FF /* ClothesDetailViewModel.swift in Sources */,
 				B4470B522A1740AD0024B2B7 /* Array+SafeIndex.swift in Sources */,
 				B43889782A14934600476BFC /* ClothesController.swift in Sources */,
+				B49CAACF2A1B5169008254C7 /* StyleCell.swift in Sources */,
 				B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */,
 				B4470B5C2A176C3A0024B2B7 /* ShadowableCellType.swift in Sources */,
 				B4470B562A1743130024B2B7 /* ClothesList.swift in Sources */,
