@@ -13,7 +13,7 @@ final class ImageCacheManager {
   
   private enum Configuration {
     static let countLimit = 100 // 총 100개 까지만 FIFO로 캐싱함
-    static let megaByteLimit = 200 * megaByteUnit // 메모리 캐싱에 200메가바이트 만큼 제약을 줌
+    static let megaByteLimit = 200 * megaByteUnit // 메모리 캐싱에 (대략) 200메가바이트 만큼 제약을 줌
     static let megaByteUnit = 1024 * 1024
   }
   
