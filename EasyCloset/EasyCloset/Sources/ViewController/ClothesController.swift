@@ -156,8 +156,7 @@ extension ClothesController: UICollectionViewDelegateFlowLayout {
 extension ClothesController: ClothesCarouselCellDelegate {
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes) {
-    let detailController = ClothesDetailController(type: .showDetail)
-    detailController.configure(with: clothes)
+    let detailController = ClothesDetailController(type: .showDetail(clothes: clothes))
     navigationController?.pushViewController(detailController, animated: true)
   }
   

@@ -7,7 +7,13 @@
 
 import UIKit
 
-final class ImageFileStorage {
+protocol ImageFileStorageProtocol {
+  func save(image: UIImage, id: UUID) throws
+  func load(withID id: UUID) -> UIImage?
+  func remove(withID id: UUID) -> Bool
+}
+
+final class ImageFileStorage: ImageFileStorageProtocol {
   
   // MARK: - Singleton
   

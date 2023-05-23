@@ -10,9 +10,13 @@ import UIKit
 import Then
 import SnapKit
 
+import Combine
+
 final class ClothesDetailController: UIViewController {
   
   // MARK: - Properties
+  
+  private var viewModel: ClothesDetailViewModel?
   
   private let type: ClothesDetailControllerType
   
@@ -21,6 +25,8 @@ final class ClothesDetailController: UIViewController {
       turnEditMode(isOn: isEditingClothes)
     }
   }
+  
+  private var cancellables = Set<AnyCancellable>()
   
   // MARK: - UI Components
   
@@ -53,7 +59,13 @@ final class ClothesDetailController: UIViewController {
   
   init(type: ClothesDetailControllerType) {
     self.type = type
+    
     super.init(nibName: nil, bundle: nil)
+
+    if case .showDetail(clothes: let clothes) = type {
+      viewModel = ClothesDetailViewModel(clothes: clothes)
+      bind()
+    }
   }
   
   required init?(coder: NSCoder) {
@@ -72,10 +84,29 @@ final class ClothesDetailController: UIViewController {
     descriptionTextField.resignFirstResponder()
   }
   
-  // MARK: - Public Methods
+  // MARK: - Private Methods
   
-  func configure(with clothes: Clothes) {
-    guard type == .showDetail else { return }
+  private func bind() {
+    guard let viewModel = viewModel else { return }
+    // viewModel의 output에 대한 bind
+    viewModel.clothes
+      .sink { [weak self] clothes in
+        self?.configure(with: clothes)
+      }
+      .store(in: &cancellables)
+    
+    viewModel.occuredErrorWhileSave
+      .sink {
+        // TODO: 저장에 실패했습니다 alert 띄우기.
+      }
+      .store(in: &cancellables)
+    
+    // viewModel의 input에 대한 bind
+    
+  }
+  
+  private func configure(with clothes: Clothes) {
+    guard case .showDetail = type else { return }
     
     photoHandlingView.setImage(clothes.image)
     categotyPickerView.selectRow(clothes.category.rawValue,
@@ -86,8 +117,6 @@ final class ClothesDetailController: UIViewController {
     }
     turnEditMode(isOn: false)
   }
-  
-  // MARK: - Private Methods
   
   private func turnEditMode(isOn: Bool) {
     categotyPickerView.isUserInteractionEnabled = isOn
@@ -183,7 +212,7 @@ extension ClothesDetailController {
 
 enum ClothesDetailControllerType {
   case add
-  case showDetail
+  case showDetail(clothes: Clothes)
   
   var title: String {
     switch self {
@@ -212,7 +241,6 @@ import SwiftUI
 struct ClothesDetailControllerPreview: PreviewProvider {
   static var previews: some View {
     let vc = ClothesDetailController(type: .add)
-    vc.configure(with: Clothes.mock)
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }
