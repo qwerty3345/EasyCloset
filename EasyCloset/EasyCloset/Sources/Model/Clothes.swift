@@ -31,16 +31,6 @@ struct Clothes: Hashable {
     self.weatherType = weatherType
     self.description = description
   }
-  
-  static var mock: Clothes {
-    Clothes(
-      imageURL: "",
-      image: .Sample.cap1,
-      category: .allCases.randomElement()!,
-      weatherType: .allWeather,
-      description: "\(Int.random(in: (1...100)))"
-    )
-  }
 }
 
 // MARK: - Entity Mapping
@@ -53,5 +43,19 @@ extension Clothes {
                   category: category.rawValue,
                   weatherType: weatherType.rawValue,
                   descriptions: description)
+  }
+}
+
+// MARK: - Mock Data
+
+extension Clothes {
+  static var mock: Clothes {
+    Clothes(
+      imageURL: "",
+      image: .Sample.cap1,
+      category: .allCases.randomElement()!,
+      weatherType: .allWeather,
+      description: "\(Int.random(in: (1...100)))"
+    )
   }
 }
