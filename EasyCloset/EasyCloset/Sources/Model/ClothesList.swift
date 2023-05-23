@@ -8,7 +8,7 @@
 import Foundation
 
 struct ClothesList {
-  let clothesByCategory: [ClothesCategory: [Clothes]]
+  var clothesByCategory: [ClothesCategory: [Clothes]]
   
   static var mock: ClothesList {
     ClothesList(

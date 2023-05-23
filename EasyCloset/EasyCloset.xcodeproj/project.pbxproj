@@ -40,6 +40,11 @@
 		B4470B582A17461E0024B2B7 /* AddClothesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B572A17461E0024B2B7 /* AddClothesCell.swift */; };
 		B4470B5A2A1766040024B2B7 /* UIView+Shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B592A1766040024B2B7 /* UIView+Shadow.swift */; };
 		B4470B5C2A176C3A0024B2B7 /* ShadowableCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */; };
+		B44EA89C2A1B20C7008A83FF /* ClothesDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44EA89B2A1B20C7008A83FF /* ClothesDetailViewModel.swift */; };
+		B44EA8B52A1B2C92008A83FF /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B44EA8B42A1B2C92008A83FF /* RealmSwift */; };
+		B44EA8B72A1B2F6A008A83FF /* ClothesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */; };
+		B44EA8B92A1B311F008A83FF /* ClothesEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44EA8B82A1B311F008A83FF /* ClothesEntity.swift */; };
+		B44EA8BC2A1B3F72008A83FF /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = B44EA8BB2A1B3F72008A83FF /* Realm */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -89,6 +94,9 @@
 		B4470B572A17461E0024B2B7 /* AddClothesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddClothesCell.swift; sourceTree = "<group>"; };
 		B4470B592A1766040024B2B7 /* UIView+Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shadow.swift"; sourceTree = "<group>"; };
 		B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowableCellType.swift; sourceTree = "<group>"; };
+		B44EA89B2A1B20C7008A83FF /* ClothesDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesDetailViewModel.swift; sourceTree = "<group>"; };
+		B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesStorage.swift; sourceTree = "<group>"; };
+		B44EA8B82A1B311F008A83FF /* ClothesEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesEntity.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -97,8 +105,6 @@
 		B46CB8C12A1473A000039F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B46CB8C32A1473A000039F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B46CB8DF2A148B3700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
-		B46CB8E32A148B4400039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
-		B46CB8E52A148B4800039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B4F1F41A2A17A90F00DA6358 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+Transition.swift"; sourceTree = "<group>"; };
 		B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlightable.swift; sourceTree = "<group>"; };
@@ -116,7 +122,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B44EA8B52A1B2C92008A83FF /* RealmSwift in Frameworks */,
 				B438898D2A14A7D400476BFC /* Then in Frameworks */,
+				B44EA8BC2A1B3F72008A83FF /* Realm in Frameworks */,
 				B43889902A14A80900476BFC /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -149,11 +157,27 @@
 			path = Preview;
 			sourceTree = "<group>";
 		};
+		B44EA8A12A1B2545008A83FF /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B44EA8B82A1B311F008A83FF /* ClothesEntity.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B44EA8BA2A1B3F72008A83FF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B46CB8A92A14739F00039F72 = {
 			isa = PBXGroup;
 			children = (
 				B46CB8B42A14739F00039F72 /* EasyCloset */,
 				B46CB8B32A14739F00039F72 /* Products */,
+				B44EA8BA2A1B3F72008A83FF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -237,6 +261,7 @@
 			isa = PBXGroup;
 			children = (
 				B4470B532A1741160024B2B7 /* ClothesViewModel.swift */,
+				B44EA89B2A1B20C7008A83FF /* ClothesDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -255,6 +280,7 @@
 		B46CB8D22A14891500039F72 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				B44EA8A12A1B2545008A83FF /* Model */,
 				B46CB8D72A1489E800039F72 /* Repository */,
 				B46CB8DE2A148B1B00039F72 /* Storage */,
 				B46CB8DD2A148B1700039F72 /* Network */,
@@ -273,7 +299,6 @@
 		B46CB8DD2A148B1700039F72 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				B46CB8E52A148B4800039F72 /* .gitkeep */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -281,7 +306,7 @@
 		B46CB8DE2A148B1B00039F72 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				B46CB8E32A148B4400039F72 /* .gitkeep */,
+				B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -369,6 +394,8 @@
 			packageProductDependencies = (
 				B438898C2A14A7D400476BFC /* Then */,
 				B438898F2A14A80900476BFC /* SnapKit */,
+				B44EA8B42A1B2C92008A83FF /* RealmSwift */,
+				B44EA8BB2A1B3F72008A83FF /* Realm */,
 			);
 			productName = EasyCloset;
 			productReference = B46CB8B22A14739F00039F72 /* EasyCloset.app */;
@@ -401,6 +428,7 @@
 			packageReferences = (
 				B438898B2A14A7D400476BFC /* XCRemoteSwiftPackageReference "Then" */,
 				B438898E2A14A80900476BFC /* XCRemoteSwiftPackageReference "SnapKit" */,
+				B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = B46CB8B32A14739F00039F72 /* Products */;
 			projectDirPath = "";
@@ -460,6 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B438899E2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift in Sources */,
+				B44EA89C2A1B20C7008A83FF /* ClothesDetailViewModel.swift in Sources */,
 				B4470B522A1740AD0024B2B7 /* Array+SafeIndex.swift in Sources */,
 				B43889782A14934600476BFC /* ClothesController.swift in Sources */,
 				B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */,
@@ -478,6 +507,7 @@
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,
 				B43889A42A14B16D00476BFC /* UIViewPreview.swift in Sources */,
 				B4F1F4282A18C84D00DA6358 /* ClothesDetailController.swift in Sources */,
+				B44EA8B72A1B2F6A008A83FF /* ClothesStorage.swift in Sources */,
 				B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
@@ -489,6 +519,7 @@
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
 				B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */,
 				B43889A22A14AD8800476BFC /* Clothes.swift in Sources */,
+				B44EA8B92A1B311F008A83FF /* ClothesEntity.swift in Sources */,
 				B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */,
 				B4F1F42C2A18D3E400DA6358 /* ClothesCategoryPickerView.swift in Sources */,
 				B4F1F4302A18DB2400DA6358 /* UIView+Seperator.swift in Sources */,
@@ -726,6 +757,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -738,6 +777,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B438898E2A14A80900476BFC /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		B44EA8B42A1B2C92008A83FF /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		B44EA8BB2A1B3F72008A83FF /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
