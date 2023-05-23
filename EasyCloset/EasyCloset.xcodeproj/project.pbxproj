@@ -54,6 +54,9 @@
 		B49CAACF2A1B5169008254C7 /* StyleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAACE2A1B5169008254C7 /* StyleCell.swift */; };
 		B49CAAD12A1B5455008254C7 /* StyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */; };
 		B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */; };
+		B4E5C5422A1C823B00B14F48 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C5412A1C823B00B14F48 /* ImageCacheManager.swift */; };
+		B4E5C56A2A1C9E3E00B14F48 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */; };
+		B4E5C56C2A1CAC0C00B14F48 /* ImageFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */; };
 		B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F41A2A17A90F00DA6358 /* InfoView.swift */; };
 		B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */; };
 		B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */; };
@@ -113,6 +116,9 @@
 		B49CAACE2A1B5169008254C7 /* StyleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleCell.swift; sourceTree = "<group>"; };
 		B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleViewModel.swift; sourceTree = "<group>"; };
 		B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
+		B4E5C5412A1C823B00B14F48 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
+		B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
+		B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileStorage.swift; sourceTree = "<group>"; };
 		B4F1F41A2A17A90F00DA6358 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+Transition.swift"; sourceTree = "<group>"; };
 		B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlightable.swift; sourceTree = "<group>"; };
@@ -318,6 +324,7 @@
 			isa = PBXGroup;
 			children = (
 				B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */,
+				B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -326,6 +333,7 @@
 			isa = PBXGroup;
 			children = (
 				B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */,
+				B4E5C5412A1C823B00B14F48 /* ImageCacheManager.swift */,
 				B43889A72A14B28D00476BFC /* Preview */,
 				B46CB8E82A148D0B00039F72 /* Extensions */,
 			);
@@ -342,6 +350,7 @@
 				B4470B592A1766040024B2B7 /* UIView+Shadow.swift */,
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
 				B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */,
+				B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -515,6 +524,7 @@
 				B49CAACF2A1B5169008254C7 /* StyleCell.swift in Sources */,
 				B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */,
 				B4470B5C2A176C3A0024B2B7 /* ShadowableCellType.swift in Sources */,
+				B4E5C5422A1C823B00B14F48 /* ImageCacheManager.swift in Sources */,
 				B4470B562A1743130024B2B7 /* ClothesList.swift in Sources */,
 				B43889A92A14B7E600476BFC /* ClothesCell.swift in Sources */,
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
@@ -530,6 +540,7 @@
 				B438897C2A1493B400476BFC /* HomeController.swift in Sources */,
 				B43889A42A14B16D00476BFC /* UIViewPreview.swift in Sources */,
 				B4F1F4282A18C84D00DA6358 /* ClothesDetailController.swift in Sources */,
+				B4E5C56A2A1C9E3E00B14F48 /* UIImage+Resize.swift in Sources */,
 				B44EA8B72A1B2F6A008A83FF /* ClothesStorage.swift in Sources */,
 				B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
@@ -548,6 +559,7 @@
 				B4F1F42C2A18D3E400DA6358 /* ClothesCategoryPickerView.swift in Sources */,
 				B4F1F4302A18DB2400DA6358 /* UIView+Seperator.swift in Sources */,
 				B4470B5A2A1766040024B2B7 /* UIView+Shadow.swift in Sources */,
+				B4E5C56C2A1CAC0C00B14F48 /* ImageFileStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
