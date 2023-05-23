@@ -1,5 +1,5 @@
 //
-//  ImageFileManager.swift
+//  ImageFileStorage.swift
 //  EasyCloset
 //
 //  Created by Mason Kim on 2023/05/23.
@@ -7,11 +7,11 @@
 
 import UIKit
 
-final class ImageFileManager {
+final class ImageFileStorage {
   
   // MARK: - Singleton
   
-  static let shared = ImageFileManager()
+  static let shared = ImageFileStorage()
   
   private init() { }
   
@@ -34,6 +34,7 @@ final class ImageFileManager {
     }
   }
   
+  @discardableResult
   func remove(withID id: UUID) -> Bool {
     guard let filePath = filePath(of: id) else { return false }
     
