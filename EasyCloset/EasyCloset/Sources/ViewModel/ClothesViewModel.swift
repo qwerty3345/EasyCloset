@@ -15,7 +15,7 @@ final class ClothesViewModel {
   
   @Published private(set) var clothesList = ClothesList(clothesByCategory: [:])
   
-  let viewWillAppear = PassthroughSubject<Void, Never>()
+  let clothesListDidUpdate = PassthroughSubject<Void, Never>()
   
   private var cancellables = Set<AnyCancellable>()
   
@@ -45,7 +45,11 @@ final class ClothesViewModel {
   // MARK: - Private Methods
   
   private func bind() {
-    viewWillAppear
+    if let fetchedClothesList = clothesStorage.fetchClothesList() {
+      self.clothesList = fetchedClothesList
+    }
+    
+    clothesListDidUpdate
       .compactMap { [weak self] in
         self?.clothesStorage.fetchClothesList()
       }

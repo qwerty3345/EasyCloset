@@ -12,6 +12,10 @@ import SnapKit
 
 import Combine
 
+protocol ClothesDetailControllerDelegate: AnyObject {
+  func clothesDetailController(didUpdateOrSave viewController: ClothesDetailController)
+}
+
 final class ClothesDetailController: UIViewController {
   
   // MARK: - Properties
@@ -25,6 +29,8 @@ final class ClothesDetailController: UIViewController {
       turnEditMode(isOn: isEditingClothes)
     }
   }
+  
+  weak var delegate: ClothesDetailControllerDelegate?
   
   private var cancellables = Set<AnyCancellable>()
   
@@ -97,7 +103,6 @@ final class ClothesDetailController: UIViewController {
     
     viewModel.didFailToSave
       .sink { [weak self] message in
-        // TODO: 저장에 실패했습니다 alert 띄우기.
         self?.showFailAlert(with: message)
       }
       .store(in: &cancellables)
@@ -138,12 +143,14 @@ final class ClothesDetailController: UIViewController {
   private func addClothes() {
     guard let clothes = clothesFromUserInput() else { return }
     viewModel.clothes = clothes
+    delegate?.clothesDetailController(didUpdateOrSave: self)
   }
   
   private func editClothes() {
     if isEditingClothes {
       guard let clothes = clothesFromUserInput() else { return }
       viewModel.clothes = clothes
+      delegate?.clothesDetailController(didUpdateOrSave: self)
     }
     
     isEditingClothes.toggle()

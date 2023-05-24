@@ -59,11 +59,6 @@ final class ClothesController: UIViewController {
     setup()
   }
   
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    viewModel.viewWillAppear.send()
-  }
-  
   // MARK: - Public Methods
   
   // MARK: - Private Methods
@@ -162,12 +157,22 @@ extension ClothesController: ClothesCarouselCellDelegate {
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes) {
     let detailController = ClothesDetailController(type: .showDetail(clothes: clothes))
+    detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory) {
     let detailController = ClothesDetailController(type: .add)
+    detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
+  }
+}
+
+// MARK: - ClothesDetailControllerDelegate
+
+extension ClothesController: ClothesDetailControllerDelegate {
+  func clothesDetailController(didUpdateOrSave viewController: ClothesDetailController) {
+    viewModel.clothesListDidUpdate.send()
   }
 }
 

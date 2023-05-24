@@ -300,7 +300,6 @@
 				B44EA8A12A1B2545008A83FF /* Model */,
 				B46CB8D72A1489E800039F72 /* Repository */,
 				B46CB8DE2A148B1B00039F72 /* Storage */,
-				B46CB8DD2A148B1700039F72 /* Network */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -311,13 +310,6 @@
 				B46CB8DF2A148B3700039F72 /* .gitkeep */,
 			);
 			path = Repository;
-			sourceTree = "<group>";
-		};
-		B46CB8DD2A148B1700039F72 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Network;
 			sourceTree = "<group>";
 		};
 		B46CB8DE2A148B1B00039F72 /* Storage */ = {
