@@ -116,9 +116,7 @@ final class ClothesDetailController: UIViewController {
     categotyPickerView.selectRow(clothes.category.rawValue,
                                  inComponent: 0, animated: false)
     weatherSegmentedControl.selectedSegmentIndex = clothes.weatherType.rawValue
-    if let description = clothes.description {
-      descriptionTextField.text = description
-    }
+    descriptionTextField.text = clothes.descriptions
     turnEditMode(isOn: false)
   }
   
@@ -166,13 +164,14 @@ final class ClothesDetailController: UIViewController {
       showFailAlert(with: "계절은 필수 항목입니다.")
       return nil
     }
-    let description = descriptionTextField.text
+    let description = descriptionTextField.text ?? ""
     
-    return Clothes(imageURL: "",
+    return Clothes(id: viewModel.clothes?.id ?? UUID(),
+                   createdAt: viewModel.clothes?.createdAt ?? Date(),
                    image: image,
                    category: category,
                    weatherType: weatherType,
-                   description: description)
+                   descriptions: description)
   }
   
   private func showFailAlert(with title: String) {
