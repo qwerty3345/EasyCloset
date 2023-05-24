@@ -7,7 +7,13 @@
 
 import UIKit
 
-final class ImageFileStorage {
+protocol ImageFileStorageProtocol {
+  func save(image: UIImage, id: UUID) throws
+  func load(withID id: UUID) -> UIImage?
+  func remove(withID id: UUID) -> Bool
+}
+
+final class ImageFileStorage: ImageFileStorageProtocol {
   
   // MARK: - Singleton
   
@@ -18,7 +24,7 @@ final class ImageFileStorage {
   // MARK: - Public Methods
 
   func save(image: UIImage, id: UUID) throws {
-    guard let data = image.jpegData(compressionQuality: 1.0),
+    guard let data = image.pngData(),
           let filePath = filePath(of: id) else { return }
     
     try data.write(to: filePath)

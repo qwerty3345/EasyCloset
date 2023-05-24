@@ -10,26 +10,23 @@ import UIKit
 struct Clothes: Hashable {
   let id: UUID
   let createdAt: Date
-  let imageURL: String
   var image: UIImage?
   var category: ClothesCategory
   var weatherType: WeatherType
-  var description: String?
+  var descriptions: String
   
   init(id: UUID = UUID(),
        createdAt: Date = Date(),
-       imageURL: String,
-       image: UIImage? = nil,
+       image: UIImage?,
        category: ClothesCategory,
        weatherType: WeatherType,
-       description: String? = nil) {
+       descriptions: String) {
     self.id = id
     self.createdAt = createdAt
-    self.imageURL = imageURL
     self.image = image
     self.category = category
     self.weatherType = weatherType
-    self.description = description
+    self.descriptions = descriptions
   }
 }
 
@@ -39,10 +36,9 @@ extension Clothes {
   func toEntity() -> ClothesEntity {
     ClothesEntity(id: id.uuidString,
                   createdAt: createdAt,
-                  imageURL: imageURL,
                   category: category.rawValue,
                   weatherType: weatherType.rawValue,
-                  descriptions: description)
+                  descriptions: descriptions)
   }
 }
 
@@ -51,11 +47,10 @@ extension Clothes {
 extension Clothes {
   static var mock: Clothes {
     Clothes(
-      imageURL: "",
-      image: .Sample.cap1,
+      image: .Sample.cap1 ?? UIImage(),
       category: .allCases.randomElement()!,
       weatherType: .allWeather,
-      description: "\(Int.random(in: (1...100)))"
+      descriptions: "\(Int.random(in: (1...100)))"
     )
   }
 }

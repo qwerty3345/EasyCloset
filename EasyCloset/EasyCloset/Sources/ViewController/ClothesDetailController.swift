@@ -10,9 +10,17 @@ import UIKit
 import Then
 import SnapKit
 
+import Combine
+
+protocol ClothesDetailControllerDelegate: AnyObject {
+  func clothesDetailController(didUpdateOrSave viewController: ClothesDetailController)
+}
+
 final class ClothesDetailController: UIViewController {
   
   // MARK: - Properties
+  
+  private let viewModel = ClothesDetailViewModel()
   
   private let type: ClothesDetailControllerType
   
@@ -21,6 +29,10 @@ final class ClothesDetailController: UIViewController {
       turnEditMode(isOn: isEditingClothes)
     }
   }
+  
+  weak var delegate: ClothesDetailControllerDelegate?
+  
+  private var cancellables = Set<AnyCancellable>()
   
   // MARK: - UI Components
   
@@ -54,6 +66,11 @@ final class ClothesDetailController: UIViewController {
   init(type: ClothesDetailControllerType) {
     self.type = type
     super.init(nibName: nil, bundle: nil)
+    
+    if case let .showDetail(clothes: clothes) = type {
+      self.viewModel.clothes = clothes
+    }
+    bind()
   }
   
   required init?(coder: NSCoder) {
@@ -72,22 +89,43 @@ final class ClothesDetailController: UIViewController {
     descriptionTextField.resignFirstResponder()
   }
   
-  // MARK: - Public Methods
+  // MARK: - Private Methods
   
-  func configure(with clothes: Clothes) {
-    guard type == .showDetail else { return }
+  private func bind() {
+    // viewModel의 output에 대한 bind
+    viewModel.$clothes
+      .sink { [weak self] clothes in
+        guard let self = self,
+              let clothes = clothes else { return }
+        self.configure(with: clothes)
+      }
+      .store(in: &cancellables)
+    
+    viewModel.didFailToSave
+      .sink { [weak self] message in
+        self?.showFailAlert(with: message)
+      }
+      .store(in: &cancellables)
+    
+    viewModel.didSuccessToSave
+      .sink { [weak self] in
+        if case .add = self?.type {
+          self?.navigationController?.popViewController(animated: true)
+        }
+      }
+      .store(in: &cancellables)
+  }
+  
+  private func configure(with clothes: Clothes) {
+    guard case .showDetail = type else { return }
     
     photoHandlingView.setImage(clothes.image)
     categotyPickerView.selectRow(clothes.category.rawValue,
                                  inComponent: 0, animated: false)
     weatherSegmentedControl.selectedSegmentIndex = clothes.weatherType.rawValue
-    if let description = clothes.description {
-      descriptionTextField.text = description
-    }
+    descriptionTextField.text = clothes.descriptions
     turnEditMode(isOn: false)
   }
-  
-  // MARK: - Private Methods
   
   private func turnEditMode(isOn: Bool) {
     categotyPickerView.isUserInteractionEnabled = isOn
@@ -105,13 +143,53 @@ final class ClothesDetailController: UIViewController {
   }
   
   private func addClothes() {
-    navigationController?.popViewController(animated: true)
+    guard let clothes = clothesFromUserInput() else { return }
+    viewModel.clothes = clothes
+    delegate?.clothesDetailController(didUpdateOrSave: self)
   }
   
   private func editClothes() {
+    if isEditingClothes {
+      guard let clothes = clothesFromUserInput() else { return }
+      viewModel.clothes = clothes
+      delegate?.clothesDetailController(didUpdateOrSave: self)
+    }
+    
     isEditingClothes.toggle()
     editAddBarButton.title = isEditingClothes ? "완료" : "편집"
     photoHandlingView.state = isEditingClothes ? .editing : .show
+  }
+  
+  private func clothesFromUserInput() -> Clothes? {
+    guard let image = photoHandlingView.clothesImageView.image else {
+      showFailAlert(with: "사진은 필수 항목입니다.")
+      return nil
+    }
+    guard let category = ClothesCategory(rawValue: categotyPickerView.selectedRow(inComponent: 0)) else {
+      showFailAlert(with: "카테고리는 필수 항목입니다.")
+      return nil
+    }
+    guard let weatherType = WeatherType(rawValue: weatherSegmentedControl.selectedSegmentIndex) else {
+      showFailAlert(with: "계절은 필수 항목입니다.")
+      return nil
+    }
+    let description = descriptionTextField.text ?? ""
+    
+    return Clothes(id: viewModel.clothes?.id ?? UUID(),
+                   createdAt: viewModel.clothes?.createdAt ?? Date(),
+                   image: image,
+                   category: category,
+                   weatherType: weatherType,
+                   descriptions: description)
+  }
+  
+  private func showFailAlert(with title: String) {
+    let alert = UIAlertController(title: title,
+                                  message: nil, preferredStyle: .alert)
+    let confirmAction = UIAlertAction(title: "확인", style: .default)
+    alert.addAction(confirmAction)
+    
+    present(alert, animated: true)
   }
 }
 
@@ -183,7 +261,7 @@ extension ClothesDetailController {
 
 enum ClothesDetailControllerType {
   case add
-  case showDetail
+  case showDetail(clothes: Clothes)
   
   var title: String {
     switch self {
@@ -212,7 +290,6 @@ import SwiftUI
 struct ClothesDetailControllerPreview: PreviewProvider {
   static var previews: some View {
     let vc = ClothesDetailController(type: .add)
-    vc.configure(with: Clothes.mock)
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

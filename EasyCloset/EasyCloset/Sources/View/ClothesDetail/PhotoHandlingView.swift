@@ -49,7 +49,7 @@ final class PhotoHandlingView: UIStackView {
   
   // MARK: - UI Components
   
-  private let clothesImageView = UIImageView().then {
+  let clothesImageView = UIImageView().then {
     $0.contentMode = .scaleAspectFit
     $0.backgroundColor = .white
   }

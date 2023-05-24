@@ -8,6 +8,8 @@
 import Foundation
 import RealmSwift
 
+import Then
+
 protocol ClothesStorageProtocol {
   func fetchClothesList() -> ClothesList?
   func save(clothes: Clothes)
@@ -30,8 +32,10 @@ struct ClothesStorage: ClothesStorageProtocol {
     guard let realm = realm else { return nil }
     
     return realm.objects(ClothesEntity.self)
-      .map {
-        $0.toModel()
+      .map { entity in
+        var model = entity.toModelWithoutImage()
+        model.image = ImageFileStorage.shared.load(withID: model.id)
+        return model
       }
       .reduce(into: ClothesList(clothesByCategory: [:]), { result, clothes in
         result.clothesByCategory[clothes.category, default: []].append(clothes)
@@ -43,14 +47,12 @@ struct ClothesStorage: ClothesStorageProtocol {
     
     let clothesList = realm.objects(ClothesEntity.self)
     
-    // 이미 존재 할 시 저장 X
     let idString = clothes.id.uuidString
-    guard clothesList.filter("id == '\(idString)'").first == nil else { return }
     
     let clothesEntity = clothes.toEntity()
     
     try? realm.write {
-      realm.add(clothesEntity)
+      realm.add(clothesEntity, update: .modified) // PrimaryKey가 같은 항목은 업데이트
     }
   }
   

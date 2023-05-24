@@ -156,14 +156,23 @@ extension ClothesController: UICollectionViewDelegateFlowLayout {
 extension ClothesController: ClothesCarouselCellDelegate {
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes) {
-    let detailController = ClothesDetailController(type: .showDetail)
-    detailController.configure(with: clothes)
+    let detailController = ClothesDetailController(type: .showDetail(clothes: clothes))
+    detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory) {
     let detailController = ClothesDetailController(type: .add)
+    detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
+  }
+}
+
+// MARK: - ClothesDetailControllerDelegate
+
+extension ClothesController: ClothesDetailControllerDelegate {
+  func clothesDetailController(didUpdateOrSave viewController: ClothesDetailController) {
+    viewModel.clothesListDidUpdate.send()
   }
 }
 
