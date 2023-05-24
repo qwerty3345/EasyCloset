@@ -58,7 +58,11 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
   
   // 각 아이템의 레이아웃 속성
   override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-    return super.layoutAttributesForElements(in: rect)?.compactMap { self.transform($0) }
+    // super의 LayoutAttributes를 직접 수정하면 안되기에, copy 한 후에 변형을 적용해야 함.
+    guard let superAttributes = super.layoutAttributesForElements(in: rect),
+          let attributes = NSArray(array: superAttributes, copyItems: true)
+            as? [UICollectionViewLayoutAttributes] else { return nil }
+    return attributes.map { self.transform($0) }
   }
   
   // 각 아이템의 레이아웃 속성 변환
