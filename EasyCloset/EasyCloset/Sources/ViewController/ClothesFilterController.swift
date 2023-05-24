@@ -49,31 +49,88 @@ final class ClothesFilterController: UIViewController {
   
   // MARK: - Properties
   
+  private lazy var dataSource: DataSource = makeDataSource()
+  private var selectedItems: [Section: Item] = [:] {
+    didSet {
+      cofigureDoneButtonActivation()
+    }
+  }
+  
+  private let viewModel: ClothesViewModel
+  
+  // MARK: - UI Components
+  
   private lazy var collectionView = UICollectionView(frame: .zero,
                                                      collectionViewLayout: makeCollectionViewLayout())
   
-  private lazy var dataSource: DataSource = makeDataSource()
+  private lazy var doneButton = UIButton().then {
+    $0.setTitle("검색", for: .normal)
+    $0.backgroundColor = .seperator
+    $0.addTarget(self, action: #selector(tappedDoneButton), for: .touchUpInside)
+    $0.isUserInteractionEnabled = false
+  }
   
-  private var selectedItems: [Section: Item] = [:]
+  // MARK: - Initialization
+  
+  init(viewModel: ClothesViewModel) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   // MARK: - Lifecycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    view.backgroundColor = .white
-    setupCollectionView()
-    applySnapshot()
+    setup()
   }
   
   // MARK: - Private Methods
   
-  private func setupCollectionView() {
+  @objc private func tappedDoneButton() {
+    print("완료완료")
+  }
+  
+  private func cofigureDoneButtonActivation() {
+    doneButton.isUserInteractionEnabled = selectedItems.isEmpty == false
+    doneButton.backgroundColor = selectedItems.isEmpty ? .seperator : .accentColor
+  }
+}
+
+// MARK: - Layout
+
+extension ClothesFilterController {
+  private func setup() {
+    setupLayout()
+    setupUI()
+    setupCollectionView()
+    applySnapshot()
+  }
+  
+  private func setupLayout() {
     view.addSubview(collectionView)
     collectionView.snp.makeConstraints {
       $0.top.equalToSuperview().inset(30)
-      $0.horizontalEdges.bottom.equalToSuperview()
+      $0.horizontalEdges.equalToSuperview()
     }
     
+    view.addSubview(doneButton)
+    doneButton.snp.makeConstraints {
+      $0.horizontalEdges.bottom.equalToSuperview().inset(40)
+      $0.top.equalTo(collectionView.snp.bottom)
+      $0.height.equalTo(50)
+    }
+  }
+  
+  private func setupUI() {
+    view.backgroundColor = .white
+    doneButton.layer.cornerRadius = 8
+  }
+  
+  private func setupCollectionView() {
     collectionView.registerCell(cellClass: FilterCell.self)
     collectionView.registerHeaderView(viewClass: FilterTitleHeaderView.self)
     collectionView.dataSource = dataSource
@@ -91,7 +148,7 @@ final class ClothesFilterController: UIViewController {
     let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                            heightDimension: .estimated(20))
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
+    
     let section = NSCollectionLayoutSection(group: group)
     section.contentInsets = .init(top: 8, leading: 10, bottom: 16, trailing: 10)
     
@@ -108,6 +165,11 @@ final class ClothesFilterController: UIViewController {
       elementKind: UICollectionView.elementKindSectionHeader,
       alignment: .top)
   }
+}
+
+// MARK: - DataSource
+
+extension ClothesFilterController {
   
   private func makeDataSource() -> DataSource {
     DataSource(collectionView: collectionView) { collectionView, indexPath, item in
@@ -180,7 +242,7 @@ import SwiftUI
 
 struct ClothesFilterControllerPreview: PreviewProvider {
   static var previews: some View {
-    return ClothesFilterController().toPreview()
+    return ClothesFilterController(viewModel: ClothesViewModel()).toPreview()
   }
 }
 #endif

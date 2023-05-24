@@ -65,7 +65,7 @@ final class ClothesController: UIViewController {
   // MARK: - Private Methods
   
   @objc private func tappedFilterButton() {
-    let filterController = ClothesFilterController()
+    let filterController = ClothesFilterController(viewModel: viewModel)
     present(filterController, animated: true)
   }
 }
