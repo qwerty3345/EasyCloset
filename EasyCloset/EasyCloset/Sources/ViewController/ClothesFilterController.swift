@@ -17,6 +17,17 @@ final class ClothesFilterController: UIViewController {
     case sort
     case weather
     case clothes
+    
+    var description: String {
+      switch self {
+      case .sort:
+        return "정렬"
+      case .weather:
+        return "계절"
+      case .clothes:
+        return "옷 종류"
+      }
+    }
   }
   
   enum Item: Hashable {
@@ -49,6 +60,7 @@ final class ClothesFilterController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    view.backgroundColor = .white
     setupCollectionView()
     applySnapshot()
   }
@@ -58,27 +70,43 @@ final class ClothesFilterController: UIViewController {
   private func setupCollectionView() {
     view.addSubview(collectionView)
     collectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.equalToSuperview().inset(30)
+      $0.horizontalEdges.bottom.equalToSuperview()
     }
     
     collectionView.registerCell(cellClass: FilterCell.self)
+    collectionView.registerHeaderView(viewClass: FilterTitleHeaderView.self)
     collectionView.dataSource = dataSource
     collectionView.delegate = self
+    
+    configureHeaderProvider()
   }
   
   private func makeCollectionViewLayout() -> UICollectionViewLayout {
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2),
-                                          heightDimension: .absolute(20))
+                                          heightDimension: .absolute(30))
     let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    item.contentInsets = .init(top: 0, leading: 4, bottom: 0, trailing: 4)
     
     let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                            heightDimension: .estimated(20))
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-    
+
     let section = NSCollectionLayoutSection(group: group)
-    section.contentInsets = .init(top: 50, leading: 0, bottom: 0, trailing: 0)
+    section.contentInsets = .init(top: 8, leading: 10, bottom: 16, trailing: 10)
+    
+    section.boundarySupplementaryItems = [headerItem()]
     
     return UICollectionViewCompositionalLayout(section: section)
+  }
+  
+  private func headerItem() -> NSCollectionLayoutBoundarySupplementaryItem {
+    let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                            heightDimension: .absolute(40))
+    return NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: headerSize,
+      elementKind: UICollectionView.elementKindSectionHeader,
+      alignment: .top)
   }
   
   private func makeDataSource() -> DataSource {
@@ -86,6 +114,18 @@ final class ClothesFilterController: UIViewController {
       let cell = collectionView.dequeueReusableCell(cellClass: FilterCell.self, for: indexPath)
       cell.filterLabel.text = item.description
       return cell
+    }
+  }
+  
+  private func configureHeaderProvider() {
+    dataSource.supplementaryViewProvider = { collectionView, _, indexPath in
+      let headerView = collectionView.dequeueReusableHeaderView(
+        ofType: FilterTitleHeaderView.self,
+        for: indexPath)
+      if let section = Section(rawValue: indexPath.section) {
+        headerView.configure(with: section)
+      }
+      return headerView
     }
   }
   
@@ -116,10 +156,15 @@ extension ClothesFilterController: UICollectionViewDelegate {
     
     // 이전에 선택된 해당 섹션의 셀이 존재하면 선택 해제
     if let beforeItem = selectedItems[section],
-       let beforeIndexPath = dataSource.indexPath(for: beforeItem),
-       beforeItem != item {
+       let beforeIndexPath = dataSource.indexPath(for: beforeItem) {
       let beforeCell = collectionView.cellForItem(at: beforeIndexPath)
       beforeCell?.backgroundColor = .white
+      
+      // 동일한 셀을 두번 클릭하면 선택 해제만 하고 return
+      if beforeItem == item {
+        selectedItems.removeValue(forKey: section)
+        return
+      }
     }
     
     // 새롭게 선택된 해당 섹션의 셀을 선택
@@ -127,3 +172,15 @@ extension ClothesFilterController: UICollectionViewDelegate {
     selectedItems[section] = item
   }
 }
+
+// MARK: - Preview
+
+#if DEBUG
+import SwiftUI
+
+struct ClothesFilterControllerPreview: PreviewProvider {
+  static var previews: some View {
+    return ClothesFilterController().toPreview()
+  }
+}
+#endif

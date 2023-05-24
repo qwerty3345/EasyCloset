@@ -49,6 +49,7 @@
 		B4504B6A2A1DE9EF0018C9BC /* ClothesFilterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B692A1DE9EF0018C9BC /* ClothesFilterController.swift */; };
 		B4504B6C2A1DEA310018C9BC /* SortBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B6B2A1DEA310018C9BC /* SortBy.swift */; };
 		B4504B6F2A1DEA9A0018C9BC /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B6E2A1DEA9A0018C9BC /* FilterCell.swift */; };
+		B4504B762A1DF7030018C9BC /* FilterTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B752A1DF7030018C9BC /* FilterTitleHeaderView.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -111,6 +112,7 @@
 		B4504B692A1DE9EF0018C9BC /* ClothesFilterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesFilterController.swift; sourceTree = "<group>"; };
 		B4504B6B2A1DEA310018C9BC /* SortBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBy.swift; sourceTree = "<group>"; };
 		B4504B6E2A1DEA9A0018C9BC /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
+		B4504B752A1DF7030018C9BC /* FilterTitleHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTitleHeaderView.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				B4504B6E2A1DEA9A0018C9BC /* FilterCell.swift */,
+				B4504B752A1DF7030018C9BC /* FilterTitleHeaderView.swift */,
 			);
 			path = Filter;
 			sourceTree = "<group>";
@@ -527,6 +530,7 @@
 			files = (
 				B438899E2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift in Sources */,
 				B44EA8BE2A1B4AEE008A83FF /* Style.swift in Sources */,
+				B4504B762A1DF7030018C9BC /* FilterTitleHeaderView.swift in Sources */,
 				B44EA89C2A1B20C7008A83FF /* ClothesDetailViewModel.swift in Sources */,
 				B4470B522A1740AD0024B2B7 /* Array+SafeIndex.swift in Sources */,
 				B43889782A14934600476BFC /* ClothesController.swift in Sources */,

@@ -27,6 +27,13 @@ final class FilterCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
+  // MARK: - Lifecycle
+  
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    filterLabel.text = ""
+  }
+  
   // MARK: - Corner Radius
   // 레이아웃이 변경될 때 마다 모서리를 둥글게 처리해주도록 함
   
