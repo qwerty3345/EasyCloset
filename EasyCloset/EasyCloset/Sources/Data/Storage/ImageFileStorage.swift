@@ -24,7 +24,7 @@ final class ImageFileStorage: ImageFileStorageProtocol {
   // MARK: - Public Methods
 
   func save(image: UIImage, id: UUID) throws {
-    guard let data = image.jpegData(compressionQuality: 1.0),
+    guard let data = image.pngData(),
           let filePath = filePath(of: id) else { return }
     
     try data.write(to: filePath)

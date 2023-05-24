@@ -37,6 +37,7 @@ final class ImageCacheManager {
   }
   
   func store(_ value: UIImage, for id: UUID) {
+    // TODO: PNG 데이터 계산하기
     let bytesOfImage = value.jpegData(compressionQuality: 1.0)?.count ?? 0
     cache.setObject(value, forKey: id.uuidString as NSString, cost: bytesOfImage)
   }
