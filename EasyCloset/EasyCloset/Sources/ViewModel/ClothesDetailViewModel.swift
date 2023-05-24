@@ -13,9 +13,10 @@ final class ClothesDetailViewModel {
   
   // MARK: - Properties
   
-  let clothes: CurrentValueSubject<Clothes, Never>
+  @Published var clothes: Clothes?
   
-  let occuredErrorWhileSave = PassthroughSubject<Void, Never>()
+  let didSuccessToSave = PassthroughSubject<Void, Never>()
+  let didFailToSave = PassthroughSubject<String, Never>()
   
   private var cancellables = Set<AnyCancellable>()
   
@@ -24,10 +25,8 @@ final class ClothesDetailViewModel {
   
   // MARK: - Initialization
   
-  init(clothes: Clothes,
-       clothesStorage: ClothesStorageProtocol = ClothesStorage.shared,
+  init(clothesStorage: ClothesStorageProtocol = ClothesStorage.shared,
        imageFileStorage: ImageFileStorageProtocol = ImageFileStorage.shared) {
-    self.clothes = CurrentValueSubject(clothes)
     self.clothesStorage = clothesStorage
     self.imageFileStorage = imageFileStorage
     bind()
@@ -36,16 +35,24 @@ final class ClothesDetailViewModel {
   // MARK: - Private Methods
   
   private func bind() {
-    clothes.sink { [weak self] clothes in
-      guard let self = self else { return }
+    $clothes.sink { [weak self] clothes in
+      guard let self = self,
+            let clothes = clothes else { return }
+      
       clothesStorage.save(clothes: clothes)
-      if let image = clothes.image {
-        do {
-          try imageFileStorage.save(image: image, id: clothes.id)
-        } catch {
-          self.occuredErrorWhileSave.send()
-        }
+      
+      guard let image = clothes.image else {
+        didFailToSave.send("이미지가 존재하지 않습니다.")
+        return
       }
+      
+      do {
+        try imageFileStorage.save(image: image, id: clothes.id)
+      } catch {
+        didFailToSave.send("저장에 실패했습니다.")
+      }
+      
+      didSuccessToSave.send()
     }
     .store(in: &cancellables)
   }

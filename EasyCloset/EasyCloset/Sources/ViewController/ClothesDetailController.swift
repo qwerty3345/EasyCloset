@@ -16,7 +16,7 @@ final class ClothesDetailController: UIViewController {
   
   // MARK: - Properties
   
-  private var viewModel: ClothesDetailViewModel?
+  private let viewModel = ClothesDetailViewModel()
   
   private let type: ClothesDetailControllerType
   
@@ -59,13 +59,12 @@ final class ClothesDetailController: UIViewController {
   
   init(type: ClothesDetailControllerType) {
     self.type = type
-    
     super.init(nibName: nil, bundle: nil)
-
-    if case .showDetail(clothes: let clothes) = type {
-      viewModel = ClothesDetailViewModel(clothes: clothes)
-      bind()
+    
+    if case let .showDetail(clothes: clothes) = type {
+      self.viewModel.clothes = clothes
     }
+    bind()
   }
   
   required init?(coder: NSCoder) {
@@ -87,22 +86,27 @@ final class ClothesDetailController: UIViewController {
   // MARK: - Private Methods
   
   private func bind() {
-    guard let viewModel = viewModel else { return }
     // viewModel의 output에 대한 bind
-    viewModel.clothes
+    viewModel.$clothes
       .sink { [weak self] clothes in
-        self?.configure(with: clothes)
+        guard let self = self,
+              let clothes = clothes else { return }
+        self.configure(with: clothes)
       }
       .store(in: &cancellables)
     
-    viewModel.occuredErrorWhileSave
-      .sink {
+    viewModel.didFailToSave
+      .sink { [weak self] message in
         // TODO: 저장에 실패했습니다 alert 띄우기.
+        self?.showFailAlert(with: message)
       }
       .store(in: &cancellables)
     
-    // viewModel의 input에 대한 bind
-    
+    viewModel.didSuccessToSave
+      .sink { [weak self] in
+        self?.navigationController?.popViewController(animated: true)
+      }
+      .store(in: &cancellables)
   }
   
   private func configure(with clothes: Clothes) {
@@ -134,13 +138,50 @@ final class ClothesDetailController: UIViewController {
   }
   
   private func addClothes() {
-    navigationController?.popViewController(animated: true)
+    guard let clothes = clothesFromUserInput() else { return }
+    viewModel.clothes = clothes
   }
   
   private func editClothes() {
+    if isEditingClothes {
+      guard let clothes = clothesFromUserInput() else { return }
+      viewModel.clothes = clothes
+    }
+    
     isEditingClothes.toggle()
     editAddBarButton.title = isEditingClothes ? "완료" : "편집"
     photoHandlingView.state = isEditingClothes ? .editing : .show
+  }
+  
+  private func clothesFromUserInput() -> Clothes? {
+    guard let image = photoHandlingView.clothesImageView.image else {
+      showFailAlert(with: "사진은 필수 항목입니다.")
+      return nil
+    }
+    guard let category = ClothesCategory(rawValue: categotyPickerView.selectedRow(inComponent: 0)) else {
+      showFailAlert(with: "카테고리는 필수 항목입니다.")
+      return nil
+    }
+    guard let weatherType = WeatherType(rawValue: weatherSegmentedControl.selectedSegmentIndex) else {
+      showFailAlert(with: "계절은 필수 항목입니다.")
+      return nil
+    }
+    let description = descriptionTextField.text
+    
+    return Clothes(imageURL: "",
+                   image: image,
+                   category: category,
+                   weatherType: weatherType,
+                   description: description)
+  }
+  
+  private func showFailAlert(with title: String) {
+    let alert = UIAlertController(title: title,
+                                  message: nil, preferredStyle: .alert)
+    let confirmAction = UIAlertAction(title: "확인", style: .default)
+    alert.addAction(confirmAction)
+    
+    present(alert, animated: true)
   }
 }
 
