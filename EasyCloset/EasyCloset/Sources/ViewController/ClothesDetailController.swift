@@ -109,7 +109,9 @@ final class ClothesDetailController: UIViewController {
     
     viewModel.didSuccessToSave
       .sink { [weak self] in
-        self?.navigationController?.popViewController(animated: true)
+        if case .add = self?.type {
+          self?.navigationController?.popViewController(animated: true)
+        }
       }
       .store(in: &cancellables)
   }
