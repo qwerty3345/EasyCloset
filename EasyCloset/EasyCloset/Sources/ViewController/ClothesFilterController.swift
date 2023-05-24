@@ -7,6 +7,8 @@
 
 import UIKit
 
+typealias FilterItems = [ClothesFilterController.Item]
+
 final class ClothesFilterController: UIViewController {
   
   // MARK: - Types
@@ -91,7 +93,8 @@ final class ClothesFilterController: UIViewController {
   // MARK: - Private Methods
   
   @objc private func tappedDoneButton() {
-    print("완료완료")
+    let filters = selectedItems.values.map { $0 }
+    viewModel.searchWithFilters.send(filters)
   }
   
   private func cofigureDoneButtonActivation() {
