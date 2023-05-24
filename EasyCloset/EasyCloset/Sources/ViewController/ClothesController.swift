@@ -59,6 +59,11 @@ final class ClothesController: UIViewController {
     setup()
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    viewModel.viewWillAppear.send()
+  }
+  
   // MARK: - Public Methods
   
   // MARK: - Private Methods
