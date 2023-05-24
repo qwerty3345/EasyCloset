@@ -7,6 +7,8 @@
 
 import UIKit
 
+import Combine
+
 typealias FilterItems = [ClothesFilterController.Item]
 
 final class ClothesFilterController: UIViewController {
@@ -52,13 +54,11 @@ final class ClothesFilterController: UIViewController {
   // MARK: - Properties
   
   private lazy var dataSource: DataSource = makeDataSource()
-  private var selectedItems: [Section: Item] = [:] {
-    didSet {
-      cofigureDoneButtonActivation()
-    }
-  }
+  private var selectedItems: [Section: Item] = [:]
   
   private let viewModel: ClothesViewModel
+  
+  private var cancellables = Set<AnyCancellable>()
   
   // MARK: - UI Components
   
@@ -67,9 +67,9 @@ final class ClothesFilterController: UIViewController {
   
   private lazy var doneButton = UIButton().then {
     $0.setTitle("검색", for: .normal)
-    $0.backgroundColor = .seperator
+    $0.setTitleColor(UIColor.white, for: .normal)
+    $0.backgroundColor = .accentColor
     $0.addTarget(self, action: #selector(tappedDoneButton), for: .touchUpInside)
-    $0.isUserInteractionEnabled = false
   }
   
   // MARK: - Initialization
@@ -88,18 +88,37 @@ final class ClothesFilterController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setup()
+    bind()
   }
   
   // MARK: - Private Methods
   
-  @objc private func tappedDoneButton() {
-    let filters = selectedItems.values.map { $0 }
-    viewModel.searchWithFilters.send(filters)
+  private func bind() {
+    viewModel.searchFilters
+      .sink { [weak self] filters in
+        self?.setSelectedFilters(with: filters)
+      }
+      .store(in: &cancellables)
   }
   
-  private func cofigureDoneButtonActivation() {
-    doneButton.isUserInteractionEnabled = selectedItems.isEmpty == false
-    doneButton.backgroundColor = selectedItems.isEmpty ? .seperator : .accentColor
+  private func setSelectedFilters(with filters: FilterItems) {
+    filters.forEach { filter in
+      print(filter)
+      switch filter {
+      case .sort:
+        self.selectedItems[.sort] = filter
+      case .weather:
+        self.selectedItems[.weather] = filter
+      case .clothes:
+        self.selectedItems[.clothes] = filter
+      }
+    }
+  }
+  
+  @objc private func tappedDoneButton() {
+    let filters = selectedItems.values.map { $0 }
+    viewModel.searchFilters.send(filters)
+    dismiss(animated: true)
   }
 }
 
@@ -178,6 +197,13 @@ extension ClothesFilterController {
     DataSource(collectionView: collectionView) { collectionView, indexPath, item in
       let cell = collectionView.dequeueReusableCell(cellClass: FilterCell.self, for: indexPath)
       cell.filterLabel.text = item.description
+      
+      if let section = Section(rawValue: indexPath.section),
+         let selectedItem = self.selectedItems[section],
+         selectedItem == item {
+        cell.backgroundColor = .seperator
+      }
+      
       return cell
     }
   }

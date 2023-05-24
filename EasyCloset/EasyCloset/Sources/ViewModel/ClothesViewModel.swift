@@ -15,7 +15,7 @@ final class ClothesViewModel {
   
   @Published private var clothesList = ClothesList(clothesByCategory: [:])
   
-  let searchWithFilters = CurrentValueSubject<FilterItems, Never>([])
+  let searchFilters = CurrentValueSubject<FilterItems, Never>([])
   let clothesListDidUpdate = PassthroughSubject<Void, Never>()
   
   private var cancellables = Set<AnyCancellable>()
@@ -38,7 +38,7 @@ final class ClothesViewModel {
   func clothes(of category: ClothesCategory) -> AnyPublisher<[Clothes], Never> {
     $clothesList
       .map { $0.clothesByCategory[category] ?? [] }
-      .combineLatest(searchWithFilters)
+      .combineLatest(searchFilters)
       .map(applyFilters)
       .eraseToAnyPublisher()
   }
@@ -71,20 +71,6 @@ final class ClothesViewModel {
         return applyClothes(filter: clothes, to: currentList)
       }
     }
-    
-//    var filteredClothes = clothesList
-//    
-//    for filter in filters {
-//      switch filter {
-//      case .sort(let sort):
-//        filteredClothes = applySort(filter: sort, to: filteredClothes)
-//      case .weather(let weather):
-//        filteredClothes = applyWeather(filter: weather, to: filteredClothes)
-//      case .clothes(let clothes):
-//        filteredClothes = applyClothes(filter: clothes, to: filteredClothes)
-//      }
-//    }
-//    return filteredClothes
   }
   
   private func applySort(filter: SortBy, to clothesList: [Clothes]) -> [Clothes] {
