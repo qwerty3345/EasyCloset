@@ -43,7 +43,7 @@ final class ClothesFilterController: UIViewController {
   
   private lazy var dataSource: DataSource = makeDataSource()
   
-//  private var selectedItems: [Section: Item] = [:]
+  private var selectedItems: [Section: Item] = [:]
   
   // MARK: - Lifecycle
   
@@ -111,18 +111,19 @@ extension ClothesFilterController: UICollectionViewDelegate {
   
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
-    guard let section = Section(rawValue: indexPath.section) else { return }
+    guard let section = Section(rawValue: indexPath.section),
+          let item = dataSource.itemIdentifier(for: indexPath) else { return }
     
-    guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-    switch item {
-    case .sort(let sort):
-      print(sort)
-    case .weather(let weather):
-      print(weather)
-    case .clothes(let clothes):
-      print(clothes)
+    // 이전에 선택된 해당 섹션의 셀이 존재하면 선택 해제
+    if let beforeItem = selectedItems[section],
+       let beforeIndexPath = dataSource.indexPath(for: beforeItem),
+       beforeItem != item {
+      let beforeCell = collectionView.cellForItem(at: beforeIndexPath)
+      beforeCell?.backgroundColor = .white
     }
     
-    collectionView.cellForItem(at: indexPath)?.backgroundColor = .blue
+    // 새롭게 선택된 해당 섹션의 셀을 선택
+    collectionView.cellForItem(at: indexPath)?.backgroundColor = .seperator
+    selectedItems[section] = item
   }
 }
