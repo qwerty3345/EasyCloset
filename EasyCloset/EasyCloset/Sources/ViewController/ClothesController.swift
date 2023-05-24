@@ -33,12 +33,13 @@ final class ClothesController: UIViewController {
     $0.itemSize = CGSize(width: view.frame.width, height: Metric.collectionViewRowHeight)
   }
   
-  private let filterButton = UIButton().then {
+  private lazy var filterButton = UIButton().then {
     $0.setImage(.filter, for: .normal)
     $0.imageView?.contentMode = .scaleAspectFit
     $0.snp.makeConstraints { make in
       make.width.height.equalTo(24)
     }
+    $0.addTarget(self, action: #selector(tappedFilterButton), for: .touchUpInside)
   }
     
   // MARK: - Initialization
@@ -63,6 +64,10 @@ final class ClothesController: UIViewController {
   
   // MARK: - Private Methods
   
+  @objc private func tappedFilterButton() {
+    let filterController = ClothesFilterController(viewModel: viewModel)
+    present(filterController, animated: true)
+  }
 }
 
 // MARK: - UI & Layout

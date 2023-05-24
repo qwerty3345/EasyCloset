@@ -13,8 +13,9 @@ final class ClothesViewModel {
   
   // MARK: - Properties
   
-  @Published private(set) var clothesList = ClothesList(clothesByCategory: [:])
+  @Published private var clothesList = ClothesList(clothesByCategory: [:])
   
+  let searchFilters = CurrentValueSubject<FilterItems, Never>([])
   let clothesListDidUpdate = PassthroughSubject<Void, Never>()
   
   private var cancellables = Set<AnyCancellable>()
@@ -36,9 +37,9 @@ final class ClothesViewModel {
   
   func clothes(of category: ClothesCategory) -> AnyPublisher<[Clothes], Never> {
     $clothesList
-      .map {
-        $0.clothesByCategory[category] ?? []
-      }
+      .map { $0.clothesByCategory[category] ?? [] }
+      .combineLatest(searchFilters)
+      .map(applyFilters)
       .eraseToAnyPublisher()
   }
   
@@ -57,5 +58,35 @@ final class ClothesViewModel {
         self?.clothesList = clothesList
       }
       .store(in: &cancellables)
+  }
+    
+  private func applyFilters(clothesList: [Clothes], filters: FilterItems) -> [Clothes] {
+    return filters.reduce(clothesList) { currentList, filter in
+      switch filter {
+      case .sort(let sort):
+        return applySort(filter: sort, to: currentList)
+      case .weather(let weather):
+        return applyWeather(filter: weather, to: currentList)
+      case .clothes(let clothes):
+        return applyClothes(filter: clothes, to: currentList)
+      }
+    }
+  }
+  
+  private func applySort(filter: SortBy, to clothesList: [Clothes]) -> [Clothes] {
+    switch filter {
+    case .new:
+      return clothesList.sorted { $0.createdAt > $1.createdAt }
+    case .old:
+      return clothesList.sorted { $0.createdAt < $1.createdAt }
+    }
+  }
+  
+  private func applyWeather(filter: WeatherType, to clothesList: [Clothes]) -> [Clothes] {
+    return clothesList.filter { $0.weatherType == filter }
+  }
+  
+  private func applyClothes(filter: ClothesCategory, to clothesList: [Clothes]) -> [Clothes] {
+    return clothesList.filter { $0.category == filter }
   }
 }
