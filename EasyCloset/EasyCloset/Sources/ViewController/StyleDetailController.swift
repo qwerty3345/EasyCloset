@@ -20,23 +20,36 @@ final class StyleDetailController: UIViewController {
     static let padding: CGFloat = 20
   }
   
+  typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
+  
+  enum Section: Int, CaseIterable {
+    case main
+  }
+  
+  enum Item: Hashable {
+    case notAdded(ClothesCategory)
+    case clothes(Clothes)
+  }
+  
   // MARK: - Properties
   
   private let viewModel = StyleViewModel()
   
   private let type: StyleDetailControllerType
   
-  private var isEditingStyle = false {
+  private var isEditing = false {
     didSet {
-      turnEditMode(isOn: isEditingStyle)
+      turnEditMode(isOn: isEditing)
     }
   }
+  
+  private lazy var dataSource: DataSource = makeDataSource()
   
   private var cancellables = Set<AnyCancellable>()
   
   // MARK: - UI Components
   
-  private lazy var colletionView = UICollectionView(
+  private lazy var collectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: collectionViewFlowLayout)
   private lazy var collectionViewFlowLayout = UICollectionViewFlowLayout().then {
@@ -76,21 +89,31 @@ final class StyleDetailController: UIViewController {
     
   }
   
-  private func configure(with style: Style) {
-    guard case .showDetail = type else { return }
-    
-//    photoHandlingView.setImage(clothes.image)
-//    categotyPickerView.selectRow(clothes.category.rawValue,
-//                                 inComponent: 0, animated: false)
-//    weatherSegmentedControl.selectedSegmentIndex = clothes.weatherType.rawValue
-//    descriptionTextField.text = clothes.descriptions
-//    turnEditMode(isOn: false)
-  }
-  
+  // 편집 모드 상태에 따라 UI를 업데이트
   private func turnEditMode(isOn: Bool) {
-//    categotyPickerView.isUserInteractionEnabled = isOn
-//    weatherSegmentedControl.isUserInteractionEnabled = isOn
-//    descriptionTextField.isUserInteractionEnabled = isOn
+    guard case let .showDetail(style: style) = type else { return }
+    
+    editAddBarButton.title = isOn ? "완료" : "편집"
+    
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+    snapshot.appendSections(Section.allCases)
+    
+    let clothesItems = style.clothes.values.map { Item.clothes($0) }
+    snapshot.appendItems(clothesItems, toSection: .main)
+    
+    // 편집 모드가 켜졌을 때는, 추가되지 않은 의류종류의 셀을 표시함
+    if isOn {
+      let categories = style.clothes.values.map { $0.category }
+      
+      let notAddedItems = ClothesCategory.allCases
+        .filter { category in
+          categories.contains(category) == false
+        }
+        .map { Item.notAdded($0) }
+      snapshot.appendItems(notAddedItems, toSection: .main)
+    }
+    
+    dataSource.apply(snapshot, animatingDifferences: true)
   }
   
   @objc private func tappedEditAddButton() {
@@ -106,8 +129,10 @@ final class StyleDetailController: UIViewController {
   }
   
   private func editStyle() {
-    if isEditingStyle {
+    if isEditing {
+      
     }
+    isEditing.toggle()
   }
   
   private func showFailAlert(with title: String) {
@@ -137,42 +162,82 @@ extension StyleDetailController {
   }
   
   private func setupLayout() {
-    view.addSubview(colletionView)
-    colletionView.snp.makeConstraints {
+    view.addSubview(collectionView)
+    collectionView.snp.makeConstraints {
       $0.edges.equalToSuperview()
     }
   }
   
   private func setupCollectionView() {
-    colletionView.registerCell(cellClass: StyleDetailCell.self)
-    colletionView.dataSource = self
-    colletionView.contentInset = .init(top: 0, left: Metric.padding,
-                                       bottom: 0, right: Metric.padding)
+    collectionView.registerCell(cellClass: StyleDetailCell.self)
+    collectionView.dataSource = dataSource
+    collectionView.contentInset = UIEdgeInsets(top: 0, left: Metric.padding,
+                                               bottom: 0, right: Metric.padding)
+    applySnapshot()
+  }
+}
+
+// MARK: - DataSource
+
+extension StyleDetailController {
+  
+  private func makeDataSource() -> DataSource {
+    
+    return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
+      let cell = collectionView.dequeueReusableCell(cellClass: StyleDetailCell.self, for: indexPath)
+      
+      switch item {
+      case .notAdded(let category):
+        cell.configure(category: category)
+      case .clothes(let clothes):
+        cell.configure(with: clothes)
+      }
+      return cell
+    }
   }
   
+  private func applySnapshot() {
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+    snapshot.appendSections(Section.allCases)
+    
+    switch type {
+    case .add:
+      let items = ClothesCategory.allCases.map { Item.notAdded($0) }
+      snapshot.appendItems(items, toSection: .main)
+    case .showDetail(style: let style):
+      let items = style.clothes.values.map { Item.clothes($0) }
+      snapshot.appendItems(items, toSection: .main)
+    }
+    
+    dataSource.apply(snapshot, animatingDifferences: true)
+  }
 }
 
 // MARK: - UICollectionViewDataSource
 
-extension StyleDetailController: UICollectionViewDataSource {
-  
-  func collectionView(_ collectionView: UICollectionView,
-                      numberOfItemsInSection section: Int) -> Int {
-    return ClothesCategory.allCases.count
-  }
-  
-  func collectionView(_ collectionView: UICollectionView,
-                      cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(cellClass: StyleDetailCell.self, for: indexPath)
-    
-    if let category = ClothesCategory(rawValue: indexPath.row),
-       case let .showDetail(style: style) = type,
-       let clothes = style.clothes[category] {
-      cell.configure(with: clothes)
-    }
-    return cell
-  }
-}
+//extension StyleDetailController: UICollectionViewDataSource {
+//
+//  func collectionView(_ collectionView: UICollectionView,
+//                      numberOfItemsInSection section: Int) -> Int {
+//    return ClothesCategory.allCases.count
+//  }
+//
+//  func collectionView(_ collectionView: UICollectionView,
+//                      cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//    let cell = collectionView.dequeueReusableCell(cellClass: StyleDetailCell.self, for: indexPath)
+//
+//    guard let category = ClothesCategory(rawValue: indexPath.row) else {
+//      return cell
+//    }
+//    cell.configure(category: category)
+//
+//    if case let .showDetail(style: style) = type,
+//       let clothes = style.clothes[category] {
+//      cell.configure(with: clothes)
+//    }
+//    return cell
+//  }
+//}
 
 // MARK: - ClothesDetailControllerType
 

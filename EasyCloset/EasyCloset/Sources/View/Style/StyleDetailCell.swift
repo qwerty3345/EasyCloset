@@ -22,6 +22,7 @@ final class StyleDetailCell: UICollectionViewCell, Highlightable {
   
   private let clothesImageView = UIImageView().then {
     $0.contentMode = .scaleAspectFit
+    $0.image = .hangerPlus
   }
   
   // MARK: - Touch Events
@@ -56,6 +57,10 @@ final class StyleDetailCell: UICollectionViewCell, Highlightable {
   
   // MARK: - Public Methods
   
+  func configure(category: ClothesCategory) {
+    clothesLabel.text = category.korean
+  }
+  
   func configure(with clothes: Clothes) {
     clothesImageView.image = clothes.image
     clothesLabel.text = clothes.category.korean
@@ -64,7 +69,7 @@ final class StyleDetailCell: UICollectionViewCell, Highlightable {
   // MARK: - Private Methods
   
   private func resetUIComponents() {
-    clothesImageView.image = nil
+    clothesImageView.image = .hangerPlus
     clothesLabel.text = ""
   }
 }
@@ -107,6 +112,7 @@ struct StyleDetailCellPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
       let cell = StyleDetailCell()
+      cell.configure(category: .accessory)
       cell.configure(with: .mock)
       return cell
     }
