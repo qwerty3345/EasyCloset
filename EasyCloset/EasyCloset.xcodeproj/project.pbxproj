@@ -42,7 +42,6 @@
 		B4470B5C2A176C3A0024B2B7 /* ShadowableCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */; };
 		B44EA89C2A1B20C7008A83FF /* ClothesDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44EA89B2A1B20C7008A83FF /* ClothesDetailViewModel.swift */; };
 		B44EA8B52A1B2C92008A83FF /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B44EA8B42A1B2C92008A83FF /* RealmSwift */; };
-		B44EA8B72A1B2F6A008A83FF /* ClothesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */; };
 		B44EA8B92A1B311F008A83FF /* ClothesEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44EA8B82A1B311F008A83FF /* ClothesEntity.swift */; };
 		B44EA8BC2A1B3F72008A83FF /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = B44EA8BB2A1B3F72008A83FF /* Realm */; };
 		B44EA8BE2A1B4AEE008A83FF /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44EA8BD2A1B4AEE008A83FF /* Style.swift */; };
@@ -50,6 +49,8 @@
 		B4504B6C2A1DEA310018C9BC /* SortBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B6B2A1DEA310018C9BC /* SortBy.swift */; };
 		B4504B6F2A1DEA9A0018C9BC /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B6E2A1DEA9A0018C9BC /* FilterCell.swift */; };
 		B4504B762A1DF7030018C9BC /* FilterTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B752A1DF7030018C9BC /* FilterTitleHeaderView.swift */; };
+		B46111432A1F481200104C3A /* ClothesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46111422A1F481200104C3A /* ClothesRepository.swift */; };
+		B46111452A1F484600104C3A /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46111442A1F484600104C3A /* RealmStorage.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -106,13 +107,14 @@
 		B4470B592A1766040024B2B7 /* UIView+Shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Shadow.swift"; sourceTree = "<group>"; };
 		B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowableCellType.swift; sourceTree = "<group>"; };
 		B44EA89B2A1B20C7008A83FF /* ClothesDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesDetailViewModel.swift; sourceTree = "<group>"; };
-		B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesStorage.swift; sourceTree = "<group>"; };
 		B44EA8B82A1B311F008A83FF /* ClothesEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesEntity.swift; sourceTree = "<group>"; };
 		B44EA8BD2A1B4AEE008A83FF /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		B4504B692A1DE9EF0018C9BC /* ClothesFilterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesFilterController.swift; sourceTree = "<group>"; };
 		B4504B6B2A1DEA310018C9BC /* SortBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBy.swift; sourceTree = "<group>"; };
 		B4504B6E2A1DEA9A0018C9BC /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
 		B4504B752A1DF7030018C9BC /* FilterTitleHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTitleHeaderView.swift; sourceTree = "<group>"; };
+		B46111422A1F481200104C3A /* ClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesRepository.swift; sourceTree = "<group>"; };
+		B46111442A1F484600104C3A /* RealmStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmStorage.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -120,7 +122,6 @@
 		B46CB8BE2A1473A000039F72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B46CB8C12A1473A000039F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B46CB8C32A1473A000039F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B46CB8DF2A148B3700039F72 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		B49CAACE2A1B5169008254C7 /* StyleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleCell.swift; sourceTree = "<group>"; };
 		B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleViewModel.swift; sourceTree = "<group>"; };
 		B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
@@ -326,7 +327,7 @@
 		B46CB8D72A1489E800039F72 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				B46CB8DF2A148B3700039F72 /* .gitkeep */,
+				B46111422A1F481200104C3A /* ClothesRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -334,8 +335,8 @@
 		B46CB8DE2A148B1B00039F72 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */,
 				B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */,
+				B46111442A1F484600104C3A /* RealmStorage.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -541,6 +542,7 @@
 				B4470B562A1743130024B2B7 /* ClothesList.swift in Sources */,
 				B4504B6F2A1DEA9A0018C9BC /* FilterCell.swift in Sources */,
 				B43889A92A14B7E600476BFC /* ClothesCell.swift in Sources */,
+				B46111432A1F481200104C3A /* ClothesRepository.swift in Sources */,
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
 				B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */,
 				B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */,
@@ -556,7 +558,6 @@
 				B4F1F4282A18C84D00DA6358 /* ClothesDetailController.swift in Sources */,
 				B4504B6C2A1DEA310018C9BC /* SortBy.swift in Sources */,
 				B4E5C56A2A1C9E3E00B14F48 /* UIImage+Resize.swift in Sources */,
-				B44EA8B72A1B2F6A008A83FF /* ClothesStorage.swift in Sources */,
 				B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
@@ -564,6 +565,7 @@
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */,
 				B4F1F4382A192B7D00DA6358 /* PhotoHandlingView.swift in Sources */,
+				B46111452A1F484600104C3A /* RealmStorage.swift in Sources */,
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
 				B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */,

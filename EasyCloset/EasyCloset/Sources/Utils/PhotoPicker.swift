@@ -63,7 +63,9 @@ final class PhotoPicker: NSObject {
         picker.cameraCaptureMode = .photo
         picker.delegate = self
         
-        self.viewController?.present(picker, animated: true)
+        DispatchQueue.main.async {
+          self.viewController?.present(picker, animated: true)
+        }
         
         self.imageCompletionHandler = { result in
           switch result {
@@ -86,7 +88,9 @@ final class PhotoPicker: NSObject {
       let picker = PHPickerViewController(configuration: configuration)
       picker.delegate = self
       
-      self.viewController?.present(picker, animated: true)
+      DispatchQueue.main.async {
+        self.viewController?.present(picker, animated: true)
+      }
       
       self.imageCompletionHandler = { result in
         switch result {

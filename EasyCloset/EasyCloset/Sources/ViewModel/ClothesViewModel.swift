@@ -20,16 +20,13 @@ final class ClothesViewModel {
   
   private var cancellables = Set<AnyCancellable>()
   
-  private let clothesStorage: ClothesStorageProtocol
-  private let imageFileStorage: ImageFileStorageProtocol
+  private let repository: ClothesRepositoryProtocol
   
   // MARK: - Initialization
   
   // 1초 후에 로딩 되는 것을 테스트 함
-  init(clothesStorage: ClothesStorageProtocol = ClothesStorage.shared,
-       imageFileStorage: ImageFileStorageProtocol = ImageFileStorage.shared) {
-    self.clothesStorage = clothesStorage
-    self.imageFileStorage = imageFileStorage
+  init(repository: ClothesRepositoryProtocol = ClothesRepository.shared) {
+    self.repository = repository
     bind()
   }
   
@@ -46,7 +43,7 @@ final class ClothesViewModel {
   // MARK: - Private Methods
   
   private func bind() {
-    clothesStorage.fetchClothesList()
+    repository.fetchClothesList()
       .sink { completion in
         if case let .failure(error) = completion {
           print(error)
@@ -58,8 +55,8 @@ final class ClothesViewModel {
     
     clothesListDidUpdate
       .flatMap { [weak self] in
-        guard let self = self else { return Empty<ClothesList, StorageError>().eraseToAnyPublisher() }
-        return self.clothesStorage.fetchClothesList()
+        guard let self = self else { return Empty<ClothesList, RepositoryError>().eraseToAnyPublisher() }
+        return self.repository.fetchClothesList()
       }
       .sink { completion in
         if case let .failure(error) = completion {

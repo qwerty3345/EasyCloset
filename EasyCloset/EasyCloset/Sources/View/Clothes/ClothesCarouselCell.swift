@@ -74,7 +74,9 @@ final class ClothesCarouselCell: UICollectionViewCell {
     viewModel.clothes(of: category)
       .sink { [weak self] clothes in
         guard let self = self else { return }
-        self.applySnapshot(with: clothes)
+        DispatchQueue.main.async {
+          self.applySnapshot(with: clothes)
+        }
       }
       .store(in: &cancellables)
   }

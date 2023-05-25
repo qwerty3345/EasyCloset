@@ -9,6 +9,8 @@ import UIKit
 
 import Combine
 
+// MARK: - Protocol, FileManagerError
+
 protocol ImageFileStorageProtocol {
   func save(image: UIImage, id: UUID) -> Future<Void, FileManagerError>
   func load(withID id: UUID) -> Future<UIImage, FileManagerError>
@@ -20,6 +22,8 @@ enum FileManagerError: Error {
   case invalidData
   case failToWrite(error: Error)
 }
+
+// MARK: - ImageFileStorage
 
 final class ImageFileStorage: ImageFileStorageProtocol {
   
