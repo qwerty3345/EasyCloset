@@ -62,6 +62,28 @@ final class ImageFileStorage: ImageFileStorageProtocol {
     }
   }
   
+  func load(withID id: UUID) -> Future<UIImage, FileManagerError> {
+    return Future { promise in
+      guard let filePath = self.filePath(of: id) else {
+        promise(.failure(.invalidFilePath))
+        return
+      }
+      
+      DispatchQueue.global().async {
+        do {
+          let data = try Data(contentsOf: filePath)
+          guard let image = UIImage(data: data) else {
+            promise(.failure(.invalidData))
+            return
+          }
+          promise(.success(image))
+        } catch {
+          promise(.failure(.failToWrite(error: error)))
+        }
+      }
+    }
+  }
+  
   func remove(withID id: UUID, completion: ((FileManagerError?) -> Void)? = nil) {
     guard let filePath = filePath(of: id) else {
       completion?(.invalidFilePath)
