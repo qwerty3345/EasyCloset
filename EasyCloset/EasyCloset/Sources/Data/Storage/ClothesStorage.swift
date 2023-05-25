@@ -46,28 +46,13 @@ final class ClothesStorage: ClothesStorageProtocol {
       }
       
       // 반영한 모델들을 다 합한 결과를 future로 내뱉음.
-      let clothesEntities = realm.objects(ClothesEntity.self)
+      let clothesEntities = Array(realm.objects(ClothesEntity.self))
       let clothesModelsWithoutImage = clothesEntities.map { $0.toModelWithoutImage() }
       
-      // ImageFileStorage를 호출해 이미지를 로딩해서 clothes에 넣는 것을 처리하는 Publisher들
-      let clothesWithImagePublishers: [AnyPublisher<Clothes, Never>] = clothesModelsWithoutImage.map { model in
-        ImageFileStorage.shared.load(withID: model.id)
-          .replaceError(with: UIImage())
-          .map { image in
-            var clothes = model
-            clothes.image = image
-            return clothes
-          }
-          .eraseToAnyPublisher()
-      }
-      
-      // 위에서 만든 단일의 Clothes를 방출하는 여러 Publisher들을 모아서 [Clothes] 를 방출하는 하나의 Publisher로 만듬
-      Publishers.MergeMany(clothesWithImagePublishers)
-        .collect()
-        .eraseToAnyPublisher()
-        .sink { clothesArray in
+      addingImagePublishers(to: clothesModelsWithoutImage)
+        .sink { clothesModels in
           // 이미지가 모두 반영 된 ClothesList
-          let clothesList = clothesArray.toClothesList()
+          let clothesList = clothesModels.toClothesList()
           promise(.success(clothesList))
         }
         .store(in: &cancellables)
@@ -92,5 +77,26 @@ final class ClothesStorage: ClothesStorageProtocol {
     try? realm.write {
       realm.delete(clothesList)
     }
+  }
+  
+  // MARK: - Private Methods
+  
+  private func addingImagePublishers(to clothesModels: [Clothes]) -> AnyPublisher<[Clothes], Never> {
+    // ImageFileStorage를 호출해 이미지를 로딩해서 clothes에 넣는 것을 처리하는 Publisher들
+    let clothesWithImagePublishers: [AnyPublisher<Clothes, Never>] = clothesModels.map { model in
+      ImageFileStorage.shared.load(withID: model.id)
+        .replaceError(with: UIImage())
+        .map { image in
+          var clothes = model
+          clothes.image = image
+          return clothes
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    // 위에서 만든 단일의 Clothes를 방출하는 여러 Publisher들을 모아서 [Clothes] 를 방출하는 하나의 Publisher로 만듬
+    return Publishers.MergeMany(clothesWithImagePublishers)
+      .collect()
+      .eraseToAnyPublisher()
   }
 }
