@@ -39,6 +39,8 @@ final class ClothesDetailViewModel {
       guard let self = self,
             let clothes = clothes else { return }
       
+      // TODO: 뷰모델에서 너무 많은 일을 함...
+      
       clothesStorage.save(clothes: clothes)
       
       guard let image = clothes.image else {
@@ -46,13 +48,13 @@ final class ClothesDetailViewModel {
         return
       }
       
-      do {
-        try imageFileStorage.save(image: image, id: clothes.id)
-      } catch {
-        didFailToSave.send("저장에 실패했습니다.")
+      imageFileStorage.save(image: image, id: clothes.id) { [weak self] error in
+        guard error == nil else {
+          self?.didFailToSave.send("저장에 실패했습니다.")
+          return
+        }
+        self?.didSuccessToSave.send()
       }
-      
-      didSuccessToSave.send()
     }
     .store(in: &cancellables)
   }

@@ -35,7 +35,13 @@ struct ClothesStorage: ClothesStorageProtocol {
     return realm.objects(ClothesEntity.self)
       .map { entity in
         var model = entity.toModelWithoutImage()
-        model.image = ImageFileStorage.shared.load(withID: model.id)
+        
+        // TODO: 얘가 비동기이기 때문에 이미지가 로드되기도 전에 기다리지 않고 넘어감. 또한 함수형으로 처리하기 힘들어짐... completion 내부로 처리해야 함..!
+        ImageFileStorage.shared.load(withID: model.id) { image in
+          if let image = image {
+            model.image = image
+          }
+        }
         return model
       }
       .reduce(into: ClothesList(clothesByCategory: [:]), { result, clothes in

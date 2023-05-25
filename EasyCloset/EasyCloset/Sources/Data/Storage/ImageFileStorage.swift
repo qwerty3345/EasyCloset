@@ -7,10 +7,18 @@
 
 import UIKit
 
+import Combine
+
 protocol ImageFileStorageProtocol {
-  func save(image: UIImage, id: UUID) throws
-  func load(withID id: UUID) -> UIImage?
-  func remove(withID id: UUID) -> Bool
+  func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)?)
+  func load(withID id: UUID, completion: @escaping (UIImage?) -> Void)
+  func remove(withID id: UUID, completion: ((FileManagerError?) -> Void)?)
+}
+
+enum FileManagerError: Error {
+  case invalidFilePath
+  case invalidData
+  case failToWrite(error: Error)
 }
 
 final class ImageFileStorage: ImageFileStorageProtocol {
@@ -22,33 +30,51 @@ final class ImageFileStorage: ImageFileStorageProtocol {
   private init() { }
   
   // MARK: - Public Methods
-
-  func save(image: UIImage, id: UUID) throws {
+  
+  func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)? = nil) {
     guard let data = image.pngData(),
           let filePath = filePath(of: id) else { return }
     
-    try data.write(to: filePath)
-  }
-  
-  func load(withID id: UUID) -> UIImage? {
-    guard let filePath = filePath(of: id) else { return nil }
-    do {
-      let data = try Data(contentsOf: filePath)
-      return UIImage(data: data)
-    } catch {
-      return nil
+    DispatchQueue.global(qos: .utility).async {
+      do {
+        try data.write(to: filePath)
+        completion?(nil)
+      } catch {
+        completion?(.failToWrite(error: error))
+      }
     }
   }
   
-  @discardableResult
-  func remove(withID id: UUID) -> Bool {
-    guard let filePath = filePath(of: id) else { return false }
+  func load(withID id: UUID, completion: @escaping (UIImage?) -> Void) {
+    guard let filePath = filePath(of: id) else {
+      completion(nil)
+      return
+    }
     
-    do {
-      try FileManager.default.removeItem(at: filePath)
-      return true
-    } catch {
-      return false
+    DispatchQueue.global().async {
+      do {
+        let data = try Data(contentsOf: filePath)
+        let image = UIImage(data: data)
+        completion(image)
+      } catch {
+        completion(nil)
+      }
+    }
+  }
+  
+  func remove(withID id: UUID, completion: ((FileManagerError?) -> Void)? = nil) {
+    guard let filePath = filePath(of: id) else {
+      completion?(.invalidFilePath)
+      return
+    }
+    
+    DispatchQueue.global(qos: .utility).async {
+      do {
+        try FileManager.default.removeItem(at: filePath)
+        completion?(nil)
+      } catch {
+        completion?(.failToWrite(error: error))
+      }
     }
   }
   
