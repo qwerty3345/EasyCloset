@@ -50,6 +50,8 @@
 		B4504B6C2A1DEA310018C9BC /* SortBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B6B2A1DEA310018C9BC /* SortBy.swift */; };
 		B4504B6F2A1DEA9A0018C9BC /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B6E2A1DEA9A0018C9BC /* FilterCell.swift */; };
 		B4504B762A1DF7030018C9BC /* FilterTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4504B752A1DF7030018C9BC /* FilterTitleHeaderView.swift */; };
+		B46111432A1F481200104C3A /* ClothesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46111422A1F481200104C3A /* ClothesRepository.swift */; };
+		B46111452A1F484600104C3A /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46111442A1F484600104C3A /* RealmStorage.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -113,6 +115,8 @@
 		B4504B6B2A1DEA310018C9BC /* SortBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBy.swift; sourceTree = "<group>"; };
 		B4504B6E2A1DEA9A0018C9BC /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
 		B4504B752A1DF7030018C9BC /* FilterTitleHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTitleHeaderView.swift; sourceTree = "<group>"; };
+		B46111422A1F481200104C3A /* ClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesRepository.swift; sourceTree = "<group>"; };
+		B46111442A1F484600104C3A /* RealmStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmStorage.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -327,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				B46CB8DF2A148B3700039F72 /* .gitkeep */,
+				B46111422A1F481200104C3A /* ClothesRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -336,6 +341,7 @@
 			children = (
 				B44EA8B62A1B2F6A008A83FF /* ClothesStorage.swift */,
 				B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */,
+				B46111442A1F484600104C3A /* RealmStorage.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -541,6 +547,7 @@
 				B4470B562A1743130024B2B7 /* ClothesList.swift in Sources */,
 				B4504B6F2A1DEA9A0018C9BC /* FilterCell.swift in Sources */,
 				B43889A92A14B7E600476BFC /* ClothesCell.swift in Sources */,
+				B46111432A1F481200104C3A /* ClothesRepository.swift in Sources */,
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
 				B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */,
 				B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */,
@@ -564,6 +571,7 @@
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */,
 				B4F1F4382A192B7D00DA6358 /* PhotoHandlingView.swift in Sources */,
+				B46111452A1F484600104C3A /* RealmStorage.swift in Sources */,
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
 				B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */,
