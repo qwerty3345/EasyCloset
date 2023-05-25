@@ -37,9 +37,9 @@ final class StyleDetailController: UIViewController {
   
   private let type: StyleDetailControllerType
   
-  private var isEditing = false {
+  private var isEditingMode = false {
     didSet {
-      turnEditMode(isOn: isEditing)
+      updateUI(withEditingMode: isEditingMode)
     }
   }
   
@@ -90,10 +90,10 @@ final class StyleDetailController: UIViewController {
   }
   
   // 편집 모드 상태에 따라 UI를 업데이트
-  private func turnEditMode(isOn: Bool) {
+  private func updateUI(withEditingMode isEditingMode: Bool) {
     guard case let .showDetail(style: style) = type else { return }
     
-    editAddBarButton.title = isOn ? "완료" : "편집"
+    editAddBarButton.title = isEditingMode ? "완료" : "편집"
     
     var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections(Section.allCases)
@@ -102,7 +102,7 @@ final class StyleDetailController: UIViewController {
     snapshot.appendItems(clothesItems, toSection: .main)
     
     // 편집 모드가 켜졌을 때는, 추가되지 않은 의류종류의 셀을 표시함
-    if isOn {
+    if isEditingMode {
       let categories = style.clothes.values.map { $0.category }
       
       let notAddedItems = ClothesCategory.allCases
@@ -129,10 +129,10 @@ final class StyleDetailController: UIViewController {
   }
   
   private func editStyle() {
-    if isEditing {
+    if isEditingMode {
       
     }
-    isEditing.toggle()
+    isEditingMode.toggle()
   }
   
   private func showFailAlert(with title: String) {
