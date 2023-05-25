@@ -97,20 +97,26 @@ final class ClothesDetailController: UIViewController {
       .sink { [weak self] clothes in
         guard let self = self,
               let clothes = clothes else { return }
-        self.configure(with: clothes)
+        DispatchQueue.main.async {
+          self.configure(with: clothes)
+        }
       }
       .store(in: &cancellables)
     
     viewModel.didFailToSave
       .sink { [weak self] message in
-        self?.showFailAlert(with: message)
+        DispatchQueue.main.async {
+          self?.showFailAlert(with: message)
+        }
       }
       .store(in: &cancellables)
     
     viewModel.didSuccessToSave
       .sink { [weak self] in
         if case .add = self?.type {
-          self?.navigationController?.popViewController(animated: true)
+          DispatchQueue.main.async {
+            self?.navigationController?.popViewController(animated: true)
+          }
         }
       }
       .store(in: &cancellables)

@@ -10,9 +10,9 @@ import UIKit
 import Combine
 
 protocol ImageFileStorageProtocol {
-  func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)?)
+  func save(image: UIImage, id: UUID) -> Future<Void, FileManagerError>
   func load(withID id: UUID) -> Future<UIImage, FileManagerError>
-  func remove(withID id: UUID, completion: ((FileManagerError?) -> Void)?)
+  func remove(withID id: UUID) -> Future<Void, FileManagerError>
 }
 
 enum FileManagerError: Error {
@@ -31,18 +31,31 @@ final class ImageFileStorage: ImageFileStorageProtocol {
   
   // MARK: - Public Methods
   
-  func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)? = nil) {
-    guard let data = image.pngData(),
-          let filePath = filePath(of: id) else { return }
-    
-    DispatchQueue.global(qos: .utility).async {
-      do {
-        try data.write(to: filePath)
-        completion?(nil)
-      } catch {
-        completion?(.failToWrite(error: error))
+  @discardableResult
+  func save(image: UIImage, id: UUID) -> Future<Void, FileManagerError> {
+    return Future { [weak self] promise in
+      guard let self = self else { return }
+      
+      guard let data = image.pngData() else {
+        promise(.failure(.invalidData))
+        return
+      }
+      
+      guard let filePath = self.filePath(of: id) else {
+        promise(.failure(.invalidFilePath))
+        return
+      }
+      
+      DispatchQueue.global(qos: .utility).async {
+        do {
+          try data.write(to: filePath)
+          promise(.success(()))
+        } catch {
+          promise(.failure(.failToWrite(error: error)))
+        }
       }
     }
+    
   }
   
   func load(withID id: UUID) -> Future<UIImage, FileManagerError> {
@@ -67,18 +80,22 @@ final class ImageFileStorage: ImageFileStorageProtocol {
     }
   }
   
-  func remove(withID id: UUID, completion: ((FileManagerError?) -> Void)? = nil) {
-    guard let filePath = filePath(of: id) else {
-      completion?(.invalidFilePath)
-      return
-    }
-    
-    DispatchQueue.global(qos: .utility).async {
-      do {
-        try FileManager.default.removeItem(at: filePath)
-        completion?(nil)
-      } catch {
-        completion?(.failToWrite(error: error))
+  func remove(withID id: UUID) -> Future<Void, FileManagerError> {
+    return Future { [weak self] promise in
+      guard let self = self else { return }
+      
+      guard let filePath = filePath(of: id) else {
+        promise(.failure(.invalidFilePath))
+        return
+      }
+      
+      DispatchQueue.global(qos: .utility).async {
+        do {
+          try FileManager.default.removeItem(at: filePath)
+          promise(.success(()))
+        } catch {
+          promise(.failure(.failToWrite(error: error)))
+        }
       }
     }
   }
