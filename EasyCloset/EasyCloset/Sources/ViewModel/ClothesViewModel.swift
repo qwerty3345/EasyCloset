@@ -46,15 +46,26 @@ final class ClothesViewModel {
   // MARK: - Private Methods
   
   private func bind() {
-    if let fetchedClothesList = clothesStorage.fetchClothesList() {
-      self.clothesList = fetchedClothesList
-    }
+    clothesStorage.fetchClothesList()
+      .sink { completion in
+        if case let .failure(error) = completion {
+          print(error)
+        }
+      } receiveValue: { clothesList in
+        self.clothesList = clothesList
+      }
+      .store(in: &cancellables)
     
     clothesListDidUpdate
-      .compactMap { [weak self] in
-        self?.clothesStorage.fetchClothesList()
+      .flatMap { [weak self] in
+        guard let self = self else { return Empty<ClothesList, StorageError>().eraseToAnyPublisher() }
+        return self.clothesStorage.fetchClothesList()
       }
-      .sink { [weak self] clothesList in
+      .sink { completion in
+        if case let .failure(error) = completion {
+          print(error)
+        }
+      } receiveValue: { [weak self] clothesList in
         self?.clothesList = clothesList
       }
       .store(in: &cancellables)
