@@ -142,8 +142,11 @@ extension StyleController: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDelegate
 
 extension StyleController {
-  override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    print("\(indexPath) 셀 선택!")
+  override func collectionView(_ collectionView: UICollectionView,
+                               didSelectItemAt indexPath: IndexPath) {
+    guard let style = dataSource.itemIdentifier(for: indexPath) else { return }
+    let detailController = StyleDetailController(type: .showDetail(style: style))
+    navigationController?.pushViewController(detailController, animated: true)
   }
 }
 
