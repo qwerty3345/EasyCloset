@@ -103,7 +103,6 @@ final class ClothesFilterController: UIViewController {
   
   private func setSelectedFilters(with filters: FilterItems) {
     filters.forEach { filter in
-      print(filter)
       switch filter {
       case .sort:
         self.selectedItems[.sort] = filter

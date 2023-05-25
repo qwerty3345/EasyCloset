@@ -13,6 +13,7 @@ import Then
 protocol ClothesStorageProtocol {
   func fetchClothesList() -> ClothesList?
   func save(clothes: Clothes)
+  func removeAll()
 }
 
 struct ClothesStorage: ClothesStorageProtocol {
@@ -44,10 +45,6 @@ struct ClothesStorage: ClothesStorageProtocol {
   
   func save(clothes: Clothes) {
     guard let realm = realm else { return }
-    
-    let clothesList = realm.objects(ClothesEntity.self)
-    
-    let idString = clothes.id.uuidString
     
     let clothesEntity = clothes.toEntity()
     
