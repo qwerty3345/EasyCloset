@@ -5,18 +5,24 @@
 //  Created by Mason Kim on 2023/05/22.
 //
 
-import Foundation
+import UIKit
 import RealmSwift
+
+import Combine
 
 import Then
 
 protocol ClothesStorageProtocol {
-  func fetchClothesList(completion: @escaping (ClothesList?) -> Void)
+  func fetchClothesList() -> AnyPublisher<ClothesList, StorageError>
   func save(clothes: Clothes)
   func removeAll()
 }
 
-struct ClothesStorage: ClothesStorageProtocol {
+enum StorageError: Error {
+  case realmNotInitialized
+}
+
+final class ClothesStorage: ClothesStorageProtocol {
   
   // MARK: - Singleton
   
@@ -26,62 +32,48 @@ struct ClothesStorage: ClothesStorageProtocol {
   // MARK: - Properties
   
   private let realm = try? Realm()
+  private var cancellables = Set<AnyCancellable>()
   
   // MARK: - Public Methods
   
-  func fetchClothesList(completion: @escaping (ClothesList?) -> Void) {
-    guard let realm = realm else {
-      completion(nil)
-      return
-    }
-    
-    let clothesEntities = realm.objects(ClothesEntity.self)
-    var clothesList = ClothesList(clothesByCategory: [:])
-    
-    let dispatchGroup = DispatchGroup()
-    let serialQueue = DispatchQueue(label: "serialQueue")
-    
-    clothesEntities.forEach { entity in
-      var model = entity.toModelWithoutImage()
+  func fetchClothesList() -> AnyPublisher<ClothesList, StorageError> {
+    return Future { [weak self] promise in
+      guard let self = self else { return }
       
-      dispatchGroup.enter()
-      
-      ImageFileStorage.shared.load(withID: model.id) { image in
-        if let image = image {
-          model.image = image
-        }
-        // 딕셔너리에 동시 접근 때문에 발생하는 문제를 serialQueue로 방지
-        serialQueue.async {
-          clothesList.clothesByCategory[model.category, default: []].append(model)
-        }
-        dispatchGroup.leave()
+      guard let realm = realm else {
+        promise(.failure(.realmNotInitialized))
+        return
       }
+      
+      // 반영한 모델들을 다 합한 결과를 future로 내뱉음.
+      let clothesEntities = realm.objects(ClothesEntity.self)
+      let clothesModelsWithoutImage = clothesEntities.map { $0.toModelWithoutImage() }
+      
+      // ImageFileStorage를 호출해 이미지를 로딩해서 clothes에 넣는 것을 처리하는 Publisher들
+      let clothesWithImagePublishers: [AnyPublisher<Clothes, Never>] = clothesModelsWithoutImage.map { model in
+        ImageFileStorage.shared.load(withID: model.id)
+          .replaceError(with: UIImage())
+          .map { image in
+            var clothes = model
+            clothes.image = image
+            return clothes
+          }
+          .eraseToAnyPublisher()
+      }
+      
+      // 위에서 만든 단일의 Clothes를 방출하는 여러 Publisher들을 모아서 [Clothes] 를 방출하는 하나의 Publisher로 만듬
+      Publishers.MergeMany(clothesWithImagePublishers)
+        .collect()
+        .eraseToAnyPublisher()
+        .sink { clothesArray in
+          // 이미지가 모두 반영 된 ClothesList
+          let clothesList = clothesArray.toClothesList()
+          promise(.success(clothesList))
+        }
+        .store(in: &cancellables)
     }
-    
-    dispatchGroup.notify(queue: .main) {
-      completion(clothesList)
-    }
+    .eraseToAnyPublisher()
   }
-  
-//  func fetchClothesList() -> ClothesList? {
-//    guard let realm = realm else { return nil }
-//
-//    return realm.objects(ClothesEntity.self)
-//      .map { entity in
-//        var model = entity.toModelWithoutImage()
-//
-//        // TODO: 얘가 비동기이기 때문에 이미지가 로드되기도 전에 기다리지 않고 넘어감. 또한 함수형으로 처리하기 힘들어짐... completion 내부로 처리해야 함..!
-//        ImageFileStorage.shared.load(withID: model.id) { image in
-//          if let image = image {
-//            model.image = image
-//          }
-//        }
-//        return model
-//      }
-//      .reduce(into: ClothesList(clothesByCategory: [:]), { result, clothes in
-//        result.clothesByCategory[clothes.category, default: []].append(clothes)
-//      })
-//  }
   
   func save(clothes: Clothes) {
     guard let realm = realm else { return }

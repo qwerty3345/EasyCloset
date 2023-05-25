@@ -46,33 +46,29 @@ final class ClothesViewModel {
   // MARK: - Private Methods
   
   private func bind() {
-    clothesStorage.fetchClothesList { clothesList in
-      if let clothesList = clothesList {
-        self.clothesList = clothesList
-      }
-    }
-//    if let fetchedClothesList = clothesStorage.fetchClothesList() {
-//      self.clothesList = fetchedClothesList
-//    }
-    
-    clothesListDidUpdate
-      .sink { [weak self] in
-        self?.clothesStorage.fetchClothesList { clothesList in
-          if let clothesList = clothesList {
-            self?.clothesList = clothesList
-          }
+    clothesStorage.fetchClothesList()
+      .sink { completion in
+        if case let .failure(error) = completion {
+          print(error)
         }
+      } receiveValue: { clothesList in
+        self.clothesList = clothesList
       }
       .store(in: &cancellables)
     
-//    clothesListDidUpdate
-//      .compactMap { [weak self] in
-//        self?.clothesStorage.fetchClothesList()
-//      }
-//      .sink { [weak self] clothesList in
-//        self?.clothesList = clothesList
-//      }
-//      .store(in: &cancellables)
+    clothesListDidUpdate
+      .flatMap { [weak self] in
+        guard let self = self else { return Empty<ClothesList, StorageError>().eraseToAnyPublisher() }
+        return self.clothesStorage.fetchClothesList()
+      }
+      .sink { completion in
+        if case let .failure(error) = completion {
+          print(error)
+        }
+      } receiveValue: { [weak self] clothesList in
+        self?.clothesList = clothesList
+      }
+      .store(in: &cancellables)
   }
     
   private func applyFilters(clothesList: [Clothes], filters: FilterItems) -> [Clothes] {

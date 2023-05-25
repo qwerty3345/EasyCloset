@@ -11,7 +11,7 @@ import Combine
 
 protocol ImageFileStorageProtocol {
   func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)?)
-  func load(withID id: UUID, completion: @escaping (UIImage?) -> Void)
+  func load(withID id: UUID) -> Future<UIImage, FileManagerError>
   func remove(withID id: UUID, completion: ((FileManagerError?) -> Void)?)
 }
 
@@ -41,23 +41,6 @@ final class ImageFileStorage: ImageFileStorageProtocol {
         completion?(nil)
       } catch {
         completion?(.failToWrite(error: error))
-      }
-    }
-  }
-  
-  func load(withID id: UUID, completion: @escaping (UIImage?) -> Void) {
-    guard let filePath = filePath(of: id) else {
-      completion(nil)
-      return
-    }
-    
-    DispatchQueue.global().async {
-      do {
-        let data = try Data(contentsOf: filePath)
-        let image = UIImage(data: data)
-        completion(image)
-      } catch {
-        completion(nil)
       }
     }
   }
