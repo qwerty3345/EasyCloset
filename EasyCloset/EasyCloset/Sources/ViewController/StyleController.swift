@@ -69,7 +69,8 @@ final class StyleController: UICollectionViewController {
   }
   
   @objc private func tappedAddButton() {
-    print("스타일 추갓")
+    let detailController = StyleDetailController(type: .add)
+    navigationController?.pushViewController(detailController, animated: true)
   }
 }
 
