@@ -12,6 +12,8 @@ import Combine
 
 import Then
 
+// MARK: - Protocol, RepositoryError
+
 protocol ClothesRepositoryProtocol {
   func fetchClothesList() -> AnyPublisher<ClothesList, RepositoryError>
   func save(clothes: Clothes) -> Future<Void, RepositoryError>
@@ -37,6 +39,8 @@ enum RepositoryError: LocalizedError {
     }
   }
 }
+
+// MARK: - ClothesRepository
 
 final class ClothesRepository: ClothesRepositoryProtocol {
   

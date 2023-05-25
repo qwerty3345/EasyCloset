@@ -12,6 +12,8 @@ import Combine
 
 import Then
 
+// MARK: - Protocol, RealmStorageError
+
 protocol RealmStorageProtocol {
   func load<T: Object>(entityType: T.Type) -> [T]
   @discardableResult func save<T: Object>(_ data: T) -> Bool
@@ -22,6 +24,8 @@ protocol RealmStorageProtocol {
 enum RealmStorageError: Error {
   case realmNotInitialized
 }
+
+// MARK: - RealmStorage
 
 final class RealmStorage: RealmStorageProtocol {
   
