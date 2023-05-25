@@ -49,7 +49,7 @@ final class ClothesStorage: ClothesStorageProtocol {
       let clothesEntities = Array(realm.objects(ClothesEntity.self))
       let clothesModelsWithoutImage = clothesEntities.map { $0.toModelWithoutImage() }
       
-      addingImagePublishers(to: clothesModelsWithoutImage)
+      addingImages(to: clothesModelsWithoutImage)
         .sink { clothesModels in
           // 이미지가 모두 반영 된 ClothesList
           let clothesList = clothesModels.toClothesList()
@@ -81,7 +81,7 @@ final class ClothesStorage: ClothesStorageProtocol {
   
   // MARK: - Private Methods
   
-  private func addingImagePublishers(to clothesModels: [Clothes]) -> AnyPublisher<[Clothes], Never> {
+  private func addingImages(to clothesModels: [Clothes]) -> AnyPublisher<[Clothes], Never> {
     // ImageFileStorage를 호출해 이미지를 로딩해서 clothes에 넣는 것을 처리하는 Publisher들
     let clothesWithImagePublishers: [AnyPublisher<Clothes, Never>] = clothesModels.map { model in
       ImageFileStorage.shared.load(withID: model.id)
