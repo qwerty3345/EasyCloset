@@ -67,6 +67,10 @@ final class StyleController: UICollectionViewController {
     snapshot.appendItems(styles, toSection: .main)
     dataSource.apply(snapshot, animatingDifferences: true)
   }
+  
+  @objc private func tappedAddButton() {
+    print("스타일 추갓")
+  }
 }
 
 // MARK: - UI & Layout
@@ -81,6 +85,7 @@ extension StyleController {
   
   private func setUI() {
     addLeftTitle(with: "MY STYLE")
+    setupAddButton()
   }
   
   private func setupLayout() {
@@ -102,6 +107,12 @@ extension StyleController {
       cell.configure(with: item)
       return cell
     }
+  }
+  
+  private func setupAddButton() {
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                        target: self,
+                                                        action: #selector(tappedAddButton))
   }
 }
 
