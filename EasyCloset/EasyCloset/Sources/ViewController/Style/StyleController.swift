@@ -29,15 +29,10 @@ final class StyleController: UICollectionViewController {
   
   // MARK: - Properties
   
-  private let viewModel = StyleViewModel()
-  
   private lazy var dataSource: DataSource = makeDataSource()
   
+  private let viewModel = StyleViewModel()
   private var cancellables = Set<AnyCancellable>()
-  
-  // MARK: - UI Components
-  
-  // MARK: - Initialization
   
   // MARK: - Lifecycle
   
@@ -46,8 +41,6 @@ final class StyleController: UICollectionViewController {
     setup()
     bind()
   }
-  
-  // MARK: - Public Methods
   
   // MARK: - Private Methods
   
@@ -70,6 +63,7 @@ final class StyleController: UICollectionViewController {
   
   @objc private func tappedAddButton() {
     let detailController = StyleDetailController(type: .add)
+    detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
 }
@@ -146,7 +140,16 @@ extension StyleController {
                                didSelectItemAt indexPath: IndexPath) {
     guard let style = dataSource.itemIdentifier(for: indexPath) else { return }
     let detailController = StyleDetailController(type: .showDetail(style: style))
+    detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
+  }
+}
+
+// MARK: - StyleDetailControllerDelegate
+
+extension StyleController: StyleDetailControllerDelegate {
+  func styleDetailController(didUpdateOrSave viewController: StyleDetailController) {
+    viewModel.stylesDidUpdate.send()
   }
 }
 

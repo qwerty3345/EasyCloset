@@ -15,16 +15,6 @@ enum TabBarItems: Int {
 
 final class MainTabBarController: UITabBarController {
   
-  // MARK: - Constants
-  
-  private enum Metric { }
-  
-  // MARK: - Properties
-  
-  // MARK: - UI Components
-  
-  // MARK: - Initialization
-  
   // MARK: - Lifecycle
   
   override func viewDidLoad() {
@@ -88,6 +78,8 @@ extension MainTabBarController {
     return navigationController
   }
 }
+
+// MARK: - UITabBarControllerDelegate
 
 extension MainTabBarController: UITabBarControllerDelegate {
   func tabBarController(_ tabBarController: UITabBarController,

@@ -66,6 +66,14 @@ final class ClothesCarouselCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
+  // MARK: - Lifecycle
+  
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    // 아직 화면에 나타나지 않은 CarouselLayout의 첫번째 셀을 크게 설정해주기 위함 (아니면 작게 보이는 이슈)
+    carouselLayout.invalidateLayout()
+  }
+  
   // MARK: - Public Methods
   
   func bind(to viewModel: ClothesViewModel, with category: ClothesCategory) {

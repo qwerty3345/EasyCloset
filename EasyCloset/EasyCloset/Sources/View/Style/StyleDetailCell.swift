@@ -112,8 +112,8 @@ struct StyleDetailCellPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
       let cell = StyleDetailCell()
-      cell.configure(category: .accessory)
-      cell.configure(with: .mock)
+      cell.configure(category: .bottom)
+      cell.configure(with: .Mock.bottom2)
       return cell
     }
     .frame(width: 200, height: 200)

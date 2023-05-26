@@ -29,16 +29,12 @@ final class HomeController: UIViewController {
     $0.addTarget(self, action: #selector(tappedClothesInfoView), for: .touchUpInside)
   }
   
-  // MARK: - Initialization
-  
   // MARK: - Lifecycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
     setup()
   }
-  
-  // MARK: - Public Methods
   
   // MARK: - Private Methods
   

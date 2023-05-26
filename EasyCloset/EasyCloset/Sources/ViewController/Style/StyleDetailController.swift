@@ -12,6 +12,10 @@ import SnapKit
 
 import Combine
 
+protocol StyleDetailControllerDelegate: AnyObject {
+  func styleDetailController(didUpdateOrSave viewController: StyleDetailController)
+}
+
 final class StyleDetailController: UIViewController {
   
   // MARK: - Constants
@@ -42,16 +46,18 @@ final class StyleDetailController: UIViewController {
   
   // MARK: - Properties
   
-  private let viewModel = StyleViewModel()
+  private let viewModel = StyleDetailViewModel()
   
   private let type: StyleDetailControllerType
   
   private var isEditingMode = false {
     didSet {
-      updateUI(withEditingMode: isEditingMode)
+      turnEditMode(isOn: isEditingMode)
+      applySnapshot()
     }
   }
   
+  weak var delegate: StyleDetailControllerDelegate?
   private lazy var dataSource: DataSource = makeDataSource()
   
   private var cancellables = Set<AnyCancellable>()
@@ -73,11 +79,29 @@ final class StyleDetailController: UIViewController {
     target: self,
     action: #selector(tappedEditAddButton))
   
+  private let nameTextField = UITextField().then {
+    $0.font = .pretendardMediumTitle
+    $0.textAlignment = .center
+    $0.placeholder = "스타일의 이름을 입력 해 주세요"
+    $0.isUserInteractionEnabled = false
+  }
+  
+  private lazy var weatherSegmentedControl = UISegmentedControl(
+    items: WeatherType.allCases.map { $0.korean }
+  ).then {
+    $0.isUserInteractionEnabled = false
+  }
+  
   // MARK: - Initialization
   
   init(type: StyleDetailControllerType) {
     self.type = type
     super.init(nibName: nil, bundle: nil)
+    
+    if case .showDetail(let style) = type {
+      viewModel.styleToEdit = style
+      configureUI(with: style)
+    }
   }
   
   required init?(coder: NSCoder) {
@@ -95,14 +119,34 @@ final class StyleDetailController: UIViewController {
   // MARK: - Private Methods
   
   private func bind() {
+    viewModel.$styleToEdit
+      .sink { [weak self] _ in
+        guard let self = self else { return }
+        DispatchQueue.main.async {
+          self.applySnapshot()
+        }
+      }
+      .store(in: &cancellables)
     
+    viewModel.didFailToSave
+      .sink { [weak self] message in
+        DispatchQueue.main.async {
+          self?.showFailAlert(with: message)
+        }
+      }
+      .store(in: &cancellables)
+    
+    viewModel.didSuccessToSave
+      .sink { [weak self] in
+        DispatchQueue.main.async {
+          self?.dismiss(animated: true)
+        }
+      }
+      .store(in: &cancellables)
   }
   
-  // 편집 모드 상태에 따라 UI를 업데이트
-  private func updateUI(withEditingMode isEditingMode: Bool) {
-    guard case let .showDetail(style: style) = type else { return }
-    
-    editAddBarButton.title = isEditingMode ? "완료" : "편집"
+  private func applySnapshot() {
+    guard let style = viewModel.styleToEdit else { return }
     
     var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections(Section.allCases)
@@ -135,13 +179,22 @@ final class StyleDetailController: UIViewController {
   }
   
   private func addStyle() {
+    saveStyleFromUserInput()
+    navigationController?.popViewController(animated: true)
   }
   
   private func editStyle() {
     if isEditingMode {
-      
+      saveStyleFromUserInput()
     }
     isEditingMode.toggle()
+  }
+  
+  private func saveStyleFromUserInput() {
+    viewModel.styleToEdit?.name = nameTextField.text
+    viewModel.styleToEdit?.weather = WeatherType(rawValue: weatherSegmentedControl.selectedSegmentIndex) ?? .allWeather
+    viewModel.saveStyle.send()
+    delegate?.styleDetailController(didUpdateOrSave: self)
   }
   
   private func showFailAlert(with title: String) {
@@ -151,6 +204,12 @@ final class StyleDetailController: UIViewController {
     alert.addAction(confirmAction)
     
     present(alert, animated: true)
+  }
+  
+  private func turnEditMode(isOn: Bool) {
+    nameTextField.isUserInteractionEnabled = isEditingMode
+    weatherSegmentedControl.isUserInteractionEnabled = isEditingMode
+    editAddBarButton.title = isEditingMode ? "완료" : "편집"
   }
 }
 
@@ -168,12 +227,33 @@ extension StyleDetailController {
     title = type.title
     navigationItem.rightBarButtonItem = editAddBarButton
     view.backgroundColor = .background
+    collectionView.backgroundColor = .background
+  }
+  
+  private func configureUI(with style: Style) {
+    nameTextField.text = style.name ?? ""
+    weatherSegmentedControl.selectedSegmentIndex = style.weather.rawValue
   }
   
   private func setupLayout() {
+    view.addSubview(nameTextField)
+    nameTextField.snp.makeConstraints {
+      $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+      $0.horizontalEdges.equalToSuperview()
+      $0.height.equalTo(50)
+    }
+    
+    view.addSubview(weatherSegmentedControl)
+    weatherSegmentedControl.snp.makeConstraints {
+      $0.top.equalTo(nameTextField.snp.bottom).offset(Metric.padding)
+      $0.horizontalEdges.equalToSuperview().inset(Metric.padding)
+      $0.height.equalTo(30)
+    }
+    
     view.addSubview(collectionView)
     collectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.equalTo(weatherSegmentedControl.snp.bottom).offset(Metric.padding)
+      $0.horizontalEdges.bottom.equalToSuperview()
     }
   }
   
@@ -183,7 +263,7 @@ extension StyleDetailController {
     collectionView.delegate = self
     collectionView.contentInset = UIEdgeInsets(top: 0, left: Metric.padding,
                                                bottom: 0, right: Metric.padding)
-    applySnapshot()
+    applyInitialSnapshot()
   }
 }
 
@@ -192,7 +272,6 @@ extension StyleDetailController {
 extension StyleDetailController {
   
   private func makeDataSource() -> DataSource {
-    
     return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
       let cell = collectionView.dequeueReusableCell(cellClass: StyleDetailCell.self, for: indexPath)
       
@@ -206,7 +285,7 @@ extension StyleDetailController {
     }
   }
   
-  private func applySnapshot() {
+  private func applyInitialSnapshot() {
     var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections(Section.allCases)
     
@@ -218,7 +297,6 @@ extension StyleDetailController {
       let items = style.clothes.values.map { Item.clothes($0) }
       snapshot.appendItems(items, toSection: .main)
     }
-    
     dataSource.apply(snapshot, animatingDifferences: true)
   }
 }
@@ -228,7 +306,10 @@ extension StyleDetailController {
 extension StyleDetailController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
-    guard isEditingMode else { return }
+    if case .showDetail = type, isEditingMode == false {
+      return
+    }
+    
     guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
     let addClothesController = StyleAddClothesController(category: item.category)
     addClothesController.delegate = self
@@ -241,12 +322,18 @@ extension StyleDetailController: UICollectionViewDelegate {
 extension StyleDetailController: StyleAddClothesControllerDelegate {
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectClothes clothes: Clothes) {
-    print(clothes)
+    if viewModel.styleToEdit == nil {
+      guard let weather = WeatherType(
+        rawValue: weatherSegmentedControl.selectedSegmentIndex) else { return }
+      viewModel.styleToEdit = Style(clothes: [:], weather: weather)
+    }
+    
+    viewModel.styleToEdit?.clothes[clothes.category] = clothes
   }
   
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectEmpty category: ClothesCategory) {
-    print(category)
+    viewModel.styleToEdit?.clothes.removeValue(forKey: category)
   }
 }
 
@@ -260,8 +347,8 @@ enum StyleDetailControllerType {
     switch self {
     case .add:
       return "스타일 추가하기"
-    case .showDetail:
-      return "스타일 상세보기"
+    case .showDetail(let style):
+      return "상세보기"
     }
   }
   
@@ -282,7 +369,7 @@ import SwiftUI
 
 struct StyleDetailControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = StyleDetailController(type: .showDetail(style: .mocks.first!))
+    let vc = StyleDetailController(type: .showDetail(style: .Mock.style1))
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

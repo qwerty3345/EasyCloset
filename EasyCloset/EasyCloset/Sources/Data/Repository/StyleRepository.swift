@@ -74,9 +74,14 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
       guard let self = self else { return }
       
       let styleEntity = style.toEntity()
-      if self.realmStorage.save(styleEntity) == false {
-        promise(.failure(.failToSave))
+      
+      let isSuccessToSave = self.realmStorage.save(styleEntity)
+      if isSuccessToSave {
+        promise(.success(()))
+        return
       }
+      
+      promise(.failure(.failToSave))
     }
   }
   
@@ -90,7 +95,7 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
 #if DEBUG
   private func setupMockData() {
     guard realmStorage.load(entityType: StyleEntity.self).isEmpty else { return }
-    Style.mocks.forEach {
+    Style.Mock.mocks.forEach {
       save(style: $0)
         .sink(receiveCompletion: { _ in }, receiveValue: { })
         .store(in: &cancellables)
