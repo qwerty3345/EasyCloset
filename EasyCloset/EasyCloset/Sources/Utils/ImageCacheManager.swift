@@ -42,4 +42,8 @@ final class ImageCacheManager {
     cache.setObject(value, forKey: id.uuidString as NSString, cost: bytesOfImage)
   }
   
+  func removeAll() {
+    cache.removeAllObjects()
+  }
+  
 }

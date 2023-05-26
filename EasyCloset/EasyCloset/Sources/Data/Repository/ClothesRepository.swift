@@ -50,6 +50,7 @@ final class ClothesRepository: ClothesRepositoryProtocol {
   
   private let imageFileStorage: ImageFileStorageProtocol
   private let realmStorage: RealmStorageProtocol
+  private let imageCacheManager: ImageCacheManager = .shared
   
   private var cancellables = Set<AnyCancellable>()
   
@@ -57,6 +58,7 @@ final class ClothesRepository: ClothesRepositoryProtocol {
                realmStorage: RealmStorageProtocol = RealmStorage.shared) {
     self.imageFileStorage = imageFileStorage
     self.realmStorage = realmStorage
+    setupMockData()
   }
   
   // MARK: - Public Methods
@@ -94,6 +96,10 @@ final class ClothesRepository: ClothesRepositoryProtocol {
         return
       }
       
+      // 캐시 저장
+      imageCacheManager.store(image, for: clothes.id)
+      
+      // 이미지 파일 저장
       imageFileStorage.save(image: image, id: clothes.id)
         .sink(receiveCompletion: { completion in
           switch completion {
@@ -110,6 +116,7 @@ final class ClothesRepository: ClothesRepositoryProtocol {
   func removeAll() {
     realmStorage.removeAll(entityType: ClothesEntity.self)
     // 이미지도 전체 삭제 구현
+    imageCacheManager.removeAll()
   }
   
   // MARK: - Private Methods
@@ -117,7 +124,15 @@ final class ClothesRepository: ClothesRepositoryProtocol {
   private func addingImages(to clothesModels: [Clothes]) -> AnyPublisher<[Clothes], Never> {
     // ImageFileStorage를 호출해 이미지를 로딩해서 clothes에 넣는 것을 처리하는 Publisher들
     let clothesWithImagePublishers: [AnyPublisher<Clothes, Never>] = clothesModels.map { model in
-      ImageFileStorage.shared.load(withID: model.id)
+      
+      // 캐시된 이미지가 존재할 경우, 캐시에서 return
+      if let image = imageCacheManager.get(for: model.id) {
+        var clothes = model
+        clothes.image = image
+        return Just(clothes).eraseToAnyPublisher()
+      }
+      
+      return ImageFileStorage.shared.load(withID: model.id)
         .replaceError(with: UIImage())
         .map { image in
           var clothes = model
@@ -132,4 +147,19 @@ final class ClothesRepository: ClothesRepositoryProtocol {
       .collect()
       .eraseToAnyPublisher()
   }
+  
+  // 초기 데이터가 없을 때 테스트 용도로 Mock 데이터를 저장 해 주는 메서드
+  #if DEBUG
+  private func setupMockData() {
+    guard realmStorage.load(entityType: ClothesEntity.self).isEmpty else { return }
+    
+    ClothesList.mock.clothesByCategory.forEach { (_, value: [Clothes]) in
+      value.forEach { clothes in
+        save(clothes: clothes)
+          .sink(receiveCompletion: { _ in }, receiveValue: { })
+          .store(in: &cancellables)
+      }
+    }
+  }
+  #endif
 }

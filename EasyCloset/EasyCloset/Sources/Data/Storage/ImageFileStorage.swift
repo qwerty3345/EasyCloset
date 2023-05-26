@@ -15,6 +15,7 @@ protocol ImageFileStorageProtocol {
   func save(image: UIImage, id: UUID) -> Future<Void, FileManagerError>
   func load(withID id: UUID) -> Future<UIImage, FileManagerError>
   func remove(withID id: UUID) -> Future<Void, FileManagerError>
+  func removeAll() -> Future<Void, FileManagerError>
 }
 
 enum FileManagerError: Error {
@@ -32,6 +33,13 @@ final class ImageFileStorage: ImageFileStorageProtocol {
   static let shared = ImageFileStorage()
   
   private init() { }
+  
+  // MARK: - Properties
+  
+  private enum Constants {
+    static let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    static let imageExtension = "png"
+  }
   
   // MARK: - Public Methods
   
@@ -104,12 +112,47 @@ final class ImageFileStorage: ImageFileStorageProtocol {
     }
   }
   
+  func removeAll() -> Future<Void, FileManagerError> {
+    return Future { promise in
+      guard let path = Constants.path,
+            let filePathURLs = try? FileManager.default.contentsOfDirectory(at: path,
+                                                                            includingPropertiesForKeys: nil) else {
+        promise(.failure(.invalidFilePath))
+        return
+      }
+      
+      let imagePathURLs = filePathURLs.filter {
+        $0.pathExtension == Constants.imageExtension
+      }
+      
+      DispatchQueue.global(qos: .utility).async {
+        // 중간에 삭제 작업이 실패해도 계속 이어나가기 위해, 발생한 에러들을 배열에 담으며 for문을 돌림
+        var occuredErrors: [Error] = []
+        
+        for imagePathURL in imagePathURLs {
+          do {
+            try FileManager.default.removeItem(at: imagePathURL)
+          } catch {
+            // 여기서 promise(.failure()) 를 호출하면, 뒤의 아이템이 삭제되지 않고 조기종료 될 수 있기에...
+            occuredErrors.append(error)
+          }
+        }
+        
+        if let firstError = occuredErrors.first {
+          promise(.failure(.failToWrite(error: firstError)))
+          return
+        }
+        
+        promise(.success(()))
+      }
+    }
+  }
+  
   // MARK: - Private Methods
   
   private func filePath(of id: UUID) -> URL? {
-    guard var path = FileManager.default.urls(for: .documentDirectory,
-                                              in: .userDomainMask).first else { return nil }
-    let fileName = "\(id.uuidString).jpg"
+    guard var path = Constants.path else { return nil }
+    let fileName = "\(id.uuidString).\(Constants.imageExtension)"
     
     // iOS 16부터 deprecated 되기에 분기처리
     if #available(iOS 16.0, *) {
