@@ -86,7 +86,6 @@ final class StyleDetailController: UIViewController {
     
     if case .showDetail(let style) = type {
       viewModel.style = style
-      //      applySnapshot(with: style)
     }
   }
   
@@ -106,9 +105,8 @@ final class StyleDetailController: UIViewController {
   
   private func bind() {
     viewModel.$style
-      .sink { [weak self] style in
-        guard let self = self,
-              let style = style else { return }
+      .sink { [weak self] _ in
+        guard let self = self else { return }
         DispatchQueue.main.async {
           self.updateUIWithSnapshot()
         }
@@ -300,8 +298,8 @@ enum StyleDetailControllerType {
     switch self {
     case .add:
       return "스타일 추가하기"
-    case .showDetail:
-      return "스타일 상세보기"
+    case .showDetail(let style):
+      return "\(style.name ?? "") 상세보기"
     }
   }
   

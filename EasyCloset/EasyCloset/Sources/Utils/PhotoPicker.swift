@@ -129,11 +129,16 @@ extension PhotoPicker: UIImagePickerControllerDelegate, UINavigationControllerDe
   func imagePickerController(_ picker: UIImagePickerController,
                              didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
     guard let image = info[.editedImage] as? UIImage else {
-      imageCompletionHandler?(.failure(.invalidImage))
+      DispatchQueue.main.async {
+        self.imageCompletionHandler?(.failure(.invalidImage))
+      }
       return
     }
-    imageCompletionHandler?(.success(image))
-    picker.dismiss(animated: true)
+    
+    DispatchQueue.main.async {
+      self.imageCompletionHandler?(.success(image))
+      picker.dismiss(animated: true)
+    }
   }
 }
 
@@ -151,7 +156,9 @@ extension PhotoPicker: PHPickerViewControllerDelegate {
       guard let self = self else { return }
       
       if let error = error {
-        self.imageCompletionHandler?(.failure(.transferError(error: error)))
+        DispatchQueue.main.async {
+          self.imageCompletionHandler?(.failure(.transferError(error: error)))
+        }
       }
       
       DispatchQueue.main.async {
