@@ -60,8 +60,6 @@ final class ClothesController: UIViewController {
     setup()
   }
   
-  // MARK: - Public Methods
-  
   // MARK: - Private Methods
   
   @objc private func tappedFilterButton() {

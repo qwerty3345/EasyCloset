@@ -42,8 +42,6 @@ final class StyleController: UICollectionViewController {
     bind()
   }
   
-  // MARK: - Public Methods
-  
   // MARK: - Private Methods
   
   private func bind() {
