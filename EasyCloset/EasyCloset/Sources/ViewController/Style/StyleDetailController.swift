@@ -50,13 +50,6 @@ final class StyleDetailController: UIViewController {
   
   private let type: StyleDetailControllerType
   
-  private var isEditingMode = false {
-    didSet {
-      turnEditMode(isOn: isEditingMode)
-      applySnapshot()
-    }
-  }
-  
   weak var delegate: StyleDetailControllerDelegate?
   private lazy var dataSource: DataSource = makeDataSource()
   
@@ -73,17 +66,13 @@ final class StyleDetailController: UIViewController {
     $0.minimumInteritemSpacing = Metric.padding / 2
   }
   
-  private lazy var editAddBarButton = UIBarButtonItem(
-    title: type.rightBarButtonTitle,
-    style: .plain,
-    target: self,
-    action: #selector(tappedEditAddButton))
-  
   private let nameTextField = UITextField().then {
     $0.font = .pretendardMediumTitle
     $0.textAlignment = .center
     $0.placeholder = "스타일의 이름을 입력 해 주세요"
     $0.isUserInteractionEnabled = false
+    $0.layer.borderColor = UIColor.accentColor.cgColor
+    $0.layer.cornerRadius = 8
   }
   
   private lazy var weatherSegmentedControl = UISegmentedControl(
@@ -114,6 +103,12 @@ final class StyleDetailController: UIViewController {
     super.viewDidLoad()
     setup()
     bind()
+  }
+  
+  override func setEditing(_ editing: Bool, animated: Bool) {
+    super.setEditing(editing, animated: animated)
+    turnEditMode()
+    applySnapshot()
   }
   
   // MARK: - Private Methods
@@ -155,7 +150,7 @@ final class StyleDetailController: UIViewController {
     snapshot.appendItems(clothesItems, toSection: .main)
     
     // 편집 모드가 켜졌을 때는, 추가되지 않은 의류종류의 셀을 표시함
-    if isEditingMode {
+    if isEditing {
       let categories = style.clothes.values.map { $0.category }
       
       let notAddedItems = ClothesCategory.allCases
@@ -184,10 +179,9 @@ final class StyleDetailController: UIViewController {
   }
   
   private func editStyle() {
-    if isEditingMode {
+    if isEditing {
       saveStyleFromUserInput()
     }
-    isEditingMode.toggle()
   }
   
   private func saveStyleFromUserInput() {
@@ -206,10 +200,10 @@ final class StyleDetailController: UIViewController {
     present(alert, animated: true)
   }
   
-  private func turnEditMode(isOn: Bool) {
-    nameTextField.isUserInteractionEnabled = isEditingMode
-    weatherSegmentedControl.isUserInteractionEnabled = isEditingMode
-    editAddBarButton.title = isEditingMode ? "완료" : "편집"
+  private func turnEditMode() {
+    nameTextField.isUserInteractionEnabled = isEditing
+    weatherSegmentedControl.isUserInteractionEnabled = isEditing
+    nameTextField.layer.borderWidth = isEditing ? 1 : 0
   }
 }
 
@@ -225,7 +219,7 @@ extension StyleDetailController {
   
   private func setUI() {
     title = type.title
-    navigationItem.rightBarButtonItem = editAddBarButton
+    navigationItem.rightBarButtonItem = editButtonItem
     view.backgroundColor = .background
     collectionView.backgroundColor = .background
   }
@@ -239,8 +233,8 @@ extension StyleDetailController {
     view.addSubview(nameTextField)
     nameTextField.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-      $0.horizontalEdges.equalToSuperview()
-      $0.height.equalTo(50)
+      $0.horizontalEdges.equalToSuperview().inset(Metric.padding)
+      $0.height.equalTo(30)
     }
     
     view.addSubview(weatherSegmentedControl)
@@ -306,7 +300,7 @@ extension StyleDetailController {
 extension StyleDetailController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
-    if case .showDetail = type, isEditingMode == false {
+    if case .showDetail = type, isEditing == false {
       return
     }
     

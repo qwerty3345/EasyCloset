@@ -24,12 +24,6 @@ final class ClothesDetailController: UIViewController {
   
   private let type: ClothesDetailControllerType
   
-  private var isEditingClothes = false {
-    didSet {
-      turnEditMode(isOn: isEditingClothes)
-    }
-  }
-  
   weak var delegate: ClothesDetailControllerDelegate?
   
   private var cancellables = Set<AnyCancellable>()
@@ -55,12 +49,6 @@ final class ClothesDetailController: UIViewController {
     $0.font = .pretendard(size: 16)
     $0.placeholder = "설명을 입력해주세요 (선택)"
   }
-  
-  private lazy var editAddBarButton = UIBarButtonItem(
-    title: type.rightBarButtonTitle,
-    style: .plain,
-    target: self,
-    action: #selector(tappedEditAddButton))
   
   // MARK: - Initialization
   
@@ -88,6 +76,11 @@ final class ClothesDetailController: UIViewController {
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesBegan(touches, with: event)
     descriptionTextField.resignFirstResponder()
+  }
+  
+  override func setEditing(_ editing: Bool, animated: Bool) {
+    super.setEditing(editing, animated: animated)
+    turnEditMode(isOn: isEditing)
   }
   
   // MARK: - Private Methods
@@ -156,15 +149,13 @@ final class ClothesDetailController: UIViewController {
   }
   
   private func editClothes() {
-    if isEditingClothes {
+    if isEditing {
       guard let clothes = clothesFromUserInput() else { return }
       viewModel.clothes = clothes
       delegate?.clothesDetailController(didUpdateOrSave: self)
     }
     
-    isEditingClothes.toggle()
-    editAddBarButton.title = isEditingClothes ? "완료" : "편집"
-    photoHandlingView.state = isEditingClothes ? .editing : .show
+    photoHandlingView.state = isEditing ? .editing : .show
   }
   
   private func clothesFromUserInput() -> Clothes? {
@@ -211,7 +202,7 @@ extension ClothesDetailController {
   
   private func setUI() {
     title = type.title
-    navigationItem.rightBarButtonItem = editAddBarButton
+    navigationItem.rightBarButtonItem = editButtonItem
     view.backgroundColor = .background
   }
   
