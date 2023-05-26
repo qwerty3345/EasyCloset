@@ -24,7 +24,6 @@ final class ClothesViewModel {
   
   // MARK: - Initialization
   
-  // 1초 후에 로딩 되는 것을 테스트 함
   init(repository: ClothesRepositoryProtocol = ClothesRepository.shared) {
     self.repository = repository
     bind()

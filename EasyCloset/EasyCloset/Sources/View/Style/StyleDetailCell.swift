@@ -1,19 +1,29 @@
 //
-//  StyleCell.swift
+//  StyleDetailCell.swift
 //  EasyCloset
 //
-//  Created by Mason Kim on 2023/05/22.
+//  Created by Mason Kim on 2023/05/25.
 //
 
 import UIKit
 
 import SnapKit
 
-final class StyleCell: UICollectionViewCell, Highlightable {
+final class StyleDetailCell: UICollectionViewCell, Highlightable {
   
   // MARK: - UI Components
   
-  private let infoView = InfoView(with: "", fontSize: .pretendardSmallTitle)
+  private let clothesLabel = UILabel().then {
+    $0.font = .pretendardSmallTitle
+    $0.textAlignment = .center
+    $0.textColor = .white
+    $0.backgroundColor = .seperator.withAlphaComponent(0.5)
+  }
+  
+  private let clothesImageView = UIImageView().then {
+    $0.contentMode = .scaleAspectFit
+    $0.image = .hangerPlus
+  }
   
   // MARK: - Touch Events
   
@@ -47,30 +57,26 @@ final class StyleCell: UICollectionViewCell, Highlightable {
   
   // MARK: - Public Methods
   
-  func configure(with style: Style) {
-    infoView.configure(title: style.name ?? "")
-    
-    let collageImage = style.clothes
-      .sorted {
-        $0.key.rawValue < $1.key.rawValue
-      }
-      .prefix(4)
-      .compactMap { $1.image }
-      .collage(withSize: frame.size, rows: 2)
-    infoView.configure(with: collageImage)
+  func configure(category: ClothesCategory) {
+    clothesLabel.text = category.korean
+  }
+  
+  func configure(with clothes: Clothes) {
+    clothesImageView.image = clothes.image
+    clothesLabel.text = clothes.category.korean
   }
   
   // MARK: - Private Methods
   
   private func resetUIComponents() {
-    infoView.configure(with: nil)
-    infoView.configure(title: "")
+    clothesImageView.image = .hangerPlus
+    clothesLabel.text = ""
   }
 }
 
 // MARK: - UI & Layout
 
-extension StyleCell {
+extension StyleDetailCell {
   
   private func setup() {
     setupLayout()
@@ -83,9 +89,16 @@ extension StyleCell {
   }
   
   private func setupLayout() {
-    addSubview(infoView)
-    infoView.snp.makeConstraints {
+    addSubview(clothesImageView)
+    clothesImageView.snp.makeConstraints {
       $0.edges.equalToSuperview()
+    }
+    
+    addSubview(clothesLabel)
+    clothesLabel.snp.makeConstraints {
+      $0.horizontalEdges.equalToSuperview()
+      $0.bottom.equalToSuperview().inset(12)
+      $0.height.equalTo(30)
     }
   }
 }
@@ -95,11 +108,12 @@ extension StyleCell {
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
 
-struct StyleCellPreview: PreviewProvider {
+struct StyleDetailCellPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
-      let cell = StyleCell()
-      cell.configure(with: .mocks.first!)
+      let cell = StyleDetailCell()
+      cell.configure(category: .accessory)
+      cell.configure(with: .mock)
       return cell
     }
     .frame(width: 200, height: 200)

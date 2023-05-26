@@ -22,7 +22,9 @@ extension UIImage {
   static let tshirt = UIImage(named: "tshirt")
   static let tshirtSelected = UIImage(named: "tshirt-selected")
   
+  // logo
   static let filter = UIImage(named: "filter")
+  static let hangerPlus = UIImage(named: "hanger-plus")
   
   // Image
   static let addPhoto = UIImage(named: "add_photo")

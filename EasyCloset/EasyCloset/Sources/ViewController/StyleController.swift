@@ -67,6 +67,11 @@ final class StyleController: UICollectionViewController {
     snapshot.appendItems(styles, toSection: .main)
     dataSource.apply(snapshot, animatingDifferences: true)
   }
+  
+  @objc private func tappedAddButton() {
+    let detailController = StyleDetailController(type: .add)
+    navigationController?.pushViewController(detailController, animated: true)
+  }
 }
 
 // MARK: - UI & Layout
@@ -81,6 +86,7 @@ extension StyleController {
   
   private func setUI() {
     addLeftTitle(with: "MY STYLE")
+    setupAddButton()
   }
   
   private func setupLayout() {
@@ -102,6 +108,12 @@ extension StyleController {
       cell.configure(with: item)
       return cell
     }
+  }
+  
+  private func setupAddButton() {
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                        target: self,
+                                                        action: #selector(tappedAddButton))
   }
 }
 
@@ -130,8 +142,11 @@ extension StyleController: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDelegate
 
 extension StyleController {
-  override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    print("\(indexPath) 셀 선택!")
+  override func collectionView(_ collectionView: UICollectionView,
+                               didSelectItemAt indexPath: IndexPath) {
+    guard let style = dataSource.itemIdentifier(for: indexPath) else { return }
+    let detailController = StyleDetailController(type: .showDetail(style: style))
+    navigationController?.pushViewController(detailController, animated: true)
   }
 }
 
