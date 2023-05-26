@@ -31,18 +31,8 @@ final class StyleViewModel {
   // MARK: - Private Methods
   
   private func bind() {
-    repository.fetchStyles()
-      .map(sortByNew)
-      .sink { completion in
-        if case let .failure(error) = completion {
-          print(error)
-        }
-      } receiveValue: { styles in
-        self.styles = styles
-      }
-      .store(in: &cancellables)
-    
     stylesDidUpdate
+      .prepend(()) // 초기에 값을 한 번 발행하여, fetchStyle를 실행함
       .flatMap { [weak self] in
         guard let self = self else { return Empty<[Style], RepositoryError>().eraseToAnyPublisher() }
         return self.repository.fetchStyles()
