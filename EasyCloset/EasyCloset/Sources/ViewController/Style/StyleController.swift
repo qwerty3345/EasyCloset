@@ -65,6 +65,7 @@ final class StyleController: UICollectionViewController {
   
   @objc private func tappedAddButton() {
     let detailController = StyleDetailController(type: .add)
+    detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
 }
@@ -141,7 +142,16 @@ extension StyleController {
                                didSelectItemAt indexPath: IndexPath) {
     guard let style = dataSource.itemIdentifier(for: indexPath) else { return }
     let detailController = StyleDetailController(type: .showDetail(style: style))
+    detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
+  }
+}
+
+// MARK: - StyleDetailControllerDelegate
+
+extension StyleController: StyleDetailControllerDelegate {
+  func styleDetailController(didUpdateOrSave viewController: StyleDetailController) {
+    viewModel.stylesDidUpdate.send()
   }
 }
 

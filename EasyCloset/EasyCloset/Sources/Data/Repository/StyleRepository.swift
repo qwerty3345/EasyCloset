@@ -74,9 +74,14 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
       guard let self = self else { return }
       
       let styleEntity = style.toEntity()
-      if self.realmStorage.save(styleEntity) == false {
-        promise(.failure(.failToSave))
+      
+      let isSuccessToSave = self.realmStorage.save(styleEntity)
+      if isSuccessToSave {
+        promise(.success(()))
+        return
       }
+      
+      promise(.failure(.failToSave))
     }
   }
   

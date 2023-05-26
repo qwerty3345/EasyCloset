@@ -12,6 +12,10 @@ import SnapKit
 
 import Combine
 
+protocol StyleDetailControllerDelegate: AnyObject {
+  func styleDetailController(didUpdateOrSave viewController: StyleDetailController)
+}
+
 final class StyleDetailController: UIViewController {
   
   // MARK: - Constants
@@ -42,16 +46,17 @@ final class StyleDetailController: UIViewController {
   
   // MARK: - Properties
   
-  private let viewModel = StyleViewModel()
+  private let viewModel = StyleDetailViewModel()
   
   private let type: StyleDetailControllerType
   
   private var isEditingMode = false {
     didSet {
-      updateUI(withEditingMode: isEditingMode)
+      updateUIWithSnapshot()
     }
   }
   
+  weak var delegate: StyleDetailControllerDelegate?
   private lazy var dataSource: DataSource = makeDataSource()
   
   private var cancellables = Set<AnyCancellable>()
@@ -78,6 +83,11 @@ final class StyleDetailController: UIViewController {
   init(type: StyleDetailControllerType) {
     self.type = type
     super.init(nibName: nil, bundle: nil)
+    
+    if case .showDetail(let style) = type {
+      viewModel.style = style
+      //      applySnapshot(with: style)
+    }
   }
   
   required init?(coder: NSCoder) {
@@ -95,12 +105,35 @@ final class StyleDetailController: UIViewController {
   // MARK: - Private Methods
   
   private func bind() {
+    viewModel.$style
+      .sink { [weak self] style in
+        guard let self = self,
+              let style = style else { return }
+        DispatchQueue.main.async {
+          self.updateUIWithSnapshot()
+        }
+      }
+      .store(in: &cancellables)
     
+    viewModel.didFailToSave
+      .sink { [weak self] message in
+        DispatchQueue.main.async {
+          self?.showFailAlert(with: message)
+        }
+      }
+      .store(in: &cancellables)
+    
+    viewModel.didSuccessToSave
+      .sink { [weak self] in
+        DispatchQueue.main.async {
+          self?.dismiss(animated: true)
+        }
+      }
+      .store(in: &cancellables)
   }
   
-  // 편집 모드 상태에 따라 UI를 업데이트
-  private func updateUI(withEditingMode isEditingMode: Bool) {
-    guard case let .showDetail(style: style) = type else { return }
+  private func updateUIWithSnapshot() {
+    guard let style = viewModel.style else { return }
     
     editAddBarButton.title = isEditingMode ? "완료" : "편집"
     
@@ -135,12 +168,11 @@ final class StyleDetailController: UIViewController {
   }
   
   private func addStyle() {
+    delegate?.styleDetailController(didUpdateOrSave: self)
+    navigationController?.popViewController(animated: true)
   }
   
   private func editStyle() {
-    if isEditingMode {
-      
-    }
     isEditingMode.toggle()
   }
   
@@ -183,7 +215,7 @@ extension StyleDetailController {
     collectionView.delegate = self
     collectionView.contentInset = UIEdgeInsets(top: 0, left: Metric.padding,
                                                bottom: 0, right: Metric.padding)
-    applySnapshot()
+    applyInitialSnapshot()
   }
 }
 
@@ -192,7 +224,6 @@ extension StyleDetailController {
 extension StyleDetailController {
   
   private func makeDataSource() -> DataSource {
-    
     return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
       let cell = collectionView.dequeueReusableCell(cellClass: StyleDetailCell.self, for: indexPath)
       
@@ -206,7 +237,7 @@ extension StyleDetailController {
     }
   }
   
-  private func applySnapshot() {
+  private func applyInitialSnapshot() {
     var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections(Section.allCases)
     
@@ -218,7 +249,6 @@ extension StyleDetailController {
       let items = style.clothes.values.map { Item.clothes($0) }
       snapshot.appendItems(items, toSection: .main)
     }
-    
     dataSource.apply(snapshot, animatingDifferences: true)
   }
 }
@@ -228,7 +258,10 @@ extension StyleDetailController {
 extension StyleDetailController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
-    guard isEditingMode else { return }
+    if case .showDetail = type, isEditingMode == false {
+      return
+    }
+    
     guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
     let addClothesController = StyleAddClothesController(category: item.category)
     addClothesController.delegate = self
@@ -241,12 +274,19 @@ extension StyleDetailController: UICollectionViewDelegate {
 extension StyleDetailController: StyleAddClothesControllerDelegate {
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectClothes clothes: Clothes) {
-    print(clothes)
+    if viewModel.style == nil {
+      // TODO: 스타일에 계절 정보 집어넣어야 함...
+      viewModel.style = Style(clothes: [:], weather: .allWeather)
+    }
+    
+    viewModel.style?.clothes[clothes.category] = clothes
+    delegate?.styleDetailController(didUpdateOrSave: self)
   }
   
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectEmpty category: ClothesCategory) {
-    print(category)
+    viewModel.style?.clothes.removeValue(forKey: category)
+    delegate?.styleDetailController(didUpdateOrSave: self)
   }
 }
 
