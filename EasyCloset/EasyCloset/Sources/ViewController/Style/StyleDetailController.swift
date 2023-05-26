@@ -46,7 +46,7 @@ final class StyleDetailController: UIViewController {
   
   // MARK: - Properties
   
-  private let viewModel = StyleDetailViewModel()
+  private let viewModel: StyleDetailViewModel
   
   private let type: StyleDetailControllerType
   
@@ -83,8 +83,10 @@ final class StyleDetailController: UIViewController {
   
   // MARK: - Initialization
   
-  init(type: StyleDetailControllerType) {
+  init(type: StyleDetailControllerType,
+       viewModel: StyleDetailViewModel) {
     self.type = type
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
     
     if case .showDetail(let style) = type {
@@ -305,7 +307,7 @@ extension StyleDetailController: UICollectionViewDelegate {
     }
     
     guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-    let addClothesController = StyleAddClothesController(category: item.category)
+    let addClothesController = DIContainer.shared.makeStyleAddClothesController(category: item.category)
     addClothesController.delegate = self
     present(addClothesController, animated: true)
   }
@@ -363,7 +365,7 @@ import SwiftUI
 
 struct StyleDetailControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = StyleDetailController(type: .showDetail(style: .Mock.style1))
+    let vc = DIContainer.shared.makeStyleDetailController(type: .showDetail(style: .Mock.style1))
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

@@ -24,7 +24,7 @@ final class ClothesViewModel {
   
   // MARK: - Initialization
   
-  init(repository: ClothesRepositoryProtocol = ClothesRepository.shared) {
+  init(repository: ClothesRepositoryProtocol) {
     self.repository = repository
     bind()
   }

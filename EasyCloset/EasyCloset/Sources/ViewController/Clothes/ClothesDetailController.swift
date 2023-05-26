@@ -20,7 +20,7 @@ final class ClothesDetailController: UIViewController {
   
   // MARK: - Properties
   
-  private let viewModel = ClothesDetailViewModel()
+  private let viewModel: ClothesDetailViewModel
   
   private let type: ClothesDetailControllerType
   
@@ -52,8 +52,10 @@ final class ClothesDetailController: UIViewController {
   
   // MARK: - Initialization
   
-  init(type: ClothesDetailControllerType) {
+  init(type: ClothesDetailControllerType,
+       viewModel: ClothesDetailViewModel) {
     self.type = type
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
     
     if case let .showDetail(clothes: clothes) = type {
@@ -287,7 +289,7 @@ import SwiftUI
 
 struct ClothesDetailControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = ClothesDetailController(type: .add)
+    let vc = DIContainer.shared.makeClothesDetailController(type: .add)
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

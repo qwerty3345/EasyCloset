@@ -159,13 +159,15 @@ extension ClothesController: UICollectionViewDelegateFlowLayout {
 extension ClothesController: ClothesCarouselCellDelegate {
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes) {
-    let detailController = ClothesDetailController(type: .showDetail(clothes: clothes))
+    
+    let detailController = DIContainer.shared.makeClothesDetailController(type: .showDetail(clothes: clothes))
     detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory) {
-    let detailController = ClothesDetailController(type: .add)
+    
+    let detailController = DIContainer.shared.makeClothesDetailController(type: .add)
     detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
@@ -186,7 +188,7 @@ import SwiftUI
 
 struct ClothesControllerPreview: PreviewProvider {
   static var previews: some View {
-    UINavigationController(rootViewController: ClothesController(viewModel: ClothesViewModel())).toPreview()
+    UINavigationController(rootViewController: DIContainer.shared.makeClothesController()).toPreview()
   }
 }
 #endif

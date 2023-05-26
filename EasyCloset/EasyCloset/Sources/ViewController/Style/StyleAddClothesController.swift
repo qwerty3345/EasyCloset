@@ -40,7 +40,7 @@ final class StyleAddClothesController: UIViewController {
   
   // MARK: - Properties
   
-  private let viewModel = ClothesViewModel()
+  private let viewModel: ClothesViewModel
   private var cancellables = Set<AnyCancellable>()
   
   private let category: ClothesCategory
@@ -67,8 +67,10 @@ final class StyleAddClothesController: UIViewController {
   
   // MARK: - Initialization
   
-  init(category: ClothesCategory) {
+  init(category: ClothesCategory,
+       viewModel: ClothesViewModel) {
     self.category = category
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -183,7 +185,7 @@ import SwiftUI
 
 struct StyleAddClothesControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = StyleAddClothesController(category: .bottom)
+    let vc = DIContainer.shared.makeStyleAddClothesController(category: .bottom)
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

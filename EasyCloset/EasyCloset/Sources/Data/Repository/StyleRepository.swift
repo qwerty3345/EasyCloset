@@ -26,14 +26,15 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
   
   // MARK: - Properties
   
-  static let shared = StyleRepository()
-  
   private let realmStorage: RealmStorageProtocol
+  let imageFileStorage: ImageFileStorageProtocol
   
   private var cancellables = Set<AnyCancellable>()
   
-  private init(realmStorage: RealmStorageProtocol = RealmStorage.shared) {
+  init(realmStorage: RealmStorageProtocol,
+       imageFileStorage: ImageFileStorageProtocol) {
     self.realmStorage = realmStorage
+    self.imageFileStorage = imageFileStorage
     setupMockData()
   }
   
