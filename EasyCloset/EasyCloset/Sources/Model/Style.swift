@@ -8,8 +8,8 @@
 import UIKit
 
 struct Style: Hashable {
-  let uuid: UUID
-  var createdAt: Date
+  let id: UUID
+  let createdAt: Date
   var clothes: [ClothesCategory: Clothes]
   var weather: WeatherType
   var name: String?
@@ -21,11 +21,23 @@ struct Style: Hashable {
        weather: WeatherType,
        name: String? = nil,
        collageImage: UIImage? = nil) {
-    self.uuid = uuid
+    self.id = uuid
     self.createdAt = createdAt
     self.clothes = clothes
     self.weather = weather
     self.name = name
+  }
+}
+
+// MARK: - Entity Mapping
+
+extension Style {
+  func toEntity() -> StyleEntity {
+    StyleEntity(id: id.uuidString,
+                createdAt: createdAt,
+                clothes: clothes.values.map { $0.toEntity() },
+                weatherType: weather.rawValue,
+                name: name ?? "")
   }
 }
 
