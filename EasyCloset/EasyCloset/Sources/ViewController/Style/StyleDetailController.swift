@@ -80,6 +80,9 @@ final class StyleDetailController: UIViewController {
   ).then {
     $0.isUserInteractionEnabled = false
   }
+  private var selectedWeather: WeatherType? {
+    WeatherType(rawValue: weatherSegmentedControl.selectedSegmentIndex)
+  }
   
   // MARK: - Initialization
   
@@ -93,7 +96,6 @@ final class StyleDetailController: UIViewController {
     case .add:
       isEditing = true
     case .showDetail(let style):
-      viewModel.styleToEdit = style
       configureUI(with: style)
     }
   }
@@ -186,9 +188,8 @@ final class StyleDetailController: UIViewController {
   }
   
   private func saveStyleFromUserInput() {
-    viewModel.styleToEdit?.name = nameTextField.text
-    viewModel.styleToEdit?.weather = WeatherType(rawValue: weatherSegmentedControl.selectedSegmentIndex) ?? .allWeather
-    viewModel.saveStyle.send()
+    viewModel.save(name: nameTextField.text,
+                   weather: selectedWeather ?? .allWeather)
     delegate?.styleDetailController(didUpdateOrSave: self)
   }
   
@@ -317,18 +318,13 @@ extension StyleDetailController: UICollectionViewDelegate {
 extension StyleDetailController: StyleAddClothesControllerDelegate {
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectClothes clothes: Clothes) {
-    if viewModel.styleToEdit == nil {
-      guard let weather = WeatherType(
-        rawValue: weatherSegmentedControl.selectedSegmentIndex) else { return }
-      viewModel.styleToEdit = Style(clothes: [:], weather: weather)
-    }
-    
-    viewModel.styleToEdit?.clothes[clothes.category] = clothes
+    let weather = selectedWeather ?? .allWeather
+    viewModel.update(clothes: clothes, weather: weather)
   }
   
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectEmpty category: ClothesCategory) {
-    viewModel.styleToEdit?.clothes.removeValue(forKey: category)
+    viewModel.removeClothes(of: category)
   }
 }
 

@@ -51,7 +51,15 @@ final class DIContainer {
   }
   
   func makeStyleDetailController(type: StyleDetailControllerType) -> StyleDetailController {
-    let viewModel = StyleDetailViewModel(repository: styleRepository)
+    let viewModel: StyleDetailViewModel = {
+      switch type {
+      case .add:
+        return StyleDetailViewModel(style: nil, repository: styleRepository)
+      case .showDetail(let style):
+        return StyleDetailViewModel(style: style, repository: styleRepository)
+      }
+    }()
+    
     return StyleDetailController(type: type, viewModel: viewModel)
   }
   
