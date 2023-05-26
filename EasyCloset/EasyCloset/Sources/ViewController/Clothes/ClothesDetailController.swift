@@ -58,9 +58,13 @@ final class ClothesDetailController: UIViewController {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
     
-    if case let .showDetail(clothes: clothes) = type {
+    switch type {
+    case .add:
+      isEditing = true
+    case .showDetail(let clothes):
       self.viewModel.clothes = clothes
     }
+    
     bind()
   }
   
@@ -83,6 +87,13 @@ final class ClothesDetailController: UIViewController {
   override func setEditing(_ editing: Bool, animated: Bool) {
     super.setEditing(editing, animated: animated)
     turnEditMode(isOn: isEditing)
+    
+    switch type {
+    case .add:
+      addClothes()
+    case .showDetail:
+      editClothes()
+    }
   }
   
   // MARK: - Private Methods
@@ -90,29 +101,26 @@ final class ClothesDetailController: UIViewController {
   private func bind() {
     // viewModel의 output에 대한 bind
     viewModel.$clothes
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] clothes in
         guard let self = self,
               let clothes = clothes else { return }
-        DispatchQueue.main.async {
-          self.configure(with: clothes)
-        }
+        self.configure(with: clothes)
       }
       .store(in: &cancellables)
     
     viewModel.didFailToSave
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] message in
-        DispatchQueue.main.async {
-          self?.showFailAlert(with: message)
-        }
+        self?.showFailAlert(with: message)
       }
       .store(in: &cancellables)
     
     viewModel.didSuccessToSave
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] in
         if case .add = self?.type {
-          DispatchQueue.main.async {
-            self?.navigationController?.popViewController(animated: true)
-          }
+          self?.navigationController?.popViewController(animated: true)
         }
       }
       .store(in: &cancellables)
@@ -135,15 +143,6 @@ final class ClothesDetailController: UIViewController {
     descriptionTextField.isUserInteractionEnabled = isOn
   }
   
-  @objc private func tappedEditAddButton() {
-    switch type {
-    case .add:
-      addClothes()
-    case .showDetail:
-      editClothes()
-    }
-  }
-  
   private func addClothes() {
     guard let clothes = clothesFromUserInput() else { return }
     viewModel.clothes = clothes
@@ -151,11 +150,10 @@ final class ClothesDetailController: UIViewController {
   }
   
   private func editClothes() {
-    if isEditing {
-      guard let clothes = clothesFromUserInput() else { return }
+    guard isEditing == false,
+    let clothes = clothesFromUserInput() else { return }
       viewModel.clothes = clothes
       delegate?.clothesDetailController(didUpdateOrSave: self)
-    }
     
     photoHandlingView.state = isEditing ? .editing : .show
   }

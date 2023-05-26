@@ -89,7 +89,10 @@ final class StyleDetailController: UIViewController {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
     
-    if case .showDetail(let style) = type {
+    switch type {
+    case .add:
+      isEditing = true
+    case .showDetail(let style):
       viewModel.styleToEdit = style
       configureUI(with: style)
     }
@@ -111,33 +114,37 @@ final class StyleDetailController: UIViewController {
     super.setEditing(editing, animated: animated)
     turnEditMode()
     applySnapshot()
+    
+    switch type {
+    case .add:
+      addStyle()
+    case .showDetail:
+      editStyle()
+    }
   }
   
   // MARK: - Private Methods
   
   private func bind() {
     viewModel.$styleToEdit
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] _ in
         guard let self = self else { return }
-        DispatchQueue.main.async {
-          self.applySnapshot()
-        }
+        self.applySnapshot()
       }
       .store(in: &cancellables)
     
     viewModel.didFailToSave
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] message in
-        DispatchQueue.main.async {
-          self?.showFailAlert(with: message)
-        }
+        self?.showFailAlert(with: message)
       }
       .store(in: &cancellables)
     
     viewModel.didSuccessToSave
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] in
-        DispatchQueue.main.async {
-          self?.dismiss(animated: true)
-        }
+        self?.dismiss(animated: true)
       }
       .store(in: &cancellables)
   }
@@ -166,24 +173,16 @@ final class StyleDetailController: UIViewController {
     dataSource.apply(snapshot, animatingDifferences: true)
   }
   
-  @objc private func tappedEditAddButton() {
-    switch type {
-    case .add:
-      addStyle()
-    case .showDetail:
-      editStyle()
-    }
-  }
-  
   private func addStyle() {
     saveStyleFromUserInput()
     navigationController?.popViewController(animated: true)
   }
   
   private func editStyle() {
-    if isEditing {
-      saveStyleFromUserInput()
+    guard isEditing == false else {
+      return
     }
+    saveStyleFromUserInput()
   }
   
   private func saveStyleFromUserInput() {
