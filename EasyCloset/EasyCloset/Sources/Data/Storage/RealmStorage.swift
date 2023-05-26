@@ -29,11 +29,6 @@ enum RealmStorageError: Error {
 
 final class RealmStorage: RealmStorageProtocol {
   
-  // MARK: - Singleton
-  
-  static let shared = RealmStorage()
-  private init() { }
-  
   // MARK: - Properties
   
   private let realm = try? Realm()

@@ -49,7 +49,7 @@ extension MainTabBarController {
       image: .tshirt,
       selectedImage: .tshirtSelected,
       title: "옷",
-      viewController: ClothesController(viewModel: ClothesViewModel()))
+      viewController: DIContainer.shared.makeClothesController())
     
     let homeController = navigationController(
       image: .house,
@@ -61,7 +61,7 @@ extension MainTabBarController {
       image: .closet,
       selectedImage: .closetSelected,
       title: "스타일",
-      viewController: StyleController(collectionViewLayout: UICollectionViewFlowLayout()))
+      viewController: DIContainer.shared.makeStyleController())
     
     viewControllers = [clothesController, homeController, styleController]
     selectedIndex = TabBarItems.home.rawValue

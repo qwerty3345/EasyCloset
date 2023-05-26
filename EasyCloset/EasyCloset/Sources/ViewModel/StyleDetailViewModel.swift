@@ -26,7 +26,7 @@ final class StyleDetailViewModel {
   
   // MARK: - Initialization
   
-  init(repository: StyleRepositoryProtocol = StyleRepository.shared) {
+  init(repository: StyleRepositoryProtocol) {
     self.repository = repository
     bind()
   }
