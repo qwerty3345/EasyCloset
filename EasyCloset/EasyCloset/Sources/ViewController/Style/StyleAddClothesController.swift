@@ -90,14 +90,11 @@ final class StyleAddClothesController: UIViewController {
   
   private func bind() {
     viewModel.clothes(of: category)
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] clothesList in
         self?.applySnapshot(with: clothesList)
       }
       .store(in: &cancellables)
-  }
-  
-  @objc private func tappedSelectButton() {
-    
   }
 }
 

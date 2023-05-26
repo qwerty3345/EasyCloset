@@ -59,8 +59,7 @@ final class StyleController: UICollectionViewController {
     viewModel.$styles
       .receive(on: DispatchQueue.main)
       .sink { [weak self] styles in
-        guard let self = self else { return }
-        self.applySnapshot(with: styles)
+        self?.applySnapshot(with: styles)
       }
       .store(in: &cancellables)
   }

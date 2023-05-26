@@ -131,8 +131,7 @@ final class StyleDetailController: UIViewController {
     viewModel.$styleToEdit
       .receive(on: DispatchQueue.main)
       .sink { [weak self] _ in
-        guard let self = self else { return }
-        self.applySnapshot()
+        self?.applySnapshot()
       }
       .store(in: &cancellables)
     
