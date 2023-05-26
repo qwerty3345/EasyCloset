@@ -12,6 +12,13 @@ import SnapKit
 
 import Combine
 
+protocol StyleAddClothesControllerDelegate: AnyObject {
+  func styleAddClothesController(_ viewController: StyleAddClothesController,
+                                 didSelectClothes clothes: Clothes)
+  func styleAddClothesController(_ viewController: StyleAddClothesController,
+                                 didSelectEmpty category: ClothesCategory)
+}
+
 final class StyleAddClothesController: UIViewController {
   
   // MARK: - Constants
@@ -20,21 +27,26 @@ final class StyleAddClothesController: UIViewController {
     static let padding: CGFloat = 20
   }
   
-  typealias DataSource = UICollectionViewDiffableDataSource<Section, Clothes>
+  typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
   
   enum Section: Int, CaseIterable {
     case main
   }
   
+  enum Item: Hashable {
+    case remove
+    case clothes(Clothes)
+  }
+  
   // MARK: - Properties
   
   private let viewModel = ClothesViewModel()
+  private var cancellables = Set<AnyCancellable>()
   
   private let category: ClothesCategory
-  
   private lazy var dataSource: DataSource = makeDataSource()
   
-  private var cancellables = Set<AnyCancellable>()
+  weak var delegate: StyleAddClothesControllerDelegate?
   
   // MARK: - UI Components
   
@@ -47,11 +59,11 @@ final class StyleAddClothesController: UIViewController {
     $0.minimumInteritemSpacing = Metric.padding / 2
   }
   
-  private lazy var selectBarButton = UIBarButtonItem(
-    title: "선택",
-    style: .plain,
-    target: self,
-    action: #selector(tappedSelectButton))
+  private lazy var titleLabel = UILabel().then {
+    $0.text = "스타일 \(category.korean) 선택"
+    $0.font = .pretendardMediumTitle
+    $0.textAlignment = .center
+  }
   
   // MARK: - Initialization
   
@@ -99,20 +111,28 @@ extension StyleAddClothesController {
   
   private func setUI() {
     title = "옷 선택하기"
-    navigationItem.rightBarButtonItem = selectBarButton
     view.backgroundColor = .background
+    collectionView.backgroundColor = .background
   }
   
   private func setupLayout() {
+    view.addSubview(titleLabel)
+    titleLabel.snp.makeConstraints {
+      $0.top.horizontalEdges.equalToSuperview()
+      $0.height.equalTo(80)
+    }
+    
     view.addSubview(collectionView)
     collectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.equalTo(titleLabel.snp.bottom)
+      $0.horizontalEdges.bottom.equalToSuperview()
     }
   }
   
   private func setupCollectionView() {
-    collectionView.registerCell(cellClass: StyleDetailCell.self)
+    collectionView.registerCell(cellClass: StyleAddClothesCell.self)
     collectionView.dataSource = dataSource
+    collectionView.delegate = self
     collectionView.contentInset = UIEdgeInsets(top: 0, left: Metric.padding,
                                                bottom: 0, right: Metric.padding)
   }
@@ -124,17 +144,35 @@ extension StyleAddClothesController {
   
   private func makeDataSource() -> DataSource {
     return DataSource(collectionView: collectionView) { collectionView, indexPath, item in
-      let cell = collectionView.dequeueReusableCell(cellClass: StyleDetailCell.self, for: indexPath)
-      
+      let cell = collectionView.dequeueReusableCell(cellClass: StyleAddClothesCell.self, for: indexPath)
+      cell.configure(with: item)
       return cell
     }
   }
   
   private func applySnapshot(with clothesList: [Clothes]) {
-    var snapshot = NSDiffableDataSourceSnapshot<Section, Clothes>()
+    var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections(Section.allCases)
-    snapshot.appendItems(clothesList, toSection: .main)
+    let clotheItems = clothesList.map { Item.clothes($0) }
+    snapshot.appendItems([.remove] + clotheItems, toSection: .main)
     dataSource.apply(snapshot, animatingDifferences: true)
+  }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension StyleAddClothesController: UICollectionViewDelegate {
+  
+  func collectionView(_ collectionView: UICollectionView,
+                      didSelectItemAt indexPath: IndexPath) {
+    guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+    switch item {
+    case .remove:
+      delegate?.styleAddClothesController(self, didSelectEmpty: category)
+    case .clothes(let clothes):
+      delegate?.styleAddClothesController(self, didSelectClothes: clothes)
+    }
+    dismiss(animated: true)
   }
 }
 

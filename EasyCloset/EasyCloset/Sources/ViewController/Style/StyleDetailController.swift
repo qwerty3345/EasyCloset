@@ -29,6 +29,15 @@ final class StyleDetailController: UIViewController {
   enum Item: Hashable {
     case notAdded(ClothesCategory)
     case clothes(Clothes)
+    
+    var category: ClothesCategory {
+      switch self {
+      case .notAdded(let category):
+        return category
+      case .clothes(let clothes):
+        return clothes.category
+      }
+    }
   }
   
   // MARK: - Properties
@@ -171,6 +180,7 @@ extension StyleDetailController {
   private func setupCollectionView() {
     collectionView.registerCell(cellClass: StyleDetailCell.self)
     collectionView.dataSource = dataSource
+    collectionView.delegate = self
     collectionView.contentInset = UIEdgeInsets(top: 0, left: Metric.padding,
                                                bottom: 0, right: Metric.padding)
     applySnapshot()
@@ -210,6 +220,33 @@ extension StyleDetailController {
     }
     
     dataSource.apply(snapshot, animatingDifferences: true)
+  }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension StyleDetailController: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView,
+                      didSelectItemAt indexPath: IndexPath) {
+    guard isEditingMode else { return }
+    guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+    let addClothesController = StyleAddClothesController(category: item.category)
+    addClothesController.delegate = self
+    present(addClothesController, animated: true)
+  }
+}
+
+// MARK: - StyleAddClothesControllerDelegate
+
+extension StyleDetailController: StyleAddClothesControllerDelegate {
+  func styleAddClothesController(_ viewController: StyleAddClothesController,
+                                 didSelectClothes clothes: Clothes) {
+    print(clothes)
+  }
+  
+  func styleAddClothesController(_ viewController: StyleAddClothesController,
+                                 didSelectEmpty category: ClothesCategory) {
+    print(category)
   }
 }
 

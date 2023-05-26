@@ -1,24 +1,17 @@
 //
-//  StyleDetailCell.swift
+//  StyleAddClothesCell.swift
 //  EasyCloset
 //
-//  Created by Mason Kim on 2023/05/25.
+//  Created by Mason Kim on 2023/05/26.
 //
 
 import UIKit
 
 import SnapKit
 
-final class StyleDetailCell: UICollectionViewCell, Highlightable {
+final class StyleAddClothesCell: UICollectionViewCell, Highlightable {
   
   // MARK: - UI Components
-  
-  private let clothesLabel = UILabel().then {
-    $0.font = .pretendardSmallTitle
-    $0.textAlignment = .center
-    $0.textColor = .white
-    $0.backgroundColor = .seperator.withAlphaComponent(0.5)
-  }
   
   private let clothesImageView = UIImageView().then {
     $0.contentMode = .scaleAspectFit
@@ -57,26 +50,29 @@ final class StyleDetailCell: UICollectionViewCell, Highlightable {
   
   // MARK: - Public Methods
   
-  func configure(category: ClothesCategory) {
-    clothesLabel.text = category.korean
+  func configure(with item: StyleAddClothesController.Item) {
+    switch item {
+    case .remove:
+      clothesImageView.image = UIImage(systemName: "nosign")
+    case .clothes(let clothes):
+      clothesImageView.image = clothes.image
+    }
   }
   
   func configure(with clothes: Clothes) {
     clothesImageView.image = clothes.image
-    clothesLabel.text = clothes.category.korean
   }
   
   // MARK: - Private Methods
   
   private func resetUIComponents() {
     clothesImageView.image = .hangerPlus
-    clothesLabel.text = ""
   }
 }
 
 // MARK: - UI & Layout
 
-extension StyleDetailCell {
+extension StyleAddClothesCell {
   
   private func setup() {
     setupLayout()
@@ -93,13 +89,6 @@ extension StyleDetailCell {
     clothesImageView.snp.makeConstraints {
       $0.edges.equalToSuperview().inset(10)
     }
-    
-    addSubview(clothesLabel)
-    clothesLabel.snp.makeConstraints {
-      $0.horizontalEdges.equalToSuperview()
-      $0.bottom.equalToSuperview().inset(12)
-      $0.height.equalTo(30)
-    }
   }
 }
 
@@ -108,11 +97,10 @@ extension StyleDetailCell {
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
 
-struct StyleDetailCellPreview: PreviewProvider {
+struct StyleAddClothesCellPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
-      let cell = StyleDetailCell()
-      cell.configure(category: .accessory)
+      let cell = StyleAddClothesCell()
       cell.configure(with: .mock)
       return cell
     }

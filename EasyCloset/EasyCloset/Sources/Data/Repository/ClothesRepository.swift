@@ -115,7 +115,6 @@ final class ClothesRepository: ClothesRepositoryProtocol {
   
   func removeAll() {
     realmStorage.removeAll(entityType: ClothesEntity.self)
-    // 이미지도 전체 삭제 구현
     imageCacheManager.removeAll()
   }
   
