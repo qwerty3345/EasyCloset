@@ -69,7 +69,6 @@ final class StyleDetailController: UIViewController {
   init(type: StyleDetailControllerType) {
     self.type = type
     super.init(nibName: nil, bundle: nil)
-    bind()
   }
   
   required init?(coder: NSCoder) {
@@ -81,6 +80,7 @@ final class StyleDetailController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setup()
+    bind()
   }
   
   // MARK: - Private Methods
@@ -212,32 +212,6 @@ extension StyleDetailController {
     dataSource.apply(snapshot, animatingDifferences: true)
   }
 }
-
-// MARK: - UICollectionViewDataSource
-
-//extension StyleDetailController: UICollectionViewDataSource {
-//
-//  func collectionView(_ collectionView: UICollectionView,
-//                      numberOfItemsInSection section: Int) -> Int {
-//    return ClothesCategory.allCases.count
-//  }
-//
-//  func collectionView(_ collectionView: UICollectionView,
-//                      cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//    let cell = collectionView.dequeueReusableCell(cellClass: StyleDetailCell.self, for: indexPath)
-//
-//    guard let category = ClothesCategory(rawValue: indexPath.row) else {
-//      return cell
-//    }
-//    cell.configure(category: category)
-//
-//    if case let .showDetail(style: style) = type,
-//       let clothes = style.clothes[category] {
-//      cell.configure(with: clothes)
-//    }
-//    return cell
-//  }
-//}
 
 // MARK: - ClothesDetailControllerType
 
