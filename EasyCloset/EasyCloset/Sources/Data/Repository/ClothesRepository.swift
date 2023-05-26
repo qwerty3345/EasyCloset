@@ -58,6 +58,7 @@ final class ClothesRepository: ClothesRepositoryProtocol {
                realmStorage: RealmStorageProtocol = RealmStorage.shared) {
     self.imageFileStorage = imageFileStorage
     self.realmStorage = realmStorage
+    setupMockData()
   }
   
   // MARK: - Public Methods
@@ -146,4 +147,17 @@ final class ClothesRepository: ClothesRepositoryProtocol {
       .collect()
       .eraseToAnyPublisher()
   }
+  
+  // 초기 데이터가 없을 때 테스트 용도로 Mock 데이터를 저장 해 주는 메서드
+  #if DEBUG
+  private func setupMockData() {
+    ClothesList.mock.clothesByCategory.forEach { (_, value: [Clothes]) in
+      value.forEach { clothes in
+        save(clothes: clothes)
+          .sink(receiveCompletion: { _ in }, receiveValue: { })
+          .store(in: &cancellables)
+      }
+    }
+  }
+  #endif
 }
