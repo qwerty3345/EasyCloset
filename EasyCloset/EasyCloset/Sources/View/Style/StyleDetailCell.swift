@@ -91,7 +91,7 @@ extension StyleDetailCell {
   private func setupLayout() {
     addSubview(clothesImageView)
     clothesImageView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.edges.equalToSuperview().inset(10)
     }
     
     addSubview(clothesLabel)
