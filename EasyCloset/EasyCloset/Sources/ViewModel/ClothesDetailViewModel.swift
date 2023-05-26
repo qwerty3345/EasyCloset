@@ -13,7 +13,7 @@ final class ClothesDetailViewModel {
   
   // MARK: - Properties
   
-  @Published var clothes: Clothes?
+  @Published private(set) var clothes: Clothes?
   
   let didSuccessToSave = PassthroughSubject<Void, Never>()
   let didFailToSave = PassthroughSubject<String, Never>()
@@ -24,29 +24,26 @@ final class ClothesDetailViewModel {
   
   // MARK: - Initialization
   
-  init(repository: ClothesRepositoryProtocol) {
+  init(clothes: Clothes?,
+       repository: ClothesRepositoryProtocol) {
+    self.clothes = clothes
     self.repository = repository
-    bind()
   }
   
-  // MARK: - Private Methods
+  // MARK: - Public Methods
   
-  private func bind() {
-    $clothes.sink { [weak self] clothes in
-      guard let self = self,
-            let clothes = clothes else { return }
-      
-      self.repository.save(clothes: clothes)
-        .sink(receiveCompletion: { [weak self] completion in
-          switch completion {
-          case .finished:
-            self?.didSuccessToSave.send()
-          case .failure(let error):
-            self?.didFailToSave.send(error.localizedDescription)
-          }
-        }, receiveValue: { })
-        .store(in: &cancellables)
-    }
-    .store(in: &cancellables)
+  func save(clothes: Clothes) {
+    self.clothes = clothes
+    
+    repository.save(clothes: clothes)
+      .sink(receiveCompletion: { [weak self] completion in
+        switch completion {
+        case .finished:
+          self?.didSuccessToSave.send()
+        case .failure(let error):
+          self?.didFailToSave.send(error.localizedDescription)
+        }
+      }, receiveValue: { })
+      .store(in: &cancellables)
   }
 }

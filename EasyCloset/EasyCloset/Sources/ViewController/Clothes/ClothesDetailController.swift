@@ -58,11 +58,8 @@ final class ClothesDetailController: UIViewController {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
     
-    switch type {
-    case .add:
+    if case .add = type {
       isEditing = true
-    case .showDetail(let clothes):
-      self.viewModel.clothes = clothes
     }
     
     bind()
@@ -86,6 +83,11 @@ final class ClothesDetailController: UIViewController {
   
   override func setEditing(_ editing: Bool, animated: Bool) {
     super.setEditing(editing, animated: animated)
+    
+    if case .add = type {
+      editButtonItem.title = "완료"
+    }
+    
     turnEditMode(isOn: isEditing)
     
     switch type {
@@ -101,11 +103,10 @@ final class ClothesDetailController: UIViewController {
   private func bind() {
     // viewModel의 output에 대한 bind
     viewModel.$clothes
+      .compactMap { $0 }
       .receive(on: DispatchQueue.main)
       .sink { [weak self] clothes in
-        guard let self = self,
-              let clothes = clothes else { return }
-        self.configure(with: clothes)
+        self?.configure(with: clothes)
       }
       .store(in: &cancellables)
     
@@ -138,24 +139,24 @@ final class ClothesDetailController: UIViewController {
   }
   
   private func turnEditMode(isOn: Bool) {
+    guard case .showDetail = type else { return }
     categotyPickerView.isUserInteractionEnabled = isOn
     weatherSegmentedControl.isUserInteractionEnabled = isOn
     descriptionTextField.isUserInteractionEnabled = isOn
+    photoHandlingView.state = isOn ? .editing : .show
   }
   
   private func addClothes() {
     guard let clothes = clothesFromUserInput() else { return }
-    viewModel.clothes = clothes
+    viewModel.save(clothes: clothes)
     delegate?.clothesDetailController(didUpdateOrSave: self)
   }
   
   private func editClothes() {
     guard isEditing == false,
-    let clothes = clothesFromUserInput() else { return }
-      viewModel.clothes = clothes
-      delegate?.clothesDetailController(didUpdateOrSave: self)
-    
-    photoHandlingView.state = isEditing ? .editing : .show
+          let clothes = clothesFromUserInput() else { return }
+    viewModel.save(clothes: clothes)
+    delegate?.clothesDetailController(didUpdateOrSave: self)
   }
   
   private func clothesFromUserInput() -> Clothes? {

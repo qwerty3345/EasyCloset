@@ -35,7 +35,15 @@ final class DIContainer {
   }
   
   func makeClothesDetailController(type: ClothesDetailControllerType) -> ClothesDetailController {
-    let viewModel = ClothesDetailViewModel(repository: clothesRepository)
+    let viewModel: ClothesDetailViewModel = {
+      switch type {
+      case .add:
+        return ClothesDetailViewModel(clothes: nil, repository: clothesRepository)
+      case .showDetail(let clothes):
+        return ClothesDetailViewModel(clothes: clothes, repository: clothesRepository)
+      }
+    }()
+    
     return ClothesDetailController(type: type, viewModel: viewModel)
   }
   
