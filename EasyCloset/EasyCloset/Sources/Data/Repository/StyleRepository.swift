@@ -16,7 +16,7 @@ import Then
 
 protocol StyleRepositoryProtocol {
   func fetchStyles() -> AnyPublisher<[Style], RepositoryError>
-  func save(style: Style) -> Future<Void, RepositoryError>
+  func save(style: Style) -> AnyPublisher<Void, RepositoryError>
   func removeAll()
 }
 
@@ -41,36 +41,30 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
   // MARK: - Public Methods
   
   func fetchStyles() -> AnyPublisher<[Style], RepositoryError> {
-    return Future { [weak self] promise in
-      guard let self = self else { return }
+    let styleEntities = realmStorage.load(entityType: StyleEntity.self)
+    let styleModels = styleEntities.map { $0.toModelWithoutImage() }
+    
+    // 내부의 clothes들에 이미지가 반영된 style 객체들
+    let styleWithImagePublishers = styleModels.map { style in
+      let clothes = style.clothes.values.map { $0 }
       
-      let styleEntities = realmStorage.load(entityType: StyleEntity.self)
-      let styleModels = styleEntities.map { $0.toModelWithoutImage() }
-      
-      // 내부의 clothes들에 이미지가 반영된 style 객체들
-      let styleWithImagePublishers = styleModels.map { style in
-        let clothes = style.clothes.values.map { $0 }
-        
-        return self.addingImages(to: clothes)
-          .map { clothesWithImages -> Style in
-            var newStyle = style
-            newStyle.clothes = clothesWithImages.toClothesDictionary()
-            return newStyle
-          }
-      }
-      
-      // 각각의 style들을 배열 값으로 한 번에 내보내도록 처리
-      Publishers.MergeMany(styleWithImagePublishers)
-        .collect()
-        .sink { styles in
-          promise(.success(styles))
+      return self.addingImages(to: clothes)
+        .map { clothesWithImages -> Style in
+          var newStyle = style
+          newStyle.clothes = clothesWithImages.toClothesDictionary()
+          return newStyle
         }
-        .store(in: &cancellables)
+        .eraseToAnyPublisher()
     }
-    .eraseToAnyPublisher()
+    
+    // 각각의 style들을 배열 값으로 한 번에 내보내도록 처리
+    return Publishers.MergeMany(styleWithImagePublishers)
+      .collect()
+      .mapError { _ in RepositoryError.invalidData }
+      .eraseToAnyPublisher()
   }
   
-  func save(style: Style) -> Future<Void, RepositoryError> {
+  func save(style: Style) -> AnyPublisher<Void, RepositoryError> {
     return Future { [weak self] promise in
       guard let self = self else { return }
       
@@ -84,6 +78,7 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
       
       promise(.failure(.failToSave))
     }
+    .eraseToAnyPublisher()
   }
   
   func removeAll() {

@@ -41,22 +41,12 @@ final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchable {
   // MARK: - Public Methods
   
   func fetchClothesList() -> AnyPublisher<ClothesList, RepositoryError> {
-    return Future { [weak self] promise in
-      guard let self = self else { return }
-      
-      // 반영한 모델들을 다 합한 결과를 future로 내뱉음.
-      let clothesEntities = realmStorage.load(entityType: ClothesEntity.self)
-      let clothesModelsWithoutImage = clothesEntities.map { $0.toModelWithoutImage() }
-      
-      addingImages(to: clothesModelsWithoutImage)
-        .sink { clothesModels in
-          // 이미지가 모두 반영 된 ClothesList
-          let clothesList = clothesModels.toClothesList()
-          promise(.success(clothesList))
-        }
-        .store(in: &cancellables)
-    }
-    .eraseToAnyPublisher()
+    let clothesEntities = realmStorage.load(entityType: ClothesEntity.self)
+    let clothesModelsWithoutImage = clothesEntities.map { $0.toModelWithoutImage() }
+    return addingImages(to: clothesModelsWithoutImage)
+      .map { $0.toClothesList() }
+      .mapError { _ in RepositoryError.invalidData }
+      .eraseToAnyPublisher()
   }
   
   func save(clothes: Clothes) -> AnyPublisher<Void, RepositoryError> {
