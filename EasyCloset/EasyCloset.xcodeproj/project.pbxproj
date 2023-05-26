@@ -61,6 +61,7 @@
 		B49CAACF2A1B5169008254C7 /* StyleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAACE2A1B5169008254C7 /* StyleCell.swift */; };
 		B49CAAD12A1B5455008254C7 /* StyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */; };
 		B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */; };
+		B4B456812A1F9A67003354F8 /* StyleAddClothesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B456802A1F9A66003354F8 /* StyleAddClothesController.swift */; };
 		B4E5C5422A1C823B00B14F48 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C5412A1C823B00B14F48 /* ImageCacheManager.swift */; };
 		B4E5C56A2A1C9E3E00B14F48 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */; };
 		B4E5C56C2A1CAC0C00B14F48 /* ImageFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */; };
@@ -129,6 +130,7 @@
 		B49CAACE2A1B5169008254C7 /* StyleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleCell.swift; sourceTree = "<group>"; };
 		B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleViewModel.swift; sourceTree = "<group>"; };
 		B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
+		B4B456802A1F9A66003354F8 /* StyleAddClothesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleAddClothesController.swift; sourceTree = "<group>"; };
 		B4E5C5412A1C823B00B14F48 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileStorage.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				B43889792A14935200476BFC /* StyleController.swift */,
 				B4504B692A1DE9EF0018C9BC /* ClothesFilterController.swift */,
 				B46111482A1F7F8A00104C3A /* StyleDetailController.swift */,
+				B4B456802A1F9A66003354F8 /* StyleAddClothesController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -577,6 +580,7 @@
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
 				B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */,
 				B43889A22A14AD8800476BFC /* Clothes.swift in Sources */,
+				B4B456812A1F9A67003354F8 /* StyleAddClothesController.swift in Sources */,
 				B4504B6A2A1DE9EF0018C9BC /* ClothesFilterController.swift in Sources */,
 				B44EA8B92A1B311F008A83FF /* ClothesEntity.swift in Sources */,
 				B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */,
