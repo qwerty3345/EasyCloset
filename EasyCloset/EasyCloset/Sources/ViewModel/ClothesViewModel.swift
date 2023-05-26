@@ -15,7 +15,7 @@ final class ClothesViewModel {
   
   @Published private var clothesList = ClothesList(clothesByCategory: [:])
   
-  let searchFilters = CurrentValueSubject<FilterItems, Never>([])
+  let searchFilters = CurrentValueSubject<FilterItems, Never>([.sort(.new)])
   let clothesListDidUpdate = PassthroughSubject<Void, Never>()
   
   private var cancellables = Set<AnyCancellable>()
