@@ -35,6 +35,7 @@ extension MainTabBarController {
   private func setup() {
     setUI()
     setupViewControllers()
+    setupGestures()
     delegate = self
   }
   
@@ -76,6 +77,33 @@ extension MainTabBarController {
     navigationController.tabBarItem.title = title
     navigationController.navigationBar.tintColor = .accentColor
     return navigationController
+  }
+  
+  private func setupGestures() {
+    let swipeRightGesture = UISwipeGestureRecognizer(
+      target: self,
+      action: #selector(handleSwipeGesture))
+    swipeRightGesture.direction = .right
+    view.addGestureRecognizer(swipeRightGesture)
+    
+    let swipeLeftGesture = UISwipeGestureRecognizer(
+      target: self,
+      action: #selector(handleSwipeGesture))
+    swipeLeftGesture.direction = .left
+    view.addGestureRecognizer(swipeLeftGesture)
+  }
+  
+  @objc private func handleSwipeGesture(_ sender: UISwipeGestureRecognizer) {
+    var destinationIndex = selectedIndex
+    switch sender.direction {
+    case .left:
+      destinationIndex += 1
+    case .right:
+      destinationIndex -= 1
+    default:
+      break
+    }
+    moveWithAnimation(to: destinationIndex)
   }
 }
 
