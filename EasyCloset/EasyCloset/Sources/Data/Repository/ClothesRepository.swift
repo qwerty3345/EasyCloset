@@ -16,7 +16,7 @@ import Then
 
 protocol ClothesRepositoryProtocol {
   func fetchClothesList() -> AnyPublisher<ClothesList, RepositoryError>
-  func save(clothes: Clothes) -> Future<Void, RepositoryError>
+  func save(clothes: Clothes) -> AnyPublisher<Void, RepositoryError>
   func removeAll()
 }
 
@@ -59,35 +59,23 @@ final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchable {
     .eraseToAnyPublisher()
   }
   
-  func save(clothes: Clothes) -> Future<Void, RepositoryError> {
-    return Future { [weak self] promise in
-      guard let self = self else { return }
-      
-      let clothesEntity = clothes.toEntity()
-      if self.realmStorage.save(clothesEntity) == false {
-        promise(.failure(.failToSave))
-      }
-      
-      guard let image = clothes.image else {
-        promise(.failure(.invalidImage))
-        return
-      }
-      
-      // 캐시 저장
-      imageCacheManager.store(image, for: clothes.id)
-      
-      // 이미지 파일 저장
-      imageFileStorage.save(image: image, id: clothes.id)
-        .sink(receiveCompletion: { completion in
-          switch completion {
-          case .finished:
-            promise(.success(()))
-          case .failure:
-            promise(.failure(.failToSave))
-          }
-        }, receiveValue: {})
-        .store(in: &cancellables)
+  func save(clothes: Clothes) -> AnyPublisher<Void, RepositoryError> {
+    let clothesEntity = clothes.toEntity()
+    if self.realmStorage.save(clothesEntity) == false {
+      return Fail(error: RepositoryError.failToSave).eraseToAnyPublisher()
     }
+    
+    guard let image = clothes.image else {
+      return Fail(error: RepositoryError.invalidImage).eraseToAnyPublisher()
+    }
+    
+    // 캐시 저장
+    imageCacheManager.store(image, for: clothes.id)
+    
+    // 이미지 파일 저장
+    return imageFileStorage.save(image: image, id: clothes.id)
+      .mapError { _ in RepositoryError.failToSave }
+      .eraseToAnyPublisher()
   }
   
   func removeAll() {
