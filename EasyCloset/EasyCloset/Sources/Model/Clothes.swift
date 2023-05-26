@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Clothes: Hashable {
+struct Clothes: Hashable, ImagableModel {
   let id: UUID
   let createdAt: Date
   var image: UIImage?
@@ -33,6 +33,12 @@ struct Clothes: Hashable {
 // MARK: - [Clothes] 를 ClothesList 타입으로 변환
 // Why: dictionary 의 key값으로 category를 매칭시켜 각 옷 종류에 따른 옷들에 접근 시 O(1)으로 접근하게 하기 위함
 extension Array where Element == Clothes {
+  func toClothesDictionary() -> [ClothesCategory: Clothes] {
+    return reduce(into: [ClothesCategory: Clothes](), { result, clothes in
+      result[clothes.category] = clothes
+    })
+  }
+  
   func toClothesList() -> ClothesList {
     return reduce(into: ClothesList(clothesByCategory: [:]), { result, clothes in
       result.clothesByCategory[clothes.category, default: []].append(clothes)
