@@ -52,7 +52,8 @@ final class StyleDetailController: UIViewController {
   
   private var isEditingMode = false {
     didSet {
-      updateUIWithSnapshot()
+      turnEditMode(isOn: isEditingMode)
+      applySnapshot()
     }
   }
   
@@ -78,6 +79,19 @@ final class StyleDetailController: UIViewController {
     target: self,
     action: #selector(tappedEditAddButton))
   
+  private let nameTextField = UITextField().then {
+    $0.font = .pretendardMediumTitle
+    $0.textAlignment = .center
+    $0.placeholder = "스타일의 이름을 입력 해 주세요"
+    $0.isUserInteractionEnabled = false
+  }
+  
+  private lazy var weatherSegmentedControl = UISegmentedControl(
+    items: WeatherType.allCases.map { $0.korean }
+  ).then {
+    $0.isUserInteractionEnabled = false
+  }
+  
   // MARK: - Initialization
   
   init(type: StyleDetailControllerType) {
@@ -85,7 +99,8 @@ final class StyleDetailController: UIViewController {
     super.init(nibName: nil, bundle: nil)
     
     if case .showDetail(let style) = type {
-      viewModel.style = style
+      viewModel.styleToEdit = style
+      configureUI(with: style)
     }
   }
   
@@ -104,11 +119,11 @@ final class StyleDetailController: UIViewController {
   // MARK: - Private Methods
   
   private func bind() {
-    viewModel.$style
+    viewModel.$styleToEdit
       .sink { [weak self] _ in
         guard let self = self else { return }
         DispatchQueue.main.async {
-          self.updateUIWithSnapshot()
+          self.applySnapshot()
         }
       }
       .store(in: &cancellables)
@@ -130,10 +145,8 @@ final class StyleDetailController: UIViewController {
       .store(in: &cancellables)
   }
   
-  private func updateUIWithSnapshot() {
-    guard let style = viewModel.style else { return }
-    
-    editAddBarButton.title = isEditingMode ? "완료" : "편집"
+  private func applySnapshot() {
+    guard let style = viewModel.styleToEdit else { return }
     
     var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections(Section.allCases)
@@ -166,12 +179,22 @@ final class StyleDetailController: UIViewController {
   }
   
   private func addStyle() {
-    delegate?.styleDetailController(didUpdateOrSave: self)
+    saveStyleFromUserInput()
     navigationController?.popViewController(animated: true)
   }
   
   private func editStyle() {
+    if isEditingMode {
+      saveStyleFromUserInput()
+    }
     isEditingMode.toggle()
+  }
+  
+  private func saveStyleFromUserInput() {
+    viewModel.styleToEdit?.name = nameTextField.text
+    viewModel.styleToEdit?.weather = WeatherType(rawValue: weatherSegmentedControl.selectedSegmentIndex) ?? .allWeather
+    viewModel.saveStyle.send()
+    delegate?.styleDetailController(didUpdateOrSave: self)
   }
   
   private func showFailAlert(with title: String) {
@@ -181,6 +204,12 @@ final class StyleDetailController: UIViewController {
     alert.addAction(confirmAction)
     
     present(alert, animated: true)
+  }
+  
+  private func turnEditMode(isOn: Bool) {
+    nameTextField.isUserInteractionEnabled = isEditingMode
+    weatherSegmentedControl.isUserInteractionEnabled = isEditingMode
+    editAddBarButton.title = isEditingMode ? "완료" : "편집"
   }
 }
 
@@ -198,12 +227,33 @@ extension StyleDetailController {
     title = type.title
     navigationItem.rightBarButtonItem = editAddBarButton
     view.backgroundColor = .background
+    collectionView.backgroundColor = .background
+  }
+  
+  private func configureUI(with style: Style) {
+    nameTextField.text = style.name ?? ""
+    weatherSegmentedControl.selectedSegmentIndex = style.weather.rawValue
   }
   
   private func setupLayout() {
+    view.addSubview(nameTextField)
+    nameTextField.snp.makeConstraints {
+      $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+      $0.horizontalEdges.equalToSuperview()
+      $0.height.equalTo(50)
+    }
+    
+    view.addSubview(weatherSegmentedControl)
+    weatherSegmentedControl.snp.makeConstraints {
+      $0.top.equalTo(nameTextField.snp.bottom).offset(Metric.padding)
+      $0.horizontalEdges.equalToSuperview().inset(Metric.padding)
+      $0.height.equalTo(30)
+    }
+    
     view.addSubview(collectionView)
     collectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.top.equalTo(weatherSegmentedControl.snp.bottom).offset(Metric.padding)
+      $0.horizontalEdges.bottom.equalToSuperview()
     }
   }
   
@@ -272,19 +322,18 @@ extension StyleDetailController: UICollectionViewDelegate {
 extension StyleDetailController: StyleAddClothesControllerDelegate {
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectClothes clothes: Clothes) {
-    if viewModel.style == nil {
-      // TODO: 스타일에 계절 정보 집어넣어야 함...
-      viewModel.style = Style(clothes: [:], weather: .allWeather)
+    if viewModel.styleToEdit == nil {
+      guard let weather = WeatherType(
+        rawValue: weatherSegmentedControl.selectedSegmentIndex) else { return }
+      viewModel.styleToEdit = Style(clothes: [:], weather: weather)
     }
     
-    viewModel.style?.clothes[clothes.category] = clothes
-    delegate?.styleDetailController(didUpdateOrSave: self)
+    viewModel.styleToEdit?.clothes[clothes.category] = clothes
   }
   
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectEmpty category: ClothesCategory) {
-    viewModel.style?.clothes.removeValue(forKey: category)
-    delegate?.styleDetailController(didUpdateOrSave: self)
+    viewModel.styleToEdit?.clothes.removeValue(forKey: category)
   }
 }
 
@@ -299,7 +348,7 @@ enum StyleDetailControllerType {
     case .add:
       return "스타일 추가하기"
     case .showDetail(let style):
-      return "\(style.name ?? "") 상세보기"
+      return "상세보기"
     }
   }
   
@@ -320,7 +369,7 @@ import SwiftUI
 
 struct StyleDetailControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = StyleDetailController(type: .showDetail(style: .Mock.style1))
+    let vc = StyleDetailController(type: .showDetail(styleToEdit: .Mock.style1))
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

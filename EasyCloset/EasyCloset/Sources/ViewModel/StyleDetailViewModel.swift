@@ -13,7 +13,9 @@ final class StyleDetailViewModel {
   
   // MARK: - Properties
   
-  @Published var style: Style?
+  @Published var styleToEdit: Style?
+  
+  let saveStyle = PassthroughSubject<Void, Never>()
   
   let didSuccessToSave = PassthroughSubject<Void, Never>()
   let didFailToSave = PassthroughSubject<String, Never>()
@@ -32,9 +34,9 @@ final class StyleDetailViewModel {
   // MARK: - Private Methods
   
   private func bind() {
-    $style.sink { [weak self] style in
+    saveStyle.sink { [weak self] _ in
       guard let self = self,
-            let style = style else { return }
+            let style = styleToEdit else { return }
       
       self.repository.save(style: style)
         .sink(receiveCompletion: { [weak self] completion in

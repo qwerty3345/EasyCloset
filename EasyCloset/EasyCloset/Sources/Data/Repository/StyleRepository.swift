@@ -96,7 +96,7 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
   private func setupMockData() {
     guard realmStorage.load(entityType: StyleEntity.self).isEmpty else { return }
     Style.Mock.mocks.forEach {
-      save(style: $0)
+      save(styleToEdit: $0)
         .sink(receiveCompletion: { _ in }, receiveValue: { })
         .store(in: &cancellables)
     }

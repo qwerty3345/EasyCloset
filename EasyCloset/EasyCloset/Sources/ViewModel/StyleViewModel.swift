@@ -32,6 +32,7 @@ final class StyleViewModel {
   
   private func bind() {
     repository.fetchStyles()
+      .map(sortByNew)
       .sink { completion in
         if case let .failure(error) = completion {
           print(error)
@@ -54,5 +55,9 @@ final class StyleViewModel {
         self?.styles = styles
       }
       .store(in: &cancellables)
+  }
+  
+  private func sortByNew(to styles: [Style]) -> [Style] {
+    return styles.sorted { $0.createdAt > $1.createdAt }
   }
 }
