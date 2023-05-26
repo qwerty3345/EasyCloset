@@ -228,6 +228,7 @@ extension StyleDetailController {
 extension StyleDetailController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView,
                       didSelectItemAt indexPath: IndexPath) {
+    guard isEditingMode else { return }
     guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
     let addClothesController = StyleAddClothesController(category: item.category)
     addClothesController.delegate = self
