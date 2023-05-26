@@ -28,12 +28,6 @@ enum FileManagerError: Error {
 
 final class ImageFileStorage: ImageFileStorageProtocol {
   
-  // MARK: - Singleton
-  
-  static let shared = ImageFileStorage()
-  
-  private init() { }
-  
   // MARK: - Properties
   
   private enum Constants {

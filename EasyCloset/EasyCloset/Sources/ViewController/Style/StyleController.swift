@@ -31,8 +31,19 @@ final class StyleController: UICollectionViewController {
   
   private lazy var dataSource: DataSource = makeDataSource()
   
-  private let viewModel = StyleViewModel()
+  private let viewModel: StyleViewModel
   private var cancellables = Set<AnyCancellable>()
+  
+  // MARK: - Initialization
+  
+  init(viewModel: StyleViewModel) {
+    self.viewModel = viewModel
+    super.init(collectionViewLayout: UICollectionViewFlowLayout())
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   // MARK: - Lifecycle
   
@@ -46,9 +57,9 @@ final class StyleController: UICollectionViewController {
   
   private func bind() {
     viewModel.$styles
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] styles in
-        guard let self = self else { return }
-        self.applySnapshot(with: styles)
+        self?.applySnapshot(with: styles)
       }
       .store(in: &cancellables)
   }
@@ -62,7 +73,7 @@ final class StyleController: UICollectionViewController {
   }
   
   @objc private func tappedAddButton() {
-    let detailController = StyleDetailController(type: .add)
+    let detailController = DIContainer.shared.makeStyleDetailController(type: .add)
     detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
@@ -139,7 +150,7 @@ extension StyleController {
   override func collectionView(_ collectionView: UICollectionView,
                                didSelectItemAt indexPath: IndexPath) {
     guard let style = dataSource.itemIdentifier(for: indexPath) else { return }
-    let detailController = StyleDetailController(type: .showDetail(style: style))
+    let detailController = DIContainer.shared.makeStyleDetailController(type: .showDetail(style: style))
     detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
@@ -160,7 +171,7 @@ import SwiftUI
 
 struct StyleControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = StyleController(collectionViewLayout: UICollectionViewFlowLayout())
+    let vc = DIContainer.shared.makeStyleController()
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

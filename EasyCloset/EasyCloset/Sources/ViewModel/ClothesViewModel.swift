@@ -24,7 +24,7 @@ final class ClothesViewModel {
   
   // MARK: - Initialization
   
-  init(repository: ClothesRepositoryProtocol = ClothesRepository.shared) {
+  init(repository: ClothesRepositoryProtocol) {
     self.repository = repository
     bind()
   }
@@ -42,17 +42,8 @@ final class ClothesViewModel {
   // MARK: - Private Methods
   
   private func bind() {
-    repository.fetchClothesList()
-      .sink { completion in
-        if case let .failure(error) = completion {
-          print(error)
-        }
-      } receiveValue: { clothesList in
-        self.clothesList = clothesList
-      }
-      .store(in: &cancellables)
-    
     clothesListDidUpdate
+      .prepend(()) // 초기에 값을 한 번 발행
       .flatMap { [weak self] in
         guard let self = self else { return Empty<ClothesList, RepositoryError>().eraseToAnyPublisher() }
         return self.repository.fetchClothesList()

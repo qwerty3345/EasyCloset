@@ -46,7 +46,7 @@ final class StyleDetailController: UIViewController {
   
   // MARK: - Properties
   
-  private let viewModel = StyleDetailViewModel()
+  private let viewModel: StyleDetailViewModel
   
   private let type: StyleDetailControllerType
   
@@ -80,15 +80,22 @@ final class StyleDetailController: UIViewController {
   ).then {
     $0.isUserInteractionEnabled = false
   }
+  private var selectedWeather: WeatherType? {
+    WeatherType(rawValue: weatherSegmentedControl.selectedSegmentIndex)
+  }
   
   // MARK: - Initialization
   
-  init(type: StyleDetailControllerType) {
+  init(type: StyleDetailControllerType,
+       viewModel: StyleDetailViewModel) {
     self.type = type
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
     
-    if case .showDetail(let style) = type {
-      viewModel.styleToEdit = style
+    switch type {
+    case .add:
+      isEditing = true
+    case .showDetail(let style):
       configureUI(with: style)
     }
   }
@@ -109,33 +116,36 @@ final class StyleDetailController: UIViewController {
     super.setEditing(editing, animated: animated)
     turnEditMode()
     applySnapshot()
+    
+    switch type {
+    case .add:
+      addStyle()
+    case .showDetail:
+      editStyle()
+    }
   }
   
   // MARK: - Private Methods
   
   private func bind() {
     viewModel.$styleToEdit
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] _ in
-        guard let self = self else { return }
-        DispatchQueue.main.async {
-          self.applySnapshot()
-        }
+        self?.applySnapshot()
       }
       .store(in: &cancellables)
     
     viewModel.didFailToSave
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] message in
-        DispatchQueue.main.async {
-          self?.showFailAlert(with: message)
-        }
+        self?.showFailAlert(with: message)
       }
       .store(in: &cancellables)
     
     viewModel.didSuccessToSave
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] in
-        DispatchQueue.main.async {
-          self?.dismiss(animated: true)
-        }
+        self?.dismiss(animated: true)
       }
       .store(in: &cancellables)
   }
@@ -164,30 +174,21 @@ final class StyleDetailController: UIViewController {
     dataSource.apply(snapshot, animatingDifferences: true)
   }
   
-  @objc private func tappedEditAddButton() {
-    switch type {
-    case .add:
-      addStyle()
-    case .showDetail:
-      editStyle()
-    }
-  }
-  
   private func addStyle() {
     saveStyleFromUserInput()
     navigationController?.popViewController(animated: true)
   }
   
   private func editStyle() {
-    if isEditing {
-      saveStyleFromUserInput()
+    guard isEditing == false else {
+      return
     }
+    saveStyleFromUserInput()
   }
   
   private func saveStyleFromUserInput() {
-    viewModel.styleToEdit?.name = nameTextField.text
-    viewModel.styleToEdit?.weather = WeatherType(rawValue: weatherSegmentedControl.selectedSegmentIndex) ?? .allWeather
-    viewModel.saveStyle.send()
+    viewModel.save(name: nameTextField.text,
+                   weather: selectedWeather ?? .allWeather)
     delegate?.styleDetailController(didUpdateOrSave: self)
   }
   
@@ -305,7 +306,7 @@ extension StyleDetailController: UICollectionViewDelegate {
     }
     
     guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-    let addClothesController = StyleAddClothesController(category: item.category)
+    let addClothesController = DIContainer.shared.makeStyleAddClothesController(category: item.category)
     addClothesController.delegate = self
     present(addClothesController, animated: true)
   }
@@ -316,18 +317,13 @@ extension StyleDetailController: UICollectionViewDelegate {
 extension StyleDetailController: StyleAddClothesControllerDelegate {
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectClothes clothes: Clothes) {
-    if viewModel.styleToEdit == nil {
-      guard let weather = WeatherType(
-        rawValue: weatherSegmentedControl.selectedSegmentIndex) else { return }
-      viewModel.styleToEdit = Style(clothes: [:], weather: weather)
-    }
-    
-    viewModel.styleToEdit?.clothes[clothes.category] = clothes
+    let weather = selectedWeather ?? .allWeather
+    viewModel.update(clothes: clothes, weather: weather)
   }
   
   func styleAddClothesController(_ viewController: StyleAddClothesController,
                                  didSelectEmpty category: ClothesCategory) {
-    viewModel.styleToEdit?.clothes.removeValue(forKey: category)
+    viewModel.removeClothes(of: category)
   }
 }
 
@@ -363,7 +359,7 @@ import SwiftUI
 
 struct StyleDetailControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = StyleDetailController(type: .showDetail(style: .Mock.style1))
+    let vc = DIContainer.shared.makeStyleDetailController(type: .showDetail(style: .Mock.style1))
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

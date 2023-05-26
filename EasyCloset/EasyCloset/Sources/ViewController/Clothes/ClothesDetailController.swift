@@ -20,7 +20,7 @@ final class ClothesDetailController: UIViewController {
   
   // MARK: - Properties
   
-  private let viewModel = ClothesDetailViewModel()
+  private let viewModel: ClothesDetailViewModel
   
   private let type: ClothesDetailControllerType
   
@@ -52,13 +52,16 @@ final class ClothesDetailController: UIViewController {
   
   // MARK: - Initialization
   
-  init(type: ClothesDetailControllerType) {
+  init(type: ClothesDetailControllerType,
+       viewModel: ClothesDetailViewModel) {
     self.type = type
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
     
-    if case let .showDetail(clothes: clothes) = type {
-      self.viewModel.clothes = clothes
+    if case .add = type {
+      isEditing = true
     }
+    
     bind()
   }
   
@@ -80,7 +83,19 @@ final class ClothesDetailController: UIViewController {
   
   override func setEditing(_ editing: Bool, animated: Bool) {
     super.setEditing(editing, animated: animated)
+    
+    if case .add = type {
+      editButtonItem.title = "완료"
+    }
+    
     turnEditMode(isOn: isEditing)
+    
+    switch type {
+    case .add:
+      addClothes()
+    case .showDetail:
+      editClothes()
+    }
   }
   
   // MARK: - Private Methods
@@ -88,29 +103,25 @@ final class ClothesDetailController: UIViewController {
   private func bind() {
     // viewModel의 output에 대한 bind
     viewModel.$clothes
+      .compactMap { $0 }
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] clothes in
-        guard let self = self,
-              let clothes = clothes else { return }
-        DispatchQueue.main.async {
-          self.configure(with: clothes)
-        }
+        self?.configure(with: clothes)
       }
       .store(in: &cancellables)
     
     viewModel.didFailToSave
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] message in
-        DispatchQueue.main.async {
-          self?.showFailAlert(with: message)
-        }
+        self?.showFailAlert(with: message)
       }
       .store(in: &cancellables)
     
     viewModel.didSuccessToSave
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] in
         if case .add = self?.type {
-          DispatchQueue.main.async {
-            self?.navigationController?.popViewController(animated: true)
-          }
+          self?.navigationController?.popViewController(animated: true)
         }
       }
       .store(in: &cancellables)
@@ -128,34 +139,24 @@ final class ClothesDetailController: UIViewController {
   }
   
   private func turnEditMode(isOn: Bool) {
+    guard case .showDetail = type else { return }
     categotyPickerView.isUserInteractionEnabled = isOn
     weatherSegmentedControl.isUserInteractionEnabled = isOn
     descriptionTextField.isUserInteractionEnabled = isOn
-  }
-  
-  @objc private func tappedEditAddButton() {
-    switch type {
-    case .add:
-      addClothes()
-    case .showDetail:
-      editClothes()
-    }
+    photoHandlingView.state = isOn ? .editing : .show
   }
   
   private func addClothes() {
     guard let clothes = clothesFromUserInput() else { return }
-    viewModel.clothes = clothes
+    viewModel.save(clothes: clothes)
     delegate?.clothesDetailController(didUpdateOrSave: self)
   }
   
   private func editClothes() {
-    if isEditing {
-      guard let clothes = clothesFromUserInput() else { return }
-      viewModel.clothes = clothes
-      delegate?.clothesDetailController(didUpdateOrSave: self)
-    }
-    
-    photoHandlingView.state = isEditing ? .editing : .show
+    guard isEditing == false,
+          let clothes = clothesFromUserInput() else { return }
+    viewModel.save(clothes: clothes)
+    delegate?.clothesDetailController(didUpdateOrSave: self)
   }
   
   private func clothesFromUserInput() -> Clothes? {
@@ -287,7 +288,7 @@ import SwiftUI
 
 struct ClothesDetailControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = ClothesDetailController(type: .add)
+    let vc = DIContainer.shared.makeClothesDetailController(type: .add)
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

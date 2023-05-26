@@ -35,6 +35,7 @@ extension MainTabBarController {
   private func setup() {
     setUI()
     setupViewControllers()
+    setupGestures()
     delegate = self
   }
   
@@ -48,7 +49,7 @@ extension MainTabBarController {
       image: .tshirt,
       selectedImage: .tshirtSelected,
       title: "옷",
-      viewController: ClothesController(viewModel: ClothesViewModel()))
+      viewController: DIContainer.shared.makeClothesController())
     
     let homeController = navigationController(
       image: .house,
@@ -60,7 +61,7 @@ extension MainTabBarController {
       image: .closet,
       selectedImage: .closetSelected,
       title: "스타일",
-      viewController: StyleController(collectionViewLayout: UICollectionViewFlowLayout()))
+      viewController: DIContainer.shared.makeStyleController())
     
     viewControllers = [clothesController, homeController, styleController]
     selectedIndex = TabBarItems.home.rawValue
@@ -76,6 +77,33 @@ extension MainTabBarController {
     navigationController.tabBarItem.title = title
     navigationController.navigationBar.tintColor = .accentColor
     return navigationController
+  }
+  
+  private func setupGestures() {
+    let swipeRightGesture = UISwipeGestureRecognizer(
+      target: self,
+      action: #selector(handleSwipeGesture))
+    swipeRightGesture.direction = .right
+    view.addGestureRecognizer(swipeRightGesture)
+    
+    let swipeLeftGesture = UISwipeGestureRecognizer(
+      target: self,
+      action: #selector(handleSwipeGesture))
+    swipeLeftGesture.direction = .left
+    view.addGestureRecognizer(swipeLeftGesture)
+  }
+  
+  @objc private func handleSwipeGesture(_ sender: UISwipeGestureRecognizer) {
+    var destinationIndex = selectedIndex
+    switch sender.direction {
+    case .left:
+      destinationIndex += 1
+    case .right:
+      destinationIndex -= 1
+    default:
+      break
+    }
+    moveWithAnimation(to: destinationIndex)
   }
 }
 

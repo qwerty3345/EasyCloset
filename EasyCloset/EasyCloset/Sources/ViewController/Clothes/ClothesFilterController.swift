@@ -270,7 +270,7 @@ import SwiftUI
 
 struct ClothesFilterControllerPreview: PreviewProvider {
   static var previews: some View {
-    return ClothesFilterController(viewModel: ClothesViewModel()).toPreview()
+    return DIContainer.shared.makeClothesFilterController().toPreview()
   }
 }
 #endif

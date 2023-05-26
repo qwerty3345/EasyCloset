@@ -18,7 +18,6 @@ protocol ImageFetchable {
 
 extension ImageFetchable {
   var imageCacheManager: ImageCacheManager { .shared }
-  var imageFileStorage: ImageFileStorageProtocol { ImageFileStorage.shared }
   
   // storage에 저장된 이미지가 아직 로딩되지 않은 모델들에 이미지를 추가해서 매핑해줌
   func addingImages<T: ImagableModel>(to imagableModels: [T]) -> AnyPublisher<[T], Never> {

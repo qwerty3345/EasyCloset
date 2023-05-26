@@ -80,11 +80,9 @@ final class ClothesCarouselCell: UICollectionViewCell {
     self.category = category
     
     viewModel.clothes(of: category)
+      .subscribe(on: DispatchQueue.main)
       .sink { [weak self] clothes in
-        guard let self = self else { return }
-        DispatchQueue.main.async {
-          self.applySnapshot(with: clothes)
-        }
+        self?.applySnapshot(with: clothes)
       }
       .store(in: &cancellables)
   }
