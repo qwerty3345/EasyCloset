@@ -59,14 +59,27 @@ extension Clothes {
 }
 
 // MARK: - Mock Data
-
 extension Clothes {
-  static var mock: Clothes {
-    Clothes(
-      image: .Sample.cap1 ?? UIImage(),
-      category: .allCases.randomElement()!,
-      weatherType: .allWeather,
-      descriptions: "\(Int.random(in: (1...100)))"
-    )
+  enum Mock {
+    static let top1 = Clothes(image: .Sample.tshirt1, category: .top,
+                              weatherType: .allWeather, descriptions: "tshirt1")
+    static let top2 = Clothes(image: .Sample.tshirt2, category: .top,
+                              weatherType: .allWeather, descriptions: "tshirt2")
+    static let top3 = Clothes(image: .Sample.shirt1, category: .top,
+                              weatherType: .allWeather, descriptions: "shirt1")
+    static let bottom1 = Clothes(image: .Sample.pants1, category: .bottom,
+                                 weatherType: .allWeather, descriptions: "pants1")
+    static let bottom2 = Clothes(image: .Sample.pants2, category: .bottom,
+                                 weatherType: .allWeather, descriptions: "pants2")
+    static let bottom3 = Clothes(image: .Sample.shortpants, category: .bottom,
+                                 weatherType: .allWeather, descriptions: "shortpants")
+    static let accessory1 = Clothes(image: .Sample.cap1, category: .accessory,
+                                    weatherType: .allWeather, descriptions: "cap1")
+    static let accessory2 = Clothes(image: .Sample.socks1, category: .accessory,
+                                    weatherType: .allWeather, descriptions: "socks1")
+    static let outer1 = Clothes(image: .Sample.jacket1, category: .outer,
+                                weatherType: .allWeather, descriptions: "jacket1")
+    static let shoes1 = Clothes(image: .Sample.shoes1, category: .shoes,
+                                weatherType: .allWeather, descriptions: "shoes1")
   }
 }

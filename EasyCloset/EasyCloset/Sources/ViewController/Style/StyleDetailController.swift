@@ -282,7 +282,7 @@ import SwiftUI
 
 struct StyleDetailControllerPreview: PreviewProvider {
   static var previews: some View {
-    let vc = StyleDetailController(type: .showDetail(style: .mocks.first!))
+    let vc = StyleDetailController(type: .showDetail(style: .Mock.style1))
     return UINavigationController(rootViewController: vc).toPreview()
   }
 }

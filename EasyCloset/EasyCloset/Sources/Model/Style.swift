@@ -44,122 +44,51 @@ extension Style {
 // MARK: - Mock Data
 
 extension Style {
-  static var mocks: [Style] {
-    [
-      Style(clothes: [
-        .top: Clothes(image: .Sample.tshirt1,
-                      category: .top,
-                      weatherType: .allWeather,
-                      descriptions: "tshirt1"),
-        .bottom: Clothes(image: .Sample.pants1,
-                         category: .bottom,
-                         weatherType: .allWeather,
-                         descriptions: "pants1"),
-        .outer: Clothes(image: .Sample.jacket1,
-                        category: .outer,
-                        weatherType: .allWeather,
-                        descriptions: "jacket1"),
-        .accessory: Clothes(image: .Sample.cap1,
-                            category: .accessory,
-                            weatherType: .allWeather,
-                            descriptions: "cap1"),
-        .shoes: Clothes(image: .Sample.shoes1,
-                        category: .shoes,
-                        weatherType: .allWeather,
-                        descriptions: "shoes1")
-      ], weather: .fall, name: "가을용 옷"),
-      
-      Style(clothes: [
-//        .top: Clothes(
-//                      image: .Sample.shirt1,
-//                      category: .top,
-//                      weatherType: .allWeather,
-//                      description: "shirt1"),
-//        .bottom: Clothes(
-//                         image: .Sample.pants2,
-//                         category: .bottom,
-//                         weatherType: .allWeather,
-//                         description: "pants2"),
-        .outer: Clothes(image: .Sample.jacket1,
-                        category: .outer,
-                        weatherType: .allWeather,
-                        descriptions: "jacket1"),
-        .accessory: Clothes(image: .Sample.socks1,
-                            category: .accessory,
-                            weatherType: .allWeather,
-                            descriptions: "socks1"),
-        .shoes: Clothes(image: .Sample.shoes1,
-                        category: .shoes,
-                        weatherType: .allWeather,
-                        descriptions: "shoes1")
-      ], weather: .winter, name: "겨울용 옷"),
-      
-      Style(clothes: [
-//        .top: Clothes(
-//                      image: .Sample.tshirt2,
-//                      category: .top,
-//                      weatherType: .allWeather,
-//                      description: "tshirt2"),
-//        .bottom: Clothes(
-//                         image: .Sample.shortpants,
-//                         category: .bottom,
-//                         weatherType: .allWeather,
-//                         description: "shortpants"),
-        .accessory: Clothes(image: .Sample.cap1,
-                            category: .accessory,
-                            weatherType: .allWeather,
-                            descriptions: "cap1"),
-        .shoes: Clothes(image: .Sample.shoes1,
-                        category: .shoes,
-                        weatherType: .allWeather,
-                        descriptions: "shoes1")
-      ], weather: .summer, name: "여름용 옷"),
-      
-      Style(clothes: [
-        .top: Clothes(image: .Sample.shirt2,
-                      category: .top,
-                      weatherType: .allWeather,
-                      descriptions: "shirt2"),
-        .bottom: Clothes(image: .Sample.pants3,
-                         category: .bottom,
-                         weatherType: .allWeather,
-                         descriptions: "pants3"),
-        .outer: Clothes(image: .Sample.jacket1,
-                        category: .outer,
-                        weatherType: .allWeather,
-                        descriptions: "jacket1"),
-        .accessory: Clothes(image: .Sample.socks1,
-                            category: .accessory,
-                            weatherType: .allWeather,
-                            descriptions: "socks1"),
-        .shoes: Clothes(image: .Sample.shoes1,
-                        category: .shoes,
-                        weatherType: .allWeather,
-                        descriptions: "shoes1")
-      ], weather: .spring, name: "봄용 옷"),
-      
-      Style(clothes: [
-        .top: Clothes(image: .Sample.shirt2,
-                      category: .top,
-                      weatherType: .allWeather,
-                      descriptions: "shirt2"),
-        .bottom: Clothes(image: .Sample.pants3,
-                         category: .bottom,
-                         weatherType: .allWeather,
-                         descriptions: "pants3"),
-        .outer: Clothes(image: .Sample.jacket1,
-                        category: .outer,
-                        weatherType: .allWeather,
-                        descriptions: "jacket1"),
-        .accessory: Clothes(image: .Sample.socks1,
-                            category: .accessory,
-                            weatherType: .allWeather,
-                            descriptions: "socks1"),
-        .shoes: Clothes(image: .Sample.shoes1,
-                        category: .shoes,
-                        weatherType: .allWeather,
-                        descriptions: "shoes1")
-      ], weather: .spring, name: "봄용 옷")
-    ]
+  enum Mock {
+    static let mocks = [style1, style2, style3, style4, style5]
+    
+    static let style1: Style = {
+      var clothesByCategory: [ClothesCategory: Clothes] = [:]
+      clothesByCategory[.top] = Clothes.Mock.top1
+      clothesByCategory[.bottom] = Clothes.Mock.bottom1
+      clothesByCategory[.outer] = Clothes.Mock.outer1
+      clothesByCategory[.accessory] = Clothes.Mock.accessory1
+      clothesByCategory[.shoes] = Clothes.Mock.shoes1
+      return Style(clothes: clothesByCategory, weather: .fall, name: "가을용 옷")
+    }()
+    
+    static let style2: Style = {
+      var clothesByCategory: [ClothesCategory: Clothes] = [:]
+      clothesByCategory[.top] = Clothes.Mock.top2
+      clothesByCategory[.bottom] = Clothes.Mock.bottom2
+      clothesByCategory[.outer] = Clothes.Mock.outer1
+      clothesByCategory[.accessory] = Clothes.Mock.accessory2
+      return Style(clothes: clothesByCategory, weather: .winter, name: "겨울용 옷")
+    }()
+    
+    static let style3: Style = {
+      var clothesByCategory: [ClothesCategory: Clothes] = [:]
+      clothesByCategory[.top] = Clothes.Mock.top3
+      clothesByCategory[.bottom] = Clothes.Mock.bottom3
+      clothesByCategory[.outer] = Clothes.Mock.outer1
+      return Style(clothes: clothesByCategory, weather: .spring, name: "봄용 옷")
+    }()
+   
+    static let style4: Style = {
+      var clothesByCategory: [ClothesCategory: Clothes] = [:]
+      clothesByCategory[.top] = Clothes.Mock.top2
+      clothesByCategory[.bottom] = Clothes.Mock.bottom1
+      clothesByCategory[.outer] = Clothes.Mock.outer1
+      clothesByCategory[.accessory] = Clothes.Mock.accessory2
+      return Style(clothes: clothesByCategory, weather: .summer, name: "여름용 옷")
+    }()
+    
+    static let style5: Style = {
+      var clothesByCategory: [ClothesCategory: Clothes] = [:]
+      clothesByCategory[.top] = Clothes.Mock.top3
+      clothesByCategory[.bottom] = Clothes.Mock.bottom2
+      clothesByCategory[.shoes] = Clothes.Mock.shoes1
+      return Style(clothes: clothesByCategory, weather: .spring, name: "봄용 옷 2")
+    }()
   }
 }

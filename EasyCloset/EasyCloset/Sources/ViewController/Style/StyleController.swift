@@ -29,15 +29,10 @@ final class StyleController: UICollectionViewController {
   
   // MARK: - Properties
   
-  private let viewModel = StyleViewModel()
-  
   private lazy var dataSource: DataSource = makeDataSource()
   
+  private let viewModel = StyleViewModel()
   private var cancellables = Set<AnyCancellable>()
-  
-  // MARK: - UI Components
-  
-  // MARK: - Initialization
   
   // MARK: - Lifecycle
   

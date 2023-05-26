@@ -121,7 +121,7 @@ final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchable {
   private func setupMockData() {
     guard realmStorage.load(entityType: ClothesEntity.self).isEmpty else { return }
     
-    ClothesList.mock.clothesByCategory.forEach { (_, value: [Clothes]) in
+    ClothesList.mocks.clothesByCategory.forEach { (_, value: [Clothes]) in
       value.forEach { clothes in
         save(clothes: clothes)
           .sink(receiveCompletion: { _ in }, receiveValue: { })

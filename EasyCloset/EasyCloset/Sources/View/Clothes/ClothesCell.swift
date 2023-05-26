@@ -94,7 +94,7 @@ struct ClothesCellPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
       let clothesCell = ClothesCell()
-      clothesCell.configure(with: .mock)
+      clothesCell.configure(with: .Mock.accessory1)
       return clothesCell
     }
     .frame(width: 200, height: 200)

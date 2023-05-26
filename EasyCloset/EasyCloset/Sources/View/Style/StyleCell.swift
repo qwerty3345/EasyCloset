@@ -99,7 +99,7 @@ struct StyleCellPreview: PreviewProvider {
   static var previews: some View {
     UIViewPreview {
       let cell = StyleCell()
-      cell.configure(with: .mocks.first!)
+      cell.configure(with: .Mock.style1)
       return cell
     }
     .frame(width: 200, height: 200)
