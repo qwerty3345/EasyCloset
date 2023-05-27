@@ -42,6 +42,17 @@ extension MainTabBarController {
   private func setUI() {
     view.backgroundColor = .background
     tabBar.tintColor = .accentColor
+    tabBar.barTintColor = .white
+    
+    // 탭바 위를 컨텐츠가 덮지 않을 시에, 자동으로 투명해지는 현상 방지 (iOS15 부터의 기능)
+    let appearance = UITabBarAppearance().then {
+      $0.configureWithDefaultBackground()
+      $0.backgroundColor = .white
+    }
+    tabBar.standardAppearance = appearance
+    if #available(iOS 15.0, *) {
+      tabBar.scrollEdgeAppearance = appearance
+    }
   }
   
   private func setupViewControllers() {

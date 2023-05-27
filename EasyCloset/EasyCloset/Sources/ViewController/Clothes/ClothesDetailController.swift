@@ -30,7 +30,9 @@ final class ClothesDetailController: UIViewController {
   
   // MARK: - UI Components
   
-  private let scrollView = UIScrollView()
+  private let scrollView = UIScrollView().then {
+    $0.keyboardDismissMode = .onDrag
+  }
   private let contentStackView = UIStackView().then {
     $0.axis = .vertical
     $0.layoutMargins = UIEdgeInsets(top: 16, left: 20, bottom: 0, right: 20)
@@ -48,6 +50,7 @@ final class ClothesDetailController: UIViewController {
   private let descriptionTextField = UITextField().then {
     $0.font = .pretendard(size: 16)
     $0.placeholder = "설명을 입력해주세요 (선택)"
+    $0.setJustHideKeyboardWhenEnter()
   }
   
   // MARK: - Initialization
@@ -74,11 +77,6 @@ final class ClothesDetailController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setup()
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    super.touchesBegan(touches, with: event)
-    descriptionTextField.resignFirstResponder()
   }
   
   override func setEditing(_ editing: Bool, animated: Bool) {
@@ -181,15 +179,6 @@ final class ClothesDetailController: UIViewController {
                    weatherType: weatherType,
                    descriptions: description)
   }
-  
-  private func showFailAlert(with title: String) {
-    let alert = UIAlertController(title: title,
-                                  message: nil, preferredStyle: .alert)
-    let confirmAction = UIAlertAction(title: "확인", style: .default)
-    alert.addAction(confirmAction)
-    
-    present(alert, animated: true)
-  }
 }
 
 // MARK: - UI & Layout
@@ -205,6 +194,7 @@ extension ClothesDetailController {
     title = type.title
     navigationItem.rightBarButtonItem = editButtonItem
     view.backgroundColor = .background
+    setupManageViewPositionForKeyboard()
   }
   
   private func setupLayout() {
@@ -253,6 +243,37 @@ extension ClothesDetailController {
       }
     }
     contentStackView.addArrangedSubview(label)
+  }
+  
+  private func setupManageViewPositionForKeyboard() {
+    let keyboardWillShowPublisher = NotificationCenter.default
+      .publisher(for: UIResponder.keyboardWillShowNotification)
+    let keyboardWillHidePublisher = NotificationCenter.default
+      .publisher(for: UIResponder.keyboardWillHideNotification)
+    
+    // 키보드 프레임 높이 만큼 뷰를 위로 올림
+    keyboardWillShowPublisher
+      .compactMap {
+        // 애니메이션이 끝난 후, 키보드의 높이
+        ($0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height
+      }
+      .filter { [weak self] _ in
+        self?.view.frame.origin.y == 0
+      }
+      .sink { [weak self] keyboardHeight in
+        self?.view.frame.origin.y -= keyboardHeight
+      }
+      .store(in: &cancellables)
+    
+    // 원래 상태대로 초기화
+    keyboardWillHidePublisher
+      .filter { [weak self] _ in
+        self?.view.frame.origin.y != 0
+      }
+      .sink { [weak self] _ in
+        self?.view.frame.origin.y = 0
+      }
+      .store(in: &cancellables)
   }
 }
 

@@ -48,7 +48,9 @@ final class ClothesCarouselCell: UICollectionViewCell {
   private lazy var collectionView = UICollectionView(
     frame: .zero,
     collectionViewLayout: carouselLayout
-  )
+  ).then {
+    $0.showsHorizontalScrollIndicator = false
+  }
   
   private let carouselLayout = CarouselFlowLayout().then {
     $0.itemSize = Metric.cellSize

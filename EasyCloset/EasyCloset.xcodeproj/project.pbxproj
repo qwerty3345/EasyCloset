@@ -70,6 +70,8 @@
 		B4C4E7D22A2094C7000859DD /* StyleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7D12A2094C7000859DD /* StyleDetailViewModel.swift */; };
 		B4C4E7D62A20ED9B000859DD /* RepositoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7D52A20ED9B000859DD /* RepositoryError.swift */; };
 		B4C8D1022A2106D100A465F9 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C8D1012A2106D100A465F9 /* DIContainer.swift */; };
+		B4C8D1062A224CB100A465F9 /* UIViewController+ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C8D1052A224CB100A465F9 /* UIViewController+ShowAlert.swift */; };
+		B4C8D1082A2264DF00A465F9 /* UITextField+HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C8D1072A2264DF00A465F9 /* UITextField+HideKeyboard.swift */; };
 		B4E5C5422A1C823B00B14F48 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C5412A1C823B00B14F48 /* ImageCacheManager.swift */; };
 		B4E5C56A2A1C9E3E00B14F48 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */; };
 		B4E5C56C2A1CAC0C00B14F48 /* ImageFileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */; };
@@ -147,6 +149,8 @@
 		B4C4E7D12A2094C7000859DD /* StyleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleDetailViewModel.swift; sourceTree = "<group>"; };
 		B4C4E7D52A20ED9B000859DD /* RepositoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryError.swift; sourceTree = "<group>"; };
 		B4C8D1012A2106D100A465F9 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
+		B4C8D1052A224CB100A465F9 /* UIViewController+ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ShowAlert.swift"; sourceTree = "<group>"; };
+		B4C8D1072A2264DF00A465F9 /* UITextField+HideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+HideKeyboard.swift"; sourceTree = "<group>"; };
 		B4E5C5412A1C823B00B14F48 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileStorage.swift; sourceTree = "<group>"; };
@@ -382,12 +386,14 @@
 			children = (
 				B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */,
 				B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */,
+				B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */,
+				B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */,
 				B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */,
 				B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */,
 				B4470B592A1766040024B2B7 /* UIView+Shadow.swift */,
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
-				B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */,
-				B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */,
+				B4C8D1052A224CB100A465F9 /* UIViewController+ShowAlert.swift */,
+				B4C8D1072A2264DF00A465F9 /* UITextField+HideKeyboard.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -633,6 +639,7 @@
 				B4C4E7D22A2094C7000859DD /* StyleDetailViewModel.swift in Sources */,
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
 				B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */,
+				B4C8D1062A224CB100A465F9 /* UIViewController+ShowAlert.swift in Sources */,
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B461114B2A1F827600104C3A /* StyleDetailCell.swift in Sources */,
 				B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */,
@@ -641,6 +648,7 @@
 				B43889A02A14ACF600476BFC /* ClothesCategory.swift in Sources */,
 				B438897A2A14935200476BFC /* StyleController.swift in Sources */,
 				B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */,
+				B4C8D1082A2264DF00A465F9 /* UITextField+HideKeyboard.swift in Sources */,
 				B43889A22A14AD8800476BFC /* Clothes.swift in Sources */,
 				B4B456812A1F9A67003354F8 /* StyleAddClothesController.swift in Sources */,
 				B4C4E7C82A2077C7000859DD /* StyleEntity.swift in Sources */,

@@ -81,7 +81,7 @@ final class PhotoHandlingView: UIStackView {
     $0.setImage(UIImage(systemName: "trash"), for: .normal)
     $0.tintColor = .systemRed
     $0.isHidden = true
-    $0.addTarget(self, action: #selector(didRemovePhoto), for: .touchUpInside)
+    $0.addTarget(self, action: #selector(tappedRemovePhotoButton), for: .touchUpInside)
   }
   
   // MARK: - Public Methods
@@ -133,53 +133,17 @@ final class PhotoHandlingView: UIStackView {
     .store(in: &cancellables)
   }
   
-  @objc private func didRemovePhoto() {
-    showAskDeletePhotoAlert { [weak self] isDelete in
-      guard isDelete,
-            let self = self else { return }
-    
+  @objc private func tappedRemovePhotoButton() {
+    parentController?.showAskAlert(title: "정말로 사진을 삭제하시겠습니까?", completion: { [weak self] isDelete in
+      guard isDelete, let self = self else { return }
+      
       self.state = .empty
       self.clothesImageView.image = nil
-    }
-  }
-  
-  private func showAskDeletePhotoAlert(completion: @escaping (Bool) -> Void) {
-    let alert = UIAlertController(title: "정말로 사진을 삭제하시겠습니까?",
-                                  message: nil, preferredStyle: .alert)
-    
-    let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-      completion(true)
-    }
-    let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
-      completion(false)
-    }
-    alert.addAction(confirmAction)
-    alert.addAction(cancelAction)
-    
-    parentController?.present(alert, animated: true)
+    })
   }
   
   private func showFailAlert(of error: PhotoPickerError, isCancellable: Bool = false) {
-    let alert = UIAlertController(title: error.localizedDescription,
-                                  message: nil, preferredStyle: .alert)
-    if case .authorizationDenied = error {
-      configureAccessDeniedAlert(alert)
-    } else {
-      let confirmAction = UIAlertAction(title: "확인", style: .default)
-      alert.addAction(confirmAction)
-    }
-    
-    parentController?.present(alert, animated: true)
-  }
-  
-  private func configureAccessDeniedAlert(_ alert: UIAlertController) {
-    let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-      guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
-      UIApplication.shared.open(settingsURL)
-    }
-    let cancelAction = UIAlertAction(title: "취소", style: .cancel)
-    alert.addAction(confirmAction)
-    alert.addAction(cancelAction)
+    parentController?.showFailAlert(with: error.localizedDescription)
   }
 }
 

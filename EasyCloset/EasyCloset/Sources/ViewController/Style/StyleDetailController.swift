@@ -22,6 +22,7 @@ final class StyleDetailController: UIViewController {
   
   private enum Metric {
     static let padding: CGFloat = 20
+    static let inputComponentHeight: CGFloat = 30
   }
   
   typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
@@ -73,6 +74,7 @@ final class StyleDetailController: UIViewController {
     $0.isUserInteractionEnabled = false
     $0.layer.borderColor = UIColor.accentColor.cgColor
     $0.layer.cornerRadius = 8
+    $0.setJustHideKeyboardWhenEnter()
   }
   
   private lazy var weatherSegmentedControl = UISegmentedControl(
@@ -129,6 +131,7 @@ final class StyleDetailController: UIViewController {
   
   private func bind() {
     viewModel.$styleToEdit
+      .dropFirst()
       .receive(on: DispatchQueue.main)
       .sink { [weak self] _ in
         self?.applySnapshot()
@@ -156,7 +159,9 @@ final class StyleDetailController: UIViewController {
     var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections(Section.allCases)
     
-    let clothesItems = style.clothes.values.map { Item.clothes($0) }
+    let clothesItems = style.clothes
+      .sorted { $0.key.rawValue < $1.key.rawValue }
+      .map { (_, clothes) in Item.clothes(clothes) }
     snapshot.appendItems(clothesItems, toSection: .main)
     
     // 편집 모드가 켜졌을 때는, 추가되지 않은 의류종류의 셀을 표시함
@@ -190,15 +195,6 @@ final class StyleDetailController: UIViewController {
     viewModel.save(name: nameTextField.text,
                    weather: selectedWeather ?? .allWeather)
     delegate?.styleDetailController(didUpdateOrSave: self)
-  }
-  
-  private func showFailAlert(with title: String) {
-    let alert = UIAlertController(title: title,
-                                  message: nil, preferredStyle: .alert)
-    let confirmAction = UIAlertAction(title: "확인", style: .default)
-    alert.addAction(confirmAction)
-    
-    present(alert, animated: true)
   }
   
   private func turnEditMode() {
@@ -235,14 +231,14 @@ extension StyleDetailController {
     nameTextField.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
       $0.horizontalEdges.equalToSuperview().inset(Metric.padding)
-      $0.height.equalTo(30)
+      $0.height.equalTo(Metric.inputComponentHeight)
     }
     
     view.addSubview(weatherSegmentedControl)
     weatherSegmentedControl.snp.makeConstraints {
       $0.top.equalTo(nameTextField.snp.bottom).offset(Metric.padding)
       $0.horizontalEdges.equalToSuperview().inset(Metric.padding)
-      $0.height.equalTo(30)
+      $0.height.equalTo(Metric.inputComponentHeight)
     }
     
     view.addSubview(collectionView)
@@ -289,7 +285,9 @@ extension StyleDetailController {
       let items = ClothesCategory.allCases.map { Item.notAdded($0) }
       snapshot.appendItems(items, toSection: .main)
     case .showDetail(style: let style):
-      let items = style.clothes.values.map { Item.clothes($0) }
+      let items = style.clothes
+        .sorted { $0.key.rawValue < $1.key.rawValue }
+        .map { (_, clothes) in Item.clothes(clothes) }
       snapshot.appendItems(items, toSection: .main)
     }
     dataSource.apply(snapshot, animatingDifferences: true)
@@ -337,7 +335,7 @@ enum StyleDetailControllerType {
     switch self {
     case .add:
       return "스타일 추가하기"
-    case .showDetail(let style):
+    case .showDetail:
       return "상세보기"
     }
   }
