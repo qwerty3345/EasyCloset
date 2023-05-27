@@ -65,7 +65,7 @@
 		B4C4E7C62A20526C000859DD /* StyleAddClothesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C52A20526C000859DD /* StyleAddClothesCell.swift */; };
 		B4C4E7C82A2077C7000859DD /* StyleEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C72A2077C7000859DD /* StyleEntity.swift */; };
 		B4C4E7CA2A207A03000859DD /* StyleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C92A207A03000859DD /* StyleRepository.swift */; };
-		B4C4E7CC2A208379000859DD /* ImageFetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7CB2A208379000859DD /* ImageFetchable.swift */; };
+		B4C4E7CC2A208379000859DD /* ImageFetchableRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7CB2A208379000859DD /* ImageFetchableRepository.swift */; };
 		B4C4E7D02A2087A2000859DD /* ImagableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7CF2A2087A2000859DD /* ImagableModel.swift */; };
 		B4C4E7D22A2094C7000859DD /* StyleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7D12A2094C7000859DD /* StyleDetailViewModel.swift */; };
 		B4C4E7D62A20ED9B000859DD /* RepositoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7D52A20ED9B000859DD /* RepositoryError.swift */; };
@@ -142,7 +142,7 @@
 		B4C4E7C52A20526C000859DD /* StyleAddClothesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleAddClothesCell.swift; sourceTree = "<group>"; };
 		B4C4E7C72A2077C7000859DD /* StyleEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleEntity.swift; sourceTree = "<group>"; };
 		B4C4E7C92A207A03000859DD /* StyleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleRepository.swift; sourceTree = "<group>"; };
-		B4C4E7CB2A208379000859DD /* ImageFetchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetchable.swift; sourceTree = "<group>"; };
+		B4C4E7CB2A208379000859DD /* ImageFetchableRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFetchableRepository.swift; sourceTree = "<group>"; };
 		B4C4E7CF2A2087A2000859DD /* ImagableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagableModel.swift; sourceTree = "<group>"; };
 		B4C4E7D12A2094C7000859DD /* StyleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleDetailViewModel.swift; sourceTree = "<group>"; };
 		B4C4E7D52A20ED9B000859DD /* RepositoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryError.swift; sourceTree = "<group>"; };
@@ -433,7 +433,7 @@
 		B4C4E7D72A20EDA9000859DD /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				B4C4E7CB2A208379000859DD /* ImageFetchable.swift */,
+				B4C4E7CB2A208379000859DD /* ImageFetchableRepository.swift */,
 				B4C4E7D52A20ED9B000859DD /* RepositoryError.swift */,
 			);
 			path = Common;
@@ -608,7 +608,7 @@
 				B4E5C5422A1C823B00B14F48 /* ImageCacheManager.swift in Sources */,
 				B4470B562A1743130024B2B7 /* ClothesList.swift in Sources */,
 				B4504B6F2A1DEA9A0018C9BC /* FilterCell.swift in Sources */,
-				B4C4E7CC2A208379000859DD /* ImageFetchable.swift in Sources */,
+				B4C4E7CC2A208379000859DD /* ImageFetchableRepository.swift in Sources */,
 				B43889A92A14B7E600476BFC /* ClothesCell.swift in Sources */,
 				B46111432A1F481200104C3A /* ClothesRepository.swift in Sources */,
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
