@@ -22,7 +22,7 @@ protocol StyleRepositoryProtocol {
 
 // MARK: - ClothesRepository
 
-final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
+final class StyleRepository: StyleRepositoryProtocol, ImageFetchableRepository {
   
   // MARK: - Properties
   
@@ -60,7 +60,6 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchable {
     // 각각의 style들을 배열 값으로 한 번에 내보내도록 처리
     return Publishers.MergeMany(styleWithImagePublishers)
       .collect()
-      .mapError { _ in RepositoryError.invalidData }
       .eraseToAnyPublisher()
   }
   

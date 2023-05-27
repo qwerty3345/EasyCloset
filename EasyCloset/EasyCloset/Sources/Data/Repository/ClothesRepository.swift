@@ -22,7 +22,7 @@ protocol ClothesRepositoryProtocol {
 
 // MARK: - ClothesRepository
 
-final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchable {
+final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchableRepository {
   
   // MARK: - Properties
   
@@ -45,7 +45,6 @@ final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchable {
     let clothesModelsWithoutImage = clothesEntities.map { $0.toModelWithoutImage() }
     return addingImages(to: clothesModelsWithoutImage)
       .map { $0.toClothesList() }
-      .mapError { _ in RepositoryError.invalidData }
       .eraseToAnyPublisher()
   }
   
