@@ -192,15 +192,6 @@ final class StyleDetailController: UIViewController {
     delegate?.styleDetailController(didUpdateOrSave: self)
   }
   
-  private func showFailAlert(with title: String) {
-    let alert = UIAlertController(title: title,
-                                  message: nil, preferredStyle: .alert)
-    let confirmAction = UIAlertAction(title: "확인", style: .default)
-    alert.addAction(confirmAction)
-    
-    present(alert, animated: true)
-  }
-  
   private func turnEditMode() {
     nameTextField.isUserInteractionEnabled = isEditing
     weatherSegmentedControl.isUserInteractionEnabled = isEditing

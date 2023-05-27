@@ -181,15 +181,6 @@ final class ClothesDetailController: UIViewController {
                    weatherType: weatherType,
                    descriptions: description)
   }
-  
-  private func showFailAlert(with title: String) {
-    let alert = UIAlertController(title: title,
-                                  message: nil, preferredStyle: .alert)
-    let confirmAction = UIAlertAction(title: "확인", style: .default)
-    alert.addAction(confirmAction)
-    
-    present(alert, animated: true)
-  }
 }
 
 // MARK: - UI & Layout
