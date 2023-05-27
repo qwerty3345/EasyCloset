@@ -384,12 +384,12 @@
 			children = (
 				B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */,
 				B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */,
+				B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */,
+				B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */,
 				B4F1F4222A18AD9700DA6358 /* UITabBarController+Transition.swift */,
 				B4F1F42F2A18DB2400DA6358 /* UIView+Seperator.swift */,
 				B4470B592A1766040024B2B7 /* UIView+Shadow.swift */,
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
-				B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */,
-				B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */,
 				B4C8D1052A224CB100A465F9 /* UIViewController+ShowAlert.swift */,
 			);
 			path = Extensions;

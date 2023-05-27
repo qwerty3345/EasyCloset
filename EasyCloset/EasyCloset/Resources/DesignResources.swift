@@ -7,11 +7,15 @@
 
 import UIKit
 
+// MARK: - Color
+
 extension UIColor {
   static let background = UIColor(white: 0.97, alpha: 1)
   static let accentColor = UIColor(named: "AccentColor") ?? .systemBlue
   static let seperator = UIColor.lightGray.withAlphaComponent(0.3)
 }
+
+// MARK: - Image
 
 extension UIImage {
   // TabBar
@@ -47,6 +51,8 @@ extension UIImage {
     static let socks1 = UIImage(named: "socks1")
   }
 }
+
+// MARK: - Font
 
 extension UIFont {
   enum PretendardWeight: String {
