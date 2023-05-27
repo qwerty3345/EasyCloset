@@ -130,6 +130,7 @@ final class StyleDetailController: UIViewController {
   
   private func bind() {
     viewModel.$styleToEdit
+      .dropFirst()
       .receive(on: DispatchQueue.main)
       .sink { [weak self] _ in
         self?.applySnapshot()
@@ -157,7 +158,9 @@ final class StyleDetailController: UIViewController {
     var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
     snapshot.appendSections(Section.allCases)
     
-    let clothesItems = style.clothes.values.map { Item.clothes($0) }
+    let clothesItems = style.clothes
+      .sorted { $0.key.rawValue < $1.key.rawValue }
+      .map { (_, clothes) in Item.clothes(clothes) }
     snapshot.appendItems(clothesItems, toSection: .main)
     
     // 편집 모드가 켜졌을 때는, 추가되지 않은 의류종류의 셀을 표시함
@@ -281,7 +284,9 @@ extension StyleDetailController {
       let items = ClothesCategory.allCases.map { Item.notAdded($0) }
       snapshot.appendItems(items, toSection: .main)
     case .showDetail(style: let style):
-      let items = style.clothes.values.map { Item.clothes($0) }
+      let items = style.clothes
+        .sorted { $0.key.rawValue < $1.key.rawValue }
+        .map { (_, clothes) in Item.clothes(clothes) }
       snapshot.appendItems(items, toSection: .main)
     }
     dataSource.apply(snapshot, animatingDifferences: true)
@@ -329,7 +334,7 @@ enum StyleDetailControllerType {
     switch self {
     case .add:
       return "스타일 추가하기"
-    case .showDetail(let style):
+    case .showDetail:
       return "상세보기"
     }
   }
