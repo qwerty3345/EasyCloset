@@ -50,6 +50,7 @@ final class ClothesDetailController: UIViewController {
   private let descriptionTextField = UITextField().then {
     $0.font = .pretendard(size: 16)
     $0.placeholder = "설명을 입력해주세요 (선택)"
+    $0.setJustHideKeyboardWhenEnter()
   }
   
   // MARK: - Initialization

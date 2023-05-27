@@ -74,6 +74,7 @@ final class StyleDetailController: UIViewController {
     $0.isUserInteractionEnabled = false
     $0.layer.borderColor = UIColor.accentColor.cgColor
     $0.layer.cornerRadius = 8
+    $0.setJustHideKeyboardWhenEnter()
   }
   
   private lazy var weatherSegmentedControl = UISegmentedControl(
