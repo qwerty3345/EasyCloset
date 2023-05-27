@@ -22,6 +22,7 @@ final class StyleDetailController: UIViewController {
   
   private enum Metric {
     static let padding: CGFloat = 20
+    static let inputComponentHeight: CGFloat = 30
   }
   
   typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
@@ -226,14 +227,14 @@ extension StyleDetailController {
     nameTextField.snp.makeConstraints {
       $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
       $0.horizontalEdges.equalToSuperview().inset(Metric.padding)
-      $0.height.equalTo(30)
+      $0.height.equalTo(Metric.inputComponentHeight)
     }
     
     view.addSubview(weatherSegmentedControl)
     weatherSegmentedControl.snp.makeConstraints {
       $0.top.equalTo(nameTextField.snp.bottom).offset(Metric.padding)
       $0.horizontalEdges.equalToSuperview().inset(Metric.padding)
-      $0.height.equalTo(30)
+      $0.height.equalTo(Metric.inputComponentHeight)
     }
     
     view.addSubview(collectionView)
