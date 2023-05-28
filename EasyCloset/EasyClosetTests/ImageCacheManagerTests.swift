@@ -4,6 +4,7 @@
 //
 //  Created by Mason Kim on 2023/05/28.
 //
+// swiftlint:disable all
 
 import XCTest
 @testable import EasyCloset
