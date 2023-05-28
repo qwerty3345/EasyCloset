@@ -15,7 +15,6 @@ extension UITabBarController {
   }
   
   func moveWithAnimation(to viewController: UIViewController) {
-    
     guard let selectedView = selectedViewController?.view,
           let destinationView = viewController.view,
           selectedView != destinationView else { return }

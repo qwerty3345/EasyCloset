@@ -194,7 +194,7 @@ extension ClothesDetailController {
     title = type.title
     navigationItem.rightBarButtonItem = editButtonItem
     view.backgroundColor = .background
-    setupManageViewPositionForKeyboard()
+    setupManageViewPositionForKeyboard(&cancellables)
   }
   
   private func setupLayout() {
@@ -243,37 +243,6 @@ extension ClothesDetailController {
       }
     }
     contentStackView.addArrangedSubview(label)
-  }
-  
-  private func setupManageViewPositionForKeyboard() {
-    let keyboardWillShowPublisher = NotificationCenter.default
-      .publisher(for: UIResponder.keyboardWillShowNotification)
-    let keyboardWillHidePublisher = NotificationCenter.default
-      .publisher(for: UIResponder.keyboardWillHideNotification)
-    
-    // 키보드 프레임 높이 만큼 뷰를 위로 올림
-    keyboardWillShowPublisher
-      .compactMap {
-        // 애니메이션이 끝난 후, 키보드의 높이
-        ($0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height
-      }
-      .filter { [weak self] _ in
-        self?.view.frame.origin.y == 0
-      }
-      .sink { [weak self] keyboardHeight in
-        self?.view.frame.origin.y -= keyboardHeight
-      }
-      .store(in: &cancellables)
-    
-    // 원래 상태대로 초기화
-    keyboardWillHidePublisher
-      .filter { [weak self] _ in
-        self?.view.frame.origin.y != 0
-      }
-      .sink { [weak self] _ in
-        self?.view.frame.origin.y = 0
-      }
-      .store(in: &cancellables)
   }
 }
 
