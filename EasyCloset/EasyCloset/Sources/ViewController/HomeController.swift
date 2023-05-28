@@ -41,11 +41,13 @@ final class HomeController: UIViewController {
   @objc private func tappedClothesInfoView() {
     guard let tabBar = tabBarController as? MainTabBarController else { return }
     tabBar.moveWithAnimation(to: .clothes)
+//    HapticManager.fireImpact()
   }
   
   @objc private func tappedStyleInfoView() {
     guard let tabBar = tabBarController as? MainTabBarController else { return }
     tabBar.moveWithAnimation(to: .style)
+//    HapticManager.fireImpact()
   }
 }
 

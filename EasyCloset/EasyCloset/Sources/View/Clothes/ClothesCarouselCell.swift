@@ -151,6 +151,8 @@ extension ClothesCarouselCell: UICollectionViewDelegate {
     guard let item = dataSource.itemIdentifier(for: indexPath),
           let category = category else { return }
     
+    HapticManager.fireImpact()
+    
     // 셀 아이템의 종류가 옷 추가였는지, 옷 상세정보 였는지를 판별해 delegate에 위임
     switch item {
     case .addClothes:
