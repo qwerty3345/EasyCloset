@@ -55,9 +55,8 @@
 		B461114B2A1F827600104C3A /* StyleDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B461114A2A1F827600104C3A /* StyleDetailCell.swift */; };
 		B4684F0A2A23612C00EAD18F /* UIViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F092A23612C00EAD18F /* UIViewController+Keyboard.swift */; };
 		B4684F0E2A23846C00EAD18F /* MockClothesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F0D2A23846C00EAD18F /* MockClothesRepository.swift */; };
-		B4684F0F2A23847A00EAD18F /* MockClothesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F0D2A23846C00EAD18F /* MockClothesRepository.swift */; };
 		B4684F112A2384E700EAD18F /* MockStyleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F102A2384E700EAD18F /* MockStyleRepository.swift */; };
-		B4684F122A2384EE00EAD18F /* MockStyleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F102A2384E700EAD18F /* MockStyleRepository.swift */; };
+		B4684F172A23869B00EAD18F /* ClothesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F142A2385C100EAD18F /* ClothesViewModelTests.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
@@ -67,6 +66,8 @@
 		B49CAAD12A1B5455008254C7 /* StyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */; };
 		B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */; };
 		B4B456812A1F9A67003354F8 /* StyleAddClothesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B456802A1F9A66003354F8 /* StyleAddClothesController.swift */; };
+		B4BE982D2A238C120074D73C /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = B4BE982C2A238C120074D73C /* Realm */; };
+		B4BE982F2A238C120074D73C /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B4BE982E2A238C120074D73C /* RealmSwift */; };
 		B4C4E7C62A20526C000859DD /* StyleAddClothesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C52A20526C000859DD /* StyleAddClothesCell.swift */; };
 		B4C4E7C82A2077C7000859DD /* StyleEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C72A2077C7000859DD /* StyleEntity.swift */; };
 		B4C4E7CA2A207A03000859DD /* StyleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C92A207A03000859DD /* StyleRepository.swift */; };
@@ -149,6 +150,7 @@
 		B4684F092A23612C00EAD18F /* UIViewController+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Keyboard.swift"; sourceTree = "<group>"; };
 		B4684F0D2A23846C00EAD18F /* MockClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockClothesRepository.swift; sourceTree = "<group>"; };
 		B4684F102A2384E700EAD18F /* MockStyleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStyleRepository.swift; sourceTree = "<group>"; };
+		B4684F142A2385C100EAD18F /* ClothesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesViewModelTests.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -203,6 +205,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4BE982F2A238C120074D73C /* RealmSwift in Frameworks */,
+				B4BE982D2A238C120074D73C /* Realm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,6 +485,7 @@
 			children = (
 				B4C8D1162A23237600A465F9 /* Data */,
 				B4C8D10F2A23233D00A465F9 /* EasyClosetTests.swift */,
+				B4684F142A2385C100EAD18F /* ClothesViewModelTests.swift */,
 			);
 			path = EasyClosetTests;
 			sourceTree = "<group>";
@@ -577,6 +582,10 @@
 				B4C8D1122A23233D00A465F9 /* PBXTargetDependency */,
 			);
 			name = EasyClosetTests;
+			packageProductDependencies = (
+				B4BE982C2A238C120074D73C /* Realm */,
+				B4BE982E2A238C120074D73C /* RealmSwift */,
+			);
 			productName = EasyClosetTests;
 			productReference = B4C8D10D2A23233D00A465F9 /* EasyClosetTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -690,7 +699,6 @@
 				B49CAACF2A1B5169008254C7 /* StyleCell.swift in Sources */,
 				B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */,
 				B4470B5C2A176C3A0024B2B7 /* ShadowableCellType.swift in Sources */,
-				B4684F122A2384EE00EAD18F /* MockStyleRepository.swift in Sources */,
 				B4E5C5422A1C823B00B14F48 /* ImageCacheManager.swift in Sources */,
 				B4470B562A1743130024B2B7 /* ClothesList.swift in Sources */,
 				B4504B6F2A1DEA9A0018C9BC /* FilterCell.swift in Sources */,
@@ -698,7 +706,6 @@
 				B43889A92A14B7E600476BFC /* ClothesCell.swift in Sources */,
 				B46111432A1F481200104C3A /* ClothesRepository.swift in Sources */,
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
-				B4684F0F2A23847A00EAD18F /* MockClothesRepository.swift in Sources */,
 				B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */,
 				B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */,
 				B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */,
@@ -754,6 +761,7 @@
 				B4684F0E2A23846C00EAD18F /* MockClothesRepository.swift in Sources */,
 				B4684F112A2384E700EAD18F /* MockStyleRepository.swift in Sources */,
 				B4C8D1102A23233D00A465F9 /* EasyClosetTests.swift in Sources */,
+				B4684F172A23869B00EAD18F /* ClothesViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1052,8 +1060,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.40.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1078,6 +1086,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = Realm;
+		};
+		B4BE982C2A238C120074D73C /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		B4BE982E2A238C120074D73C /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

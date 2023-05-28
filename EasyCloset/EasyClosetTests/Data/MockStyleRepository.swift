@@ -5,7 +5,7 @@
 //  Created by Mason Kim on 2023/05/28.
 //
 
-import Foundation
+@testable import EasyCloset
 import Combine
 
 final class MockStyleRepository: StyleRepositoryProtocol {
