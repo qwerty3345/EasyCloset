@@ -33,6 +33,7 @@
 		B43889AD2A14B92600476BFC /* UICollectionView+RegisterDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */; };
 		B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */; };
 		B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */; };
+		B445316C2A239C81003B8461 /* ImageCacheManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B445316B2A239C81003B8461 /* ImageCacheManagerTests.swift */; };
 		B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */; };
 		B4470B522A1740AD0024B2B7 /* Array+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */; };
 		B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B532A1741160024B2B7 /* ClothesViewModel.swift */; };
@@ -129,6 +130,7 @@
 		B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RegisterDeque.swift"; sourceTree = "<group>"; };
 		B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselFlowLayout.swift; sourceTree = "<group>"; };
 		B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCarouselCell.swift; sourceTree = "<group>"; };
+		B445316B2A239C81003B8461 /* ImageCacheManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManagerTests.swift; sourceTree = "<group>"; };
 		B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCategoryHeaderView.swift; sourceTree = "<group>"; };
 		B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeIndex.swift"; sourceTree = "<group>"; };
 		B4470B532A1741160024B2B7 /* ClothesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesViewModel.swift; sourceTree = "<group>"; };
@@ -486,6 +488,7 @@
 				B4C8D1162A23237600A465F9 /* Data */,
 				B4C8D10F2A23233D00A465F9 /* EasyClosetTests.swift */,
 				B4684F142A2385C100EAD18F /* ClothesViewModelTests.swift */,
+				B445316B2A239C81003B8461 /* ImageCacheManagerTests.swift */,
 			);
 			path = EasyClosetTests;
 			sourceTree = "<group>";
@@ -665,6 +668,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		B43889912A14A88900476BFC /* SwiftLint Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -759,6 +763,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4684F0E2A23846C00EAD18F /* MockClothesRepository.swift in Sources */,
+				B445316C2A239C81003B8461 /* ImageCacheManagerTests.swift in Sources */,
 				B4684F112A2384E700EAD18F /* MockStyleRepository.swift in Sources */,
 				B4C8D1102A23233D00A465F9 /* EasyClosetTests.swift in Sources */,
 				B4684F172A23869B00EAD18F /* ClothesViewModelTests.swift in Sources */,
@@ -909,6 +914,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TZ3VZ8CUCV;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EasyCloset/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -940,6 +946,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TZ3VZ8CUCV;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EasyCloset/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

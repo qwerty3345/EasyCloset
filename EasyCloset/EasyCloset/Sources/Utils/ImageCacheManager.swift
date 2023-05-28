@@ -12,6 +12,8 @@ final class ImageCacheManager {
   // MARK: - Constants
   
   private enum Constants {
+    static let initialByteLimit = 200 * megaByteUnit // 초기 제약: 200메가바이트
+    static let kiloByteUnit = 1024
     static let megaByteUnit = 1024 * 1024
   }
   
@@ -32,12 +34,17 @@ final class ImageCacheManager {
   var countLimit = 100 {
     didSet { cache.countLimit = countLimit }
   }
-  // 메모리 캐싱에 (대략) 200메가바이트 만큼 제약을 줌
-  var megaByteLimit = 200 {
+  // 메모리 캐싱 시의 용량 제약 (기본값: 200메가바이트)
+  var byteLimit: Int = Constants.initialByteLimit {
     didSet { cache.totalCostLimit = byteLimit }
   }
-  private var byteLimit: Int {
-    megaByteLimit * Constants.megaByteUnit
+  var megaByteLimit: Int {
+    get { byteLimit / Constants.megaByteUnit }
+    set { byteLimit = newValue * Constants.megaByteUnit }
+  }
+  var kiloByteLimit: Int {
+    get { byteLimit / Constants.kiloByteUnit }
+    set { byteLimit = newValue * Constants.kiloByteUnit }
   }
   
   // MARK: - Public Methods
