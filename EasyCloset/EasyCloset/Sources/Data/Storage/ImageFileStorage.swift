@@ -12,10 +12,10 @@ import Combine
 // MARK: - Protocol, FileManagerError
 
 protocol ImageFileStorageProtocol {
-  func save(image: UIImage, id: UUID) -> Future<Void, FileManagerError>
-  func load(withID id: UUID) -> Future<UIImage, FileManagerError>
-  func remove(withID id: UUID) -> Future<Void, FileManagerError>
-  func removeAll() -> Future<Void, FileManagerError>
+  func save(image: UIImage, id: UUID) -> AnyPublisher<Void, FileManagerError>
+  func load(withID id: UUID) -> AnyPublisher<UIImage, FileManagerError>
+  func remove(withID id: UUID) -> AnyPublisher<Void, FileManagerError>
+  func removeAll() -> AnyPublisher<Void, FileManagerError>
 }
 
 enum FileManagerError: Error {
@@ -38,7 +38,7 @@ final class ImageFileStorage: ImageFileStorageProtocol {
   // MARK: - Public Methods
   
   @discardableResult
-  func save(image: UIImage, id: UUID) -> Future<Void, FileManagerError> {
+  func save(image: UIImage, id: UUID) -> AnyPublisher<Void, FileManagerError> {
     return Future { [weak self] promise in
       guard let self = self else { return }
       
@@ -52,19 +52,18 @@ final class ImageFileStorage: ImageFileStorageProtocol {
         return
       }
       
-      DispatchQueue.global(qos: .utility).async {
-        do {
-          try data.write(to: filePath)
-          promise(.success(()))
-        } catch {
-          promise(.failure(.failToWrite(error: error)))
-        }
+      do {
+        try data.write(to: filePath)
+        promise(.success(()))
+      } catch {
+        promise(.failure(.failToWrite(error: error)))
       }
     }
-    
+    .receive(on: DispatchQueue.global(qos: .utility))
+    .eraseToAnyPublisher()
   }
   
-  func load(withID id: UUID) -> Future<UIImage, FileManagerError> {
+  func load(withID id: UUID) -> AnyPublisher<UIImage, FileManagerError> {
     return Future { promise in
       guard let filePath = self.filePath(of: id) else {
         promise(.failure(.invalidFilePath))
@@ -84,9 +83,11 @@ final class ImageFileStorage: ImageFileStorageProtocol {
         }
       }
     }
+    .receive(on: DispatchQueue.global(qos: .utility))
+    .eraseToAnyPublisher()
   }
   
-  func remove(withID id: UUID) -> Future<Void, FileManagerError> {
+  func remove(withID id: UUID) -> AnyPublisher<Void, FileManagerError> {
     return Future { [weak self] promise in
       guard let self = self else { return }
       
@@ -95,18 +96,18 @@ final class ImageFileStorage: ImageFileStorageProtocol {
         return
       }
       
-      DispatchQueue.global(qos: .utility).async {
-        do {
-          try FileManager.default.removeItem(at: filePath)
-          promise(.success(()))
-        } catch {
-          promise(.failure(.failToWrite(error: error)))
-        }
+      do {
+        try FileManager.default.removeItem(at: filePath)
+        promise(.success(()))
+      } catch {
+        promise(.failure(.failToWrite(error: error)))
       }
     }
+    .receive(on: DispatchQueue.global(qos: .utility))
+    .eraseToAnyPublisher()
   }
   
-  func removeAll() -> Future<Void, FileManagerError> {
+  func removeAll() -> AnyPublisher<Void, FileManagerError> {
     return Future { promise in
       guard let path = Constants.path,
             let filePathURLs = try? FileManager.default.contentsOfDirectory(at: path,
@@ -119,17 +120,15 @@ final class ImageFileStorage: ImageFileStorageProtocol {
         $0.pathExtension == Constants.imageExtension
       }
       
-      DispatchQueue.global(qos: .utility).async {
-        // 중간에 삭제 작업이 실패해도 계속 이어나가기 위해, 발생한 에러들을 배열에 담으며 for문을 돌림
-        var occuredErrors: [Error] = []
-        
-        for imagePathURL in imagePathURLs {
-          do {
-            try FileManager.default.removeItem(at: imagePathURL)
-          } catch {
-            // 여기서 promise(.failure()) 를 호출하면, 뒤의 아이템이 삭제되지 않고 조기종료 될 수 있기에...
-            occuredErrors.append(error)
-          }
+      // 중간에 삭제 작업이 실패해도 계속 이어나가기 위해, 발생한 에러들을 배열에 담으며 for문을 돌림
+      var occuredErrors: [Error] = []
+      
+      for imagePathURL in imagePathURLs {
+        do {
+          try FileManager.default.removeItem(at: imagePathURL)
+        } catch {
+          // 여기서 promise(.failure()) 를 호출하면, 뒤의 아이템이 삭제되지 않고 조기종료 될 수 있기에...
+          occuredErrors.append(error)
         }
         
         if let firstError = occuredErrors.first {
@@ -140,6 +139,8 @@ final class ImageFileStorage: ImageFileStorageProtocol {
         promise(.success(()))
       }
     }
+    .receive(on: DispatchQueue.global(qos: .utility))
+    .eraseToAnyPublisher()
   }
   
   // MARK: - Private Methods
