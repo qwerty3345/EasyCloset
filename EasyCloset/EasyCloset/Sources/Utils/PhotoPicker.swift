@@ -104,23 +104,24 @@ final class PhotoPicker: NSObject {
   }
   
   // MARK: - Private Methods
+  
   private func checkAndRequestCameraPermission(completion: @escaping (Bool) -> Void) {
-      let status = AVCaptureDevice.authorizationStatus(for: .video)
-      switch status {
-      case .notDetermined:
-        AVCaptureDevice.requestAccess(for: .video) { isGranted in
-          completion(isGranted)
-        }
-      case .authorized:
-        completion(true)
-      case .denied:
-        completion(false)
-      case .restricted:
-        completion(false)
-      @unknown default:
-        break
+    let status = AVCaptureDevice.authorizationStatus(for: .video)
+    switch status {
+    case .notDetermined:
+      AVCaptureDevice.requestAccess(for: .video) { isGranted in
+        completion(isGranted)
       }
+    case .authorized:
+      completion(true)
+    case .denied:
+      completion(false)
+    case .restricted:
+      completion(false)
+    @unknown default:
+      break
     }
+  }
 }
 
 // MARK: - UIImagePickerControllerDelegate & UINavigationControllerDelegate
