@@ -33,6 +33,7 @@
 		B43889AD2A14B92600476BFC /* UICollectionView+RegisterDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */; };
 		B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */; };
 		B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */; };
+		B445316C2A239C81003B8461 /* ImageCacheManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B445316B2A239C81003B8461 /* ImageCacheManagerTests.swift */; };
 		B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */; };
 		B4470B522A1740AD0024B2B7 /* Array+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */; };
 		B4470B542A1741160024B2B7 /* ClothesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B532A1741160024B2B7 /* ClothesViewModel.swift */; };
@@ -53,15 +54,22 @@
 		B46111452A1F484600104C3A /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46111442A1F484600104C3A /* RealmStorage.swift */; };
 		B46111492A1F7F8A00104C3A /* StyleDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46111482A1F7F8A00104C3A /* StyleDetailController.swift */; };
 		B461114B2A1F827600104C3A /* StyleDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B461114A2A1F827600104C3A /* StyleDetailCell.swift */; };
+		B4684F0A2A23612C00EAD18F /* UIViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F092A23612C00EAD18F /* UIViewController+Keyboard.swift */; };
+		B4684F0E2A23846C00EAD18F /* MockClothesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F0D2A23846C00EAD18F /* MockClothesRepository.swift */; };
+		B4684F112A2384E700EAD18F /* MockStyleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F102A2384E700EAD18F /* MockStyleRepository.swift */; };
+		B4684F172A23869B00EAD18F /* ClothesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4684F142A2385C100EAD18F /* ClothesViewModelTests.swift */; };
 		B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B52A14739F00039F72 /* AppDelegate.swift */; };
 		B46CB8B82A14739F00039F72 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B72A14739F00039F72 /* SceneDelegate.swift */; };
 		B46CB8BA2A14739F00039F72 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46CB8B92A14739F00039F72 /* MainTabBarController.swift */; };
 		B46CB8BF2A1473A000039F72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8BE2A1473A000039F72 /* Assets.xcassets */; };
 		B46CB8C22A1473A000039F72 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B46CB8C02A1473A000039F72 /* LaunchScreen.storyboard */; };
+		B49B90BE2A23B3BE00997782 /* .swiftlint in Resources */ = {isa = PBXBuildFile; fileRef = B49B90BD2A23B3BE00997782 /* .swiftlint */; };
 		B49CAACF2A1B5169008254C7 /* StyleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAACE2A1B5169008254C7 /* StyleCell.swift */; };
 		B49CAAD12A1B5455008254C7 /* StyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */; };
 		B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */; };
 		B4B456812A1F9A67003354F8 /* StyleAddClothesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B456802A1F9A66003354F8 /* StyleAddClothesController.swift */; };
+		B4BE982D2A238C120074D73C /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = B4BE982C2A238C120074D73C /* Realm */; };
+		B4BE982F2A238C120074D73C /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B4BE982E2A238C120074D73C /* RealmSwift */; };
 		B4C4E7C62A20526C000859DD /* StyleAddClothesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C52A20526C000859DD /* StyleAddClothesCell.swift */; };
 		B4C4E7C82A2077C7000859DD /* StyleEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C72A2077C7000859DD /* StyleEntity.swift */; };
 		B4C4E7CA2A207A03000859DD /* StyleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C92A207A03000859DD /* StyleRepository.swift */; };
@@ -86,6 +94,16 @@
 		B4F1F4362A1914DF00DA6358 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4352A1914DF00DA6358 /* PhotoPicker.swift */; };
 		B4F1F4382A192B7D00DA6358 /* PhotoHandlingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F1F4372A192B7D00DA6358 /* PhotoHandlingView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B4C8D1112A23233D00A465F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B46CB8AA2A14739F00039F72 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B46CB8B12A14739F00039F72;
+			remoteInfo = EasyCloset;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		B43889772A14934600476BFC /* ClothesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesController.swift; sourceTree = "<group>"; };
@@ -112,6 +130,7 @@
 		B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RegisterDeque.swift"; sourceTree = "<group>"; };
 		B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselFlowLayout.swift; sourceTree = "<group>"; };
 		B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCarouselCell.swift; sourceTree = "<group>"; };
+		B445316B2A239C81003B8461 /* ImageCacheManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManagerTests.swift; sourceTree = "<group>"; };
 		B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCategoryHeaderView.swift; sourceTree = "<group>"; };
 		B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeIndex.swift"; sourceTree = "<group>"; };
 		B4470B532A1741160024B2B7 /* ClothesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesViewModel.swift; sourceTree = "<group>"; };
@@ -130,6 +149,10 @@
 		B46111442A1F484600104C3A /* RealmStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmStorage.swift; sourceTree = "<group>"; };
 		B46111482A1F7F8A00104C3A /* StyleDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleDetailController.swift; sourceTree = "<group>"; };
 		B461114A2A1F827600104C3A /* StyleDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleDetailCell.swift; sourceTree = "<group>"; };
+		B4684F092A23612C00EAD18F /* UIViewController+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Keyboard.swift"; sourceTree = "<group>"; };
+		B4684F0D2A23846C00EAD18F /* MockClothesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockClothesRepository.swift; sourceTree = "<group>"; };
+		B4684F102A2384E700EAD18F /* MockStyleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStyleRepository.swift; sourceTree = "<group>"; };
+		B4684F142A2385C100EAD18F /* ClothesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesViewModelTests.swift; sourceTree = "<group>"; };
 		B46CB8B22A14739F00039F72 /* EasyCloset.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyCloset.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B46CB8B52A14739F00039F72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B46CB8B72A14739F00039F72 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -137,6 +160,7 @@
 		B46CB8BE2A1473A000039F72 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B46CB8C12A1473A000039F72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B46CB8C32A1473A000039F72 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B49B90BD2A23B3BE00997782 /* .swiftlint */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint; sourceTree = "<group>"; };
 		B49CAACE2A1B5169008254C7 /* StyleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleCell.swift; sourceTree = "<group>"; };
 		B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleViewModel.swift; sourceTree = "<group>"; };
 		B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
@@ -151,6 +175,7 @@
 		B4C8D1012A2106D100A465F9 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		B4C8D1052A224CB100A465F9 /* UIViewController+ShowAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ShowAlert.swift"; sourceTree = "<group>"; };
 		B4C8D1072A2264DF00A465F9 /* UITextField+HideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+HideKeyboard.swift"; sourceTree = "<group>"; };
+		B4C8D10D2A23233D00A465F9 /* EasyClosetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EasyClosetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4E5C5412A1C823B00B14F48 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		B4E5C5692A1C9E3E00B14F48 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		B4E5C56B2A1CAC0C00B14F48 /* ImageFileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFileStorage.swift; sourceTree = "<group>"; };
@@ -175,6 +200,15 @@
 				B438898D2A14A7D400476BFC /* Then in Frameworks */,
 				B44EA8BC2A1B3F72008A83FF /* Realm in Frameworks */,
 				B43889902A14A80900476BFC /* SnapKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B4C8D10A2A23233D00A465F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B4BE982F2A238C120074D73C /* RealmSwift in Frameworks */,
+				B4BE982D2A238C120074D73C /* Realm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				B46CB8B42A14739F00039F72 /* EasyCloset */,
+				B4C8D10E2A23233D00A465F9 /* EasyClosetTests */,
 				B46CB8B32A14739F00039F72 /* Products */,
 				B44EA8BA2A1B3F72008A83FF /* Frameworks */,
 			);
@@ -244,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				B46CB8B22A14739F00039F72 /* EasyCloset.app */,
+				B4C8D10D2A23233D00A465F9 /* EasyClosetTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -394,6 +430,7 @@
 				B438899D2A14AB8E00476BFC /* UIViewController+NavigationTitle.swift */,
 				B4C8D1052A224CB100A465F9 /* UIViewController+ShowAlert.swift */,
 				B4C8D1072A2264DF00A465F9 /* UITextField+HideKeyboard.swift */,
+				B4684F092A23612C00EAD18F /* UIViewController+Keyboard.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -443,6 +480,26 @@
 				B4C4E7D52A20ED9B000859DD /* RepositoryError.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		B4C8D10E2A23233D00A465F9 /* EasyClosetTests */ = {
+			isa = PBXGroup;
+			children = (
+				B4C8D1162A23237600A465F9 /* Data */,
+				B4684F142A2385C100EAD18F /* ClothesViewModelTests.swift */,
+				B445316B2A239C81003B8461 /* ImageCacheManagerTests.swift */,
+				B49B90BD2A23B3BE00997782 /* .swiftlint */,
+			);
+			path = EasyClosetTests;
+			sourceTree = "<group>";
+		};
+		B4C8D1162A23237600A465F9 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				B4684F0D2A23846C00EAD18F /* MockClothesRepository.swift */,
+				B4684F102A2384E700EAD18F /* MockStyleRepository.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 		B4D95D492A19E161009C8931 /* Clothes */ = {
@@ -514,6 +571,28 @@
 			productReference = B46CB8B22A14739F00039F72 /* EasyCloset.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B4C8D10C2A23233D00A465F9 /* EasyClosetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B4C8D1152A23233D00A465F9 /* Build configuration list for PBXNativeTarget "EasyClosetTests" */;
+			buildPhases = (
+				B4C8D1092A23233D00A465F9 /* Sources */,
+				B4C8D10A2A23233D00A465F9 /* Frameworks */,
+				B4C8D10B2A23233D00A465F9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B4C8D1122A23233D00A465F9 /* PBXTargetDependency */,
+			);
+			name = EasyClosetTests;
+			packageProductDependencies = (
+				B4BE982C2A238C120074D73C /* Realm */,
+				B4BE982E2A238C120074D73C /* RealmSwift */,
+			);
+			productName = EasyClosetTests;
+			productReference = B4C8D10D2A23233D00A465F9 /* EasyClosetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -526,6 +605,10 @@
 				TargetAttributes = {
 					B46CB8B12A14739F00039F72 = {
 						CreatedOnToolsVersion = 14.3;
+					};
+					B4C8D10C2A23233D00A465F9 = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = B46CB8B12A14739F00039F72;
 					};
 				};
 			};
@@ -548,6 +631,7 @@
 			projectRoot = "";
 			targets = (
 				B46CB8B12A14739F00039F72 /* EasyCloset */,
+				B4C8D10C2A23233D00A465F9 /* EasyClosetTests */,
 			);
 		};
 /* End PBXProject section */
@@ -572,11 +656,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B4C8D10B2A23233D00A465F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B49B90BE2A23B3BE00997782 /* .swiftlint in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		B43889912A14A88900476BFC /* SwiftLint Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -639,6 +732,7 @@
 				B4C4E7D22A2094C7000859DD /* StyleDetailViewModel.swift in Sources */,
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
 				B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */,
+				B4684F0A2A23612C00EAD18F /* UIViewController+Keyboard.swift in Sources */,
 				B4C8D1062A224CB100A465F9 /* UIViewController+ShowAlert.swift in Sources */,
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B461114B2A1F827600104C3A /* StyleDetailCell.swift in Sources */,
@@ -665,7 +759,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B4C8D1092A23233D00A465F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B4684F0E2A23846C00EAD18F /* MockClothesRepository.swift in Sources */,
+				B445316C2A239C81003B8461 /* ImageCacheManagerTests.swift in Sources */,
+				B4684F112A2384E700EAD18F /* MockStyleRepository.swift in Sources */,
+				B4684F172A23869B00EAD18F /* ClothesViewModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B4C8D1122A23233D00A465F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B46CB8B12A14739F00039F72 /* EasyCloset */;
+			targetProxy = B4C8D1112A23233D00A465F9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		B46CB8C02A1473A000039F72 /* LaunchScreen.storyboard */ = {
@@ -801,6 +914,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TZ3VZ8CUCV;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EasyCloset/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -832,6 +946,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = TZ3VZ8CUCV;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EasyCloset/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -855,6 +970,50 @@
 			};
 			name = Release;
 		};
+		B4C8D1132A23233D00A465F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TZ3VZ8CUCV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MasonKim.EasyClosetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EasyCloset.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EasyCloset";
+			};
+			name = Debug;
+		};
+		B4C8D1142A23233D00A465F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TZ3VZ8CUCV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MasonKim.EasyClosetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EasyCloset.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EasyCloset";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -872,6 +1031,15 @@
 			buildConfigurations = (
 				B46CB8C72A1473A000039F72 /* Debug */,
 				B46CB8C82A1473A000039F72 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B4C8D1152A23233D00A465F9 /* Build configuration list for PBXNativeTarget "EasyClosetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B4C8D1132A23233D00A465F9 /* Debug */,
+				B4C8D1142A23233D00A465F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -899,8 +1067,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.40.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -925,6 +1093,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = Realm;
+		};
+		B4BE982C2A238C120074D73C /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		B4BE982E2A238C120074D73C /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B44EA8B32A1B2C92008A83FF /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
