@@ -15,6 +15,7 @@ protocol Highlightable: UIView {
 extension Highlightable {
   
   func highlight() {
+    HapticManager.fireImpact()
     UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseInOut]) {
       let highlightScale: CGFloat = 0.95
       self.transform = CGAffineTransform(scaleX: highlightScale, y: highlightScale)
