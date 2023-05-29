@@ -33,7 +33,7 @@ final class PhotoHandlingView: UIStackView {
   private weak var parentController: UIViewController?
   
   private var cancellables = Set<AnyCancellable>()
-
+  
   // MARK: - Initialization
   
   init(parentController: UIViewController) {
@@ -109,12 +109,18 @@ final class PhotoHandlingView: UIStackView {
   }
   
   @objc private func tappedCameraButton() {
-    let cameraPublisher = photoPicker.requestCamera()
+    let cameraPublisher = photoPicker
+      .requestCamera()
+      .receive(on: DispatchQueue.main)
+      .eraseToAnyPublisher()
     handlePhoto(with: cameraPublisher)
   }
   
   @objc private func tappedGalleryButton() {
-    let albumPublisher = photoPicker.requestAlbum()
+    let albumPublisher = photoPicker
+      .requestAlbum()
+      .receive(on: DispatchQueue.main)
+      .eraseToAnyPublisher()
     handlePhoto(with: albumPublisher)
   }
   
@@ -143,7 +149,20 @@ final class PhotoHandlingView: UIStackView {
   }
   
   private func showFailAlert(of error: PhotoPickerError, isCancellable: Bool = false) {
+    if case .authorizationDenied = error {
+      parentController?.showAskAlert(
+        title: error.localizedDescription) { [weak self] isConfirmed in
+          guard isConfirmed else { return }
+          self?.moveUserToSetting()
+        }
+    }
+    
     parentController?.showFailAlert(with: error.localizedDescription)
+  }
+  
+  private func moveUserToSetting() {
+    guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+    UIApplication.shared.open(settingsURL)
   }
 }
 

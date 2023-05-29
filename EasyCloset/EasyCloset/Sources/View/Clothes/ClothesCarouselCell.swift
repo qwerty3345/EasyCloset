@@ -14,6 +14,7 @@ protocol ClothesCarouselCellDelegate: AnyObject {
   func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory)
 }
 
+/// Clothes화면의 각 행에 해당함 (외투 목록, 상의 목록...)
 final class ClothesCarouselCell: UICollectionViewCell {
   
   enum Section: CaseIterable {
@@ -31,8 +32,8 @@ final class ClothesCarouselCell: UICollectionViewCell {
   
   private enum Metric {
     static let collectionViewHeight: CGFloat = 180
-    static let cellSize = CGSize(width: collectionViewHeight - 20,
-                                 height: collectionViewHeight - 20)
+    static let cellSize = CGSize(width: collectionViewHeight - 25,
+                                 height: collectionViewHeight - 25)
   }
   
   // MARK: - Properties
