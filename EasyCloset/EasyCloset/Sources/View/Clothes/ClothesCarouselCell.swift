@@ -12,6 +12,7 @@ import Combine
 protocol ClothesCarouselCellDelegate: AnyObject {
   func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes)
   func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory)
+  func clothesCarouselCell(_ cell: ClothesCarouselCell, deleteClothes clothes: Clothes)
 }
 
 /// Clothes화면의 각 행에 해당함 (외투 목록, 상의 목록...)
@@ -148,7 +149,23 @@ extension ClothesCarouselCell {
 
 extension ClothesCarouselCell: UICollectionViewDelegate {
   
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+  func collectionView(_ collectionView: UICollectionView,
+                      didSelectItemAt indexPath: IndexPath) {
+   moveToSelectedItem(at: indexPath)
+  }
+
+  func collectionView(_ collectionView: UICollectionView,
+                      contextMenuConfigurationForItemAt indexPath: IndexPath,
+                      point: CGPoint) -> UIContextMenuConfiguration? {
+    return configureMenuConfiguration(of: indexPath)
+  }
+}
+
+// MARK: - MenuConfigurable
+
+extension ClothesCarouselCell: MenuConfigurable {
+  
+  func moveToSelectedItem(at indexPath: IndexPath) {
     guard let item = dataSource.itemIdentifier(for: indexPath),
           let category = category else { return }
     
@@ -161,11 +178,17 @@ extension ClothesCarouselCell: UICollectionViewDelegate {
     case .clothes(let clothes):
       delegate?.clothesCarouselCell(self, showClothesDetail: clothes)
     }
-
+    
     // 자연스럽게 보이도록 0.5초 후에 해당 위치로 scroll
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
       self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
+  }
+  
+  func deleteSelectedItem(of indexPath: IndexPath) {
+    guard let item = dataSource.itemIdentifier(for: indexPath),
+          case let .clothes(clotehs) = item else { return }
+    delegate?.clothesCarouselCell(self, deleteClothes: clotehs)
   }
 }
 

@@ -14,7 +14,8 @@ final class StyleViewModel {
   // MARK: - Properties
   
   @Published private(set) var styles = [Style]()
-  
+
+  let deleteStyle = PassthroughSubject<Style, Never>()
   let stylesDidUpdate = PassthroughSubject<Void, Never>()
   
   private var cancellables = Set<AnyCancellable>()
@@ -43,6 +44,13 @@ final class StyleViewModel {
         }
       } receiveValue: { [weak self] styles in
         self?.styles = styles
+      }
+      .store(in: &cancellables)
+    
+    deleteStyle
+      .sink { [weak self] style in
+        self?.repository.remove(style: style)
+        self?.stylesDidUpdate.send()
       }
       .store(in: &cancellables)
   }

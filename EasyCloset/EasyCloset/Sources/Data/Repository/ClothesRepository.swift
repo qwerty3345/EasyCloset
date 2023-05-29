@@ -17,6 +17,7 @@ import Then
 protocol ClothesRepositoryProtocol {
   func fetchClothesList() -> AnyPublisher<ClothesList, RepositoryError>
   func save(clothes: Clothes) -> AnyPublisher<Void, RepositoryError>
+  func remove(clothes: Clothes)
   func removeAll()
 }
 
@@ -67,9 +68,20 @@ final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchableReposito
       .eraseToAnyPublisher()
   }
   
+  func remove(clothes: Clothes) {
+    realmStorage.remove(id: clothes.id.uuidString, entityType: ClothesEntity.self)
+    imageFileStorage.remove(withID: clothes.id)
+      // 딱히 삭제에 대한 에러 처리를 할 필요가 없기에 단순히 무응답 클로저로 남김
+      .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
+      .store(in: &cancellables)
+  }
+  
   func removeAll() {
     realmStorage.removeAll(entityType: ClothesEntity.self)
     imageCacheManager.removeAll()
+    imageFileStorage.removeAll()
+      .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
+      .store(in: &cancellables)
   }
   
   // MARK: - Private Methods

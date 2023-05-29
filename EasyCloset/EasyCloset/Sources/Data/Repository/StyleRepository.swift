@@ -17,6 +17,7 @@ import Then
 protocol StyleRepositoryProtocol {
   func fetchStyles() -> AnyPublisher<[Style], RepositoryError>
   func save(style: Style) -> AnyPublisher<Void, RepositoryError>
+  func remove(style: Style)
   func removeAll()
 }
 
@@ -78,6 +79,14 @@ final class StyleRepository: StyleRepositoryProtocol, ImageFetchableRepository {
       promise(.failure(.failToSave))
     }
     .eraseToAnyPublisher()
+  }
+  
+  func remove(style: Style) {
+    realmStorage.remove(id: style.id.uuidString, entityType: StyleEntity.self)
+    imageFileStorage.remove(withID: style.id)
+    // 딱히 삭제에 대한 에러 처리를 할 필요가 없기에 단순히 무응답 클로저로 남김
+      .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
+      .store(in: &cancellables)
   }
   
   func removeAll() {

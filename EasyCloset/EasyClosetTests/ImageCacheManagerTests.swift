@@ -16,12 +16,10 @@ final class ImageCacheManagerTests: XCTestCase {
   override func setUpWithError() throws {
     sut.countLimit = 100
     sut.megaByteLimit = 200
-    print("제한 초기화는 함")
   }
   
   override func tearDownWithError() throws {
     sut.removeAll()
-    print("끝나고 삭제도 함")
   }
   
   func test_이미지_캐싱_저장과_불러오기가_잘_이뤄지는지_확인() {

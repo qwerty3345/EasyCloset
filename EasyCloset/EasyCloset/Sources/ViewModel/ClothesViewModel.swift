@@ -16,6 +16,7 @@ final class ClothesViewModel {
   @Published private var clothesList = ClothesList(clothesByCategory: [:])
   
   let searchFilters = CurrentValueSubject<FilterItems, Never>([.sort(.new)])
+  let deleteClothes = PassthroughSubject<Clothes, Never>()
   let clothesListDidUpdate = PassthroughSubject<Void, Never>()
   let clothesListDidEndUpdate = PassthroughSubject<Void, Never>()
   
@@ -56,6 +57,13 @@ final class ClothesViewModel {
       } receiveValue: { [weak self] clothesList in
         self?.clothesList = clothesList
         self?.clothesListDidEndUpdate.send()
+      }
+      .store(in: &cancellables)
+    
+    deleteClothes
+      .sink { [weak self] clothes in
+        self?.repository.remove(clothes: clothes)
+        self?.clothesListDidUpdate.send()
       }
       .store(in: &cancellables)
   }
