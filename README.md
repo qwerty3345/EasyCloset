@@ -171,8 +171,14 @@ let label2 = UILabel().then {
 > 스타일 상세보기/편집 - 각 카테고리의 옷을 스타일에 편집 / 추가 할 수 있습니다.
 
 ![스타일_상세_화면](https://github.com/qwerty3345/ios-closet-app/assets/59835351/258cef4c-68c1-4756-a962-5db2b50a15ea)
+
+> 삭제 기능 (메뉴) - 옷과 스타일을 각각 꾹 눌러서 삭제할 수 있습니다.
+
+![삭제_기능](https://github.com/qwerty3345/ios-closet-app/assets/59835351/d12484ac-063a-4f70-ac06-e8668ba1aa67)
+
 </details>
-    
+
+
 # 🔥 트러블 슈팅
 
 ## 🎠 Carousel 뷰 구현
