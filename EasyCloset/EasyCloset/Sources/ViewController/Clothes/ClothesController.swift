@@ -182,17 +182,23 @@ extension ClothesController: UICollectionViewDelegateFlowLayout {
 extension ClothesController: ClothesCarouselCellDelegate {
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, showClothesDetail clothes: Clothes) {
-    
     let detailController = DIContainer.shared.makeClothesDetailController(type: .showDetail(clothes: clothes))
     detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
   }
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, addClothesOf categoty: ClothesCategory) {
-    
     let detailController = DIContainer.shared.makeClothesDetailController(type: .add)
     detailController.delegate = self
     navigationController?.pushViewController(detailController, animated: true)
+  }
+  
+  func clothesCarouselCell(_ cell: ClothesCarouselCell, deleteClothes clothes: Clothes) {
+    showAskAlert(title: "정말 삭제하시겠습니까?") { isDelete in
+      guard isDelete else { return }
+      
+    }
+    print("삭제삭제?!?!? : \(clothes)")
   }
 }
 

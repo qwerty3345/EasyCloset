@@ -68,6 +68,7 @@
 		B49CAAD12A1B5455008254C7 /* StyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */; };
 		B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */; };
 		B4B456812A1F9A67003354F8 /* StyleAddClothesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B456802A1F9A66003354F8 /* StyleAddClothesController.swift */; };
+		B4B50C052A25066E002DE5E8 /* MenuConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B50C042A25066E002DE5E8 /* MenuConfigurable.swift */; };
 		B4BE982D2A238C120074D73C /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = B4BE982C2A238C120074D73C /* Realm */; };
 		B4BE982F2A238C120074D73C /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B4BE982E2A238C120074D73C /* RealmSwift */; };
 		B4C4E7C62A20526C000859DD /* StyleAddClothesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C4E7C52A20526C000859DD /* StyleAddClothesCell.swift */; };
@@ -165,6 +166,7 @@
 		B49CAAD02A1B5455008254C7 /* StyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleViewModel.swift; sourceTree = "<group>"; };
 		B49CAAD42A1B8AD6008254C7 /* UIImage+Collage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Collage.swift"; sourceTree = "<group>"; };
 		B4B456802A1F9A66003354F8 /* StyleAddClothesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleAddClothesController.swift; sourceTree = "<group>"; };
+		B4B50C042A25066E002DE5E8 /* MenuConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuConfigurable.swift; sourceTree = "<group>"; };
 		B4C4E7C52A20526C000859DD /* StyleAddClothesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleAddClothesCell.swift; sourceTree = "<group>"; };
 		B4C4E7C72A2077C7000859DD /* StyleEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleEntity.swift; sourceTree = "<group>"; };
 		B4C4E7C92A207A03000859DD /* StyleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleRepository.swift; sourceTree = "<group>"; };
@@ -540,6 +542,7 @@
 				B4F1F4242A18C1FF00DA6358 /* Highlightable.swift */,
 				B43889AA2A14B8F300476BFC /* ReusableView.swift */,
 				B4470B5B2A176C3A0024B2B7 /* ShadowableCellType.swift */,
+				B4B50C042A25066E002DE5E8 /* MenuConfigurable.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -733,6 +736,7 @@
 				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
 				B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */,
 				B4684F0A2A23612C00EAD18F /* UIViewController+Keyboard.swift in Sources */,
+				B4B50C052A25066E002DE5E8 /* MenuConfigurable.swift in Sources */,
 				B4C8D1062A224CB100A465F9 /* UIViewController+ShowAlert.swift in Sources */,
 				B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */,
 				B461114B2A1F827600104C3A /* StyleDetailCell.swift in Sources */,
