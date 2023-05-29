@@ -194,11 +194,10 @@ extension ClothesController: ClothesCarouselCellDelegate {
   }
   
   func clothesCarouselCell(_ cell: ClothesCarouselCell, deleteClothes clothes: Clothes) {
-    showAskAlert(title: "정말 삭제하시겠습니까?") { isDelete in
+    showAskAlert(title: "정말 삭제하시겠습니까?") { [weak self] isDelete in
       guard isDelete else { return }
-      
+      self?.viewModel.deleteClothes.send(clothes)
     }
-    print("삭제삭제?!?!? : \(clothes)")
   }
 }
 
