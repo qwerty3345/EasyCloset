@@ -17,7 +17,7 @@ import Then
 protocol RealmStorageProtocol {
   func load<T: Object>(entityType: T.Type) -> [T]
   @discardableResult func save<T: Object>(_ data: T) -> Bool
-  @discardableResult func remove<T: Object>(entity: T) -> Bool
+  @discardableResult func remove<T: Object>(id: String, entityType: T.Type) -> Bool
   func removeAll<T: Object>(entityType: T.Type)
 }
 
@@ -54,12 +54,16 @@ final class RealmStorage: RealmStorageProtocol {
     }
   }
   
-  func remove<T: Object>(entity: T) -> Bool {
+  func remove<T: Object>(id: String, entityType: T.Type) -> Bool {
     guard let realm = realm else { return false }
+    
+    guard let object = realm.object(ofType: entityType.self, forPrimaryKey: id) else {
+      return false
+    }
     
     do {
       try realm.write {
-        realm.delete(entity)
+        realm.delete(object)
       }
       return true
     } catch {
