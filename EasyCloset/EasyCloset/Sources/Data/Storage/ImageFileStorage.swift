@@ -70,20 +70,18 @@ final class ImageFileStorage: ImageFileStorageProtocol {
         return
       }
       
-      DispatchQueue.global().async {
-        do {
-          let data = try Data(contentsOf: filePath)
-          guard let image = UIImage(data: data) else {
-            promise(.failure(.invalidData))
-            return
-          }
-          promise(.success(image))
-        } catch {
-          promise(.failure(.failToWrite(error: error)))
+      do {
+        let data = try Data(contentsOf: filePath)
+        guard let image = UIImage(data: data) else {
+          promise(.failure(.invalidData))
+          return
         }
+        promise(.success(image))
+      } catch {
+        promise(.failure(.failToWrite(error: error)))
       }
     }
-    .receive(on: DispatchQueue.global(qos: .utility))
+    .receive(on: DispatchQueue.global())
     .eraseToAnyPublisher()
   }
   

@@ -51,7 +51,8 @@ final class ImageCacheManagerTests: XCTestCase {
     // then
     let storedImages = ids
       .compactMap { sut.get(for: $0) }
-    print(storedImages)
+    
+    // 갯수 제한을 준 갯수보다 같거나 작게 저장되었는지 확인
     XCTAssertGreaterThanOrEqual(countLimit, storedImages.count)
   }
   
@@ -64,11 +65,11 @@ final class ImageCacheManagerTests: XCTestCase {
       UIImage(systemName: "pencil.circle.fill")!,
       UIImage(systemName: "pencil.line")!
     ]
-    let imageDataSize = images.first!.pngData()?.count ?? 0
+    let imageDataSize = images.compactMap { $0.pngData()?.count }.min() ?? 0 // 가장 작은 이미지 용량
     let ids = (0..<5).map { _ in UUID() }
     
     // when
-    sut.byteLimit = imageDataSize * 3
+    sut.byteLimit = imageDataSize * 3 // 대략 이미지 3개 정도의 사이즈만큼 용량 제한을 줌
     zip(images, ids).forEach { image, id in
       sut.store(image, for: id)
     }
