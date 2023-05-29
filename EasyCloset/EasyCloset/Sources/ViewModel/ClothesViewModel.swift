@@ -17,6 +17,7 @@ final class ClothesViewModel {
   
   let searchFilters = CurrentValueSubject<FilterItems, Never>([.sort(.new)])
   let clothesListDidUpdate = PassthroughSubject<Void, Never>()
+  let clothesListDidEndUpdate = PassthroughSubject<Void, Never>()
   
   private var cancellables = Set<AnyCancellable>()
   
@@ -54,6 +55,7 @@ final class ClothesViewModel {
         }
       } receiveValue: { [weak self] clothesList in
         self?.clothesList = clothesList
+        self?.clothesListDidEndUpdate.send()
       }
       .store(in: &cancellables)
   }

@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 import Then
 
+import Combine
+
 final class ClothesController: UIViewController {
   
   // MARK: - Constants
@@ -21,6 +23,7 @@ final class ClothesController: UIViewController {
   // MARK: - Properties
   
   private let viewModel: ClothesViewModel
+  private var cancellables = Set<AnyCancellable>()
   
   // MARK: - UI Components
   
@@ -31,6 +34,10 @@ final class ClothesController: UIViewController {
   private lazy var collectionViewLayout = UICollectionViewFlowLayout().then {
     $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0)
     $0.itemSize = CGSize(width: view.frame.width, height: Metric.collectionViewRowHeight)
+  }
+  
+  private lazy var refreshControl = UIRefreshControl().then {
+    $0.addTarget(self, action: #selector(didTriggerRefresh), for: .valueChanged)
   }
   
   private lazy var filterButton = UIButton().then {
@@ -58,13 +65,28 @@ final class ClothesController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setup()
+    bind()
   }
   
   // MARK: - Private Methods
   
+  private func bind() {
+    viewModel.clothesListDidEndUpdate
+      .sink { [weak refreshControl] in
+        if refreshControl?.isRefreshing == true {
+          refreshControl?.endRefreshing()
+        }
+      }
+      .store(in: &cancellables)
+  }
+  
   @objc private func tappedFilterButton() {
     let filterController = ClothesFilterController(viewModel: viewModel)
     present(filterController, animated: true)
+  }
+  
+  @objc func didTriggerRefresh() {
+    viewModel.clothesListDidUpdate.send()
   }
 }
 
@@ -97,6 +119,7 @@ extension ClothesController {
     containerCollectionView.delegate = self
     containerCollectionView.registerCell(cellClass: ClothesCarouselCell.self)
     containerCollectionView.registerHeaderView(viewClass: ClothesCategoryHeaderView.self)
+    containerCollectionView.refreshControl = refreshControl
   }
   
   private func setupFilterButton() {
