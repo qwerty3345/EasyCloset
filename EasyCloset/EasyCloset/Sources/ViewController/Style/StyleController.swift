@@ -149,10 +149,13 @@ extension StyleController: UICollectionViewDelegateFlowLayout {
 extension StyleController {
   override func collectionView(_ collectionView: UICollectionView,
                                didSelectItemAt indexPath: IndexPath) {
-    guard let style = dataSource.itemIdentifier(for: indexPath) else { return }
-    let detailController = DIContainer.shared.makeStyleDetailController(type: .showDetail(style: style))
-    detailController.delegate = self
-    navigationController?.pushViewController(detailController, animated: true)
+    moveToSelectedItem(at: indexPath)
+  }
+  
+  override func collectionView(_ collectionView: UICollectionView,
+                               contextMenuConfigurationForItemAt indexPath: IndexPath,
+                               point: CGPoint) -> UIContextMenuConfiguration? {
+    return configureMenuConfiguration(of: indexPath)
   }
 }
 
@@ -161,6 +164,28 @@ extension StyleController {
 extension StyleController: StyleDetailControllerDelegate {
   func styleDetailController(didUpdateOrSave viewController: StyleDetailController) {
     viewModel.stylesDidUpdate.send()
+  }
+}
+
+// MARK: - MenuConfigurable
+
+extension StyleController: MenuConfigurable {
+  
+  func moveToSelectedItem(at indexPath: IndexPath) {
+    guard let style = dataSource.itemIdentifier(for: indexPath) else { return }
+    
+    let detailController = DIContainer.shared.makeStyleDetailController(type: .showDetail(style: style))
+    detailController.delegate = self
+    navigationController?.pushViewController(detailController, animated: true)
+  }
+  
+  func deleteSelectedItem(of indexPath: IndexPath) {
+    guard let style = dataSource.itemIdentifier(for: indexPath) else { return }
+    
+    showAskAlert(title: "정말 삭제하시겠습니까?") { [weak self] isDelete in
+      guard isDelete else { return }
+      self?.viewModel.deleteStyle.send(style)
+    }
   }
 }
 

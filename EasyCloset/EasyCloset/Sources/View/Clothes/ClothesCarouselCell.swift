@@ -161,7 +161,10 @@ extension ClothesCarouselCell: UICollectionViewDelegate {
   }
 }
 
+// MARK: - MenuConfigurable
+
 extension ClothesCarouselCell: MenuConfigurable {
+  
   func moveToSelectedItem(at indexPath: IndexPath) {
     guard let item = dataSource.itemIdentifier(for: indexPath),
           let category = category else { return }
