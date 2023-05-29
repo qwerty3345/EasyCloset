@@ -40,6 +40,7 @@ extension ImageFetchableRepository {
         .replaceError(with: UIImage())
         .map { image in
           var model = imagableModel
+          imageCacheManager.store(image, for: model.id) // 메모리 캐시에 저장
           model.image = image
           return model
         }
