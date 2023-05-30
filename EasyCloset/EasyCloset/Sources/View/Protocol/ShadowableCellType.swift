@@ -15,8 +15,7 @@ extension UITableViewCell: ShadowableCellType {}
 
 extension ShadowableCellType {
   func addShadowToCell(withCornerRadius radius: CGFloat = 10, to loation: ShadowLocation) {
-    contentView.layer.masksToBounds = true
-    contentView.layer.cornerRadius = radius
+    contentView.clipsToBounds = true
     
     layer.cornerRadius = radius
     addShadow(to: loation)
