@@ -13,7 +13,7 @@ final class ClothesViewModel {
   
   // MARK: - Properties
   
-  @Published private var clothesList = ClothesList(clothesByCategory: [:])
+  @Published private(set) var clothesList = ClothesList(clothesByCategory: [:])
   
   let searchFilters = CurrentValueSubject<FilterItems, Never>([.sort(.new)])
   let deleteClothes = PassthroughSubject<Clothes, Never>()
