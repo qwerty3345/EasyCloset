@@ -457,8 +457,31 @@ fileprivate class NSCacheKey: NSObject {
 
 - 참조 타입 키값을 wrapping 하는 방식으로 NSCacheKey 로 저장하는 것을 알 수 있었음.
 
+	
+4. countLimit, totalCostLimit
+- countLimit으로 저장 갯수의 제한을 줄 수 있고,totalCostLimit으로 저장의 비용의 가중치를 부여해 특정 비용만큼 저장될 수 있게 할 수 있음.
+주의해야 할 점은, 해당 수치들로 줄 수 있는 제약은 imprecise/not strict 정확하지 않을 수 있다라고 되어 있었고,
+또한 저장 시 cost를 지정 해 주지 않으면 totalCostLimit를 지정했더라도 기본 cost는 0이기 때문에 적용되지 않는 문제가 있을 수 있음.
 
-4. 캐싱이 지워지는 것에 대한 체크
+```swift 
+open class NSCache<KeyType : AnyObject, ObjectType : AnyObject> : NSObject {
+
+  private var _totalCost = 0
+
+  open var totalCostLimit: Int = 0 // limits are imprecise/not strict
+  open var countLimit: Int = 0 // limits are imprecise/not strict
+
+  
+  open func setObject(_ obj: ObjectType, forKey key: KeyType) {
+    setObject(obj, forKey: key, cost: 0)
+  }
+  
+  open func setObject(_ obj: ObjectType, forKey key: KeyType, cost g: Int) {
+    let g = max(g, 0)
+    let keyRef = NSCacheKey(key)
+```
+
+5. 캐싱이 지워지는 것에 대한 체크
 > 갯수 제한, 용량 제한을 구현한 `ImageCacheManager` 에 해당 방식으로 캐싱이 삭제되는 것을 확인할 수 있었음.
 
 ```swift
