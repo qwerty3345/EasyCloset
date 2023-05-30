@@ -98,7 +98,7 @@
 > 의존성 관리 도구: `Swift Package Manager`
 > 
 
-| 이름 | 목적 |
+| 이름 | 용도 |
 | --- | --- |
 | Snapkit | Auto Layout |
 | Then | Syntax Sugar |
@@ -174,24 +174,37 @@ let label2 = UILabel().then {
 
 > 삭제 기능 (메뉴) - 옷과 스타일을 각각 꾹 눌러서 삭제할 수 있습니다.
 
-![삭제_기능](https://github.com/qwerty3345/ios-closet-app/assets/59835351/d12484ac-063a-4f70-ac06-e8668ba1aa67)
+![삭제_기능](https://github.com/qwerty3345/ios-closet-app/assets/59835351/d12484ac-063a-4f70-ac06-e8668ba1aa67)
 
 </details>
 
 
-# 🔥 트러블 슈팅
+# 🔥 트러블 슈팅 / 기술적 도전
 
 ## 🎠 Carousel 뷰 구현
 
 <details>
-<summary>UICollectionViewFlowLayout 커스텀</summary>
+<summary>CollectionView 가로 스크롤을 할 때 사이즈가 동적으로 움직이게 구현</summary>
+
+### 배경
     
+> 이런 형태의 Carousel View를 구현해야 했음
+> ![image](https://github.com/qwerty3345/ios-closet-app/assets/59835351/4c468ca4-a24c-4a5c-b6d9-8444dabf5f90)
+
 - 초기엔 컬렉션뷰의 컴포지셔널 레이아웃으로 구성하였으나, 특정 셀의 크기를 키우며 자연스럽게 애니메이션을 주는 커스텀을 하기가 쉽지 않았음.
-- 결국은 FlowLayout을 커스텀해서 사용하기로 결정. Library 를 해체해보면서 필요한 부분만 뽑아서 따로 CarouselFlowLayout이라는 Custom Class 를 만듬
+    - orthogonal 방식으로 툭툭 다음으로 넘어가게 구현하는 것은 쉬웠지만, 사용자의 스크롤에 따라 사이즈를 자연스럽게 키우고 줄이는 형태의 구현이 쉽지 않았음. 
+    > CompositionalLayout에서 `contentOffset`와, 사이즈를 조절할 중앙에 있는 `cell`을 정확히 가져오는 것을 실패함. 
+    
+### 1차 구현
+- FlowLayout을 커스텀해서 사용하기로 결정. Library 를 해체해보면서 필요한 부분만 뽑아서 따로 CarouselFlowLayout이라는 Custom Class 를 만듬
     - [UPCarouselFlowLayout](https://github.com/zepojo/UPCarouselFlowLayout) 을 참고
 - 전체의 틀을 보면 각 상의/하의/… 의 섹션의 가로 스크롤 형태가 반복 되기에 컬렉션뷰의 셀로 구성하고
 해당 셀 내부에 가로로 Carousel 레이아웃의 컬렉션뷰가 들어가 있는 중첩 컬렉션뷰의 형태
 ![EasyCloset 관련 001](https://github.com/qwerty3345/ios-closet-app/assets/59835351/3f650c9a-3218-4388-981d-9ee426fcaaec)
+
+<details>
+<summary>CaroselFlowLayout 코드</summary>
+    
 ```swift
 final class CarouselFlowLayout: UICollectionViewFlowLayout {
   
@@ -288,7 +301,55 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
     return targetContentOffset
   }
 }
-```                                                        
+```       
+
+</details>
+                                                                      
+### 2차 문제 상황
+- 기존의 FlowLayout을 커스텀한 버전도 동작은 잘 되었지만, 중첩 컬렉션뷰의 특성 상 코드의 흐름이 알기 어려워지고 컬렉션뷰 -> 셀 -> 컬렉션뷰 -> 셀 의 형태였기 때문에 데이터의 흐름도 깊어지는 단점이 발생했음
+- 이전에는 Compositional Layout 으로 구현하려다 실패한 Carousel 구현을 다시 한 번 시도 해 보기로 결정
+  > 포기 지점: Compositional Layout 으로는 중첩 형태를 구현해서 contentOffset을 출력해도 x축의 좌표를 알아낼 수 없었음. 
+- Compositional Layout은 비교적 최근에 공개된 API이기 때문에 Reference를 찾기 어려웠음.
+- 그러다 `visibleItemsInvalidationHandler` 를 알게 되어서 다시 한 번 도전함
+    > 공식문서: A closure called before each layout cycle to allow modification of the items in the section immediately before they’re displayed.
+    > 항목이 표시되기 직전에 섹션의 항목을 수정할 수 있도록 각 레이아웃 주기 전에 호출되는 클로저입니다.
+    > https://developer.apple.com/documentation/uikit/nscollectionlayoutsection/3199096-visibleitemsinvalidationhandler
+
+## 최종 구현 - CompositionalLayout에 적용
+- 아래와 같이 `visibleItemsInvalidationHandler` 에 적용함으로서 offset를 가져올 수 있었고, 
+- 현재 표시되고 있는 visibleItems의 정보를 가져옴으로서 셀 아이템들의 중심부로부터의 거리를 계산 해 tranform을 적용할 수 있었음.
+- 덕분에 중첩 컬렉션뷰를 사용하지 않을 수 있어 Carousel의 행에 해당했던 CarouselCell를 삭제할 수 있었고, 뷰간 데이터의 흐름이 명확해지는 장점이 발생.
+
+![EasyCloset 관련 003](https://github.com/qwerty3345/ios-closet-app/assets/59835351/88ccc209-dacf-4b00-94d9-6ffcf3e38998)
+    
+```swift 
+ /// Carousel 을 적용하기 위해 셀 아이템에 중심부 부터의 거리를 계산 해 transform 을 적용
+private func setupCollectionViewCarousel(to section: NSCollectionLayoutSection) {
+  section.visibleItemsInvalidationHandler = { visibleItems, offset, environment in
+    
+    // 헤더가 아닌 셀 아이템들
+    let cellItems = visibleItems.filter {
+      $0.representedElementKind != UICollectionView.elementKindSectionHeader
+    }
+    let containerWidth = environment.container.contentSize.width
+    
+    cellItems.forEach { item in
+      let itemCenterRelativeToOffset = item.frame.midX - offset.x
+      
+      // 셀이 컬렉션 뷰의 중앙에서 얼마나 떨어져 있는지
+      let distanceFromCenter = abs(itemCenterRelativeToOffset - containerWidth / 2.0)
+      
+      // 셀이 커지고 작아질 때의 최대 스케일, 최소 스케일
+      let minScale: CGFloat = 0.7
+      let maxScale: CGFloat = 1.0
+      let scale = max(maxScale - (distanceFromCenter / containerWidth), minScale)
+      
+      item.transform = CGAffineTransform(scaleX: scale, y: scale)
+    }
+  }
+}
+```
+
 </details>
     
 
@@ -296,16 +357,20 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
 
 <details>
 <summary>masksToBound 관련 이슈 해결, POP 확장</summary>
-    
+
+### 배경
+
 - `layer`의 masksToBound 를 true 로 줌으로서 바운드를 기준으로 잘라서 cornerRadius를 구현할 수 있었음.
-- 근데, 그림자를 주려면 `layer` 바깥에 잘리지 않아야 하기에 masksToBound 를 false 로 줘야 하는 충돌이 일어나는 현상…
-- 해결법: `contentView` 를 활용한다!
-    - 만약 셀이 아니라, contentView가 없다면 내부에 containerView를 만들어 처리할 수도 있었을 듯 :)
-1. 일단 먼저 실수로 그냥 addSubView로 추가했던 UI 컴포넌트 들을 contentView에 addSubview하는 것으로 수정
+- 근데, 그림자를 주려면 `layer` 바깥에 잘리지 않아야 하기에 masksToBound 를 false 로 줘야 하는 충돌이 일어나는 현상이 발생
+    
+### 해결
+- `contentView` 를 활용하여 masksToBound를 따로 줌
+    > 만약 셀이 아니라, contentView가 없다면 내부에 containerView를 만들어 처리할 수도 있음
+1. 먼저 self에 addSubView로 추가했던 UI 컴포넌트 들을 contentView에 addSubview하는 것으로 수정
 2. contentView에는 layer에 masksToBound = true 로 주고 cornerRadius를 설정하고
 3. 그냥 cell의 layer에는 masksToBound = false 를 주며 그림자 관련 속성을 설정한다. 
-> 참고 한 아티클
-[Adding rounded corner and drop shadow to UICollectionViewCell](https://stackoverflow.com/questions/13505379/adding-rounded-corner-and-drop-shadow-to-uicollectionviewcell)
+    > 참고 한 아티클
+    [Adding rounded corner and drop shadow to UICollectionViewCell](https://stackoverflow.com/questions/13505379/adding-rounded-corner-and-drop-shadow-to-uicollectionviewcell)
 
 - 이에 이렇게 CollectionViewCell의 extension으로 그림자를 주는 메서드를 작성함
 ```swift
@@ -328,6 +393,8 @@ extension UICollectionViewCell {
 }
 ```
 
+### 추가 구현
+    
 - 하지만 위의 코드는 마음에 들지 않았다. TableView 에도 동일한 현상이 발생할 것 같은데, 그럼 따로 extension func을 처리해줘야 할 것 같았기에.
 - 그래서 POP 로 구현해서 확장함!
 
@@ -429,17 +496,15 @@ extension ShadowableCellType {
 
 <details>
 <summary>NSCache를 통한 메모리 캐시 구현 / 저장 갯수, 용량 제한</summary>
-    
-### 이미지 로딩 프로세스
 
-1. id값을 바탕으로 메모리 Cahche 에서 이미지를 가져오려고 시도
-    - 있으면 → return
-2. 없으면 FileManager 에서 download 하고 return
-    - 동시에 메모리 Cache에 저장
-
-### 초기 구현 Image Caching
-
-> 해당 방식에서 생각한 문제점: NSCache가 내부적으로 처리를 해주겠지만, 혹시나 캐싱으로 저장되는 이미지가 너무 크거나 저장되는 이미지의 갯수가 너무 많다면?
+### 배경
+- 이미지 로딩 프로세스는 아래와 같음
+    1. id값을 바탕으로 메모리 Cahche 에서 이미지를 가져오려고 시도
+        - 있으면 → return
+    2. 없으면 FileManager 에서 download 하고 return
+        - 동시에 메모리 Cache에 저장
+- 초기에 아래 코드처럼 단순히 Image Caching 매니저를 구현하였으나, 문제점이 떠오름
+- NSCache가 내부적으로 처리를 해주겠지만, 혹시나 캐싱으로 저장되는 이미지가 너무 크거나 저장되는 이미지의 갯수가 너무 많다면?
 - NSCache가 알아서 삭제해주는 정책이 있다고는 하지만 메모리를 불필요하게 사용하는 상황이 발생하지 않을까?
 - 아주 큰 용량의 이미지로 테스트 해본 결과, 앱이 허용하는 메모리 까지는 거의 끝없이 저장함.
     
@@ -468,22 +533,20 @@ final class ImageCacheManager {
 }
 ```
 
-> 아래와 같은 NSCache에 대한 학습을 하며 리팩터링 하기로 결정함
-    
-### Thread Safe 할까?
+> NSCache에 대해 좀 더 깊이 학습하며 리팩터링 하기로 결정함
 
-> 출처: 공식문서
-> 
+### 문제 해결을 위한 NSCache에 대한 학습
+1. Thread Safe 할까? 
 - Thread Safe 하다!
-
-You can add, remove, and query items in the cache from different threads without having to lock the cache yourself.
+> 출처: 공식문서
+> You can add, remove, and query items in the cache from different threads without having to lock the cache yourself.
 
     
-### 그러다 문득… NSCache 의 내부가 궁금해졌다
-
+2. NSCache 의 내부는 어떻게 생겼을까?
+- 공식 문서의 내용 만으로는 이해에 한계가 있어 Swift Foundation 의 NSCache 코드를 뜯어봄
 > 출처: https://github.com/apple/swift-corelibs-foundation/blob/main/Sources/Foundation/NSCache.swift
 > 
-
+- 내부적으로 NSLock을 사용해서 lock, unlock 을 해주기 때문에 thread safe 했던 것
 ```swift
 open class NSCache<KeyType : AnyObject, ObjectType : AnyObject> : NSObject {
     private var _entries = Dictionary<NSCacheKey, NSCacheEntry<KeyType, ObjectType>>()
@@ -491,15 +554,7 @@ open class NSCache<KeyType : AnyObject, ObjectType : AnyObject> : NSObject {
     private var _totalCost = 0
     private var _head: NSCacheEntry<KeyType, ObjectType>?
 ```
-
-! 내부적으로 NSLock을 사용해서 lock, unlock 을 해주기 때문에 thread safe 했던 것
-
-또한 딕셔너리를 사용하지만, 내부의 `_entries` 의 value 인 `NSCacheEntry` 를 살펴보면 prev, next 를 가지는 `linkedList` 형태로 이루어져 있음!
-
-→ countLimit 를 줬을 때, FIFO (선입선출) 로 데이터를 관리하기 위해서 구현해놓은 것을 알 수 있었음!
-
-> 하지만 보장하지는 않는다고 함.
-> 
+- 또한 딕셔너리를 사용하지만, 내부의 `_entries` 의 value 인 `NSCacheEntry` 를 살펴보면 prev, next 를 가지는 `linkedList` 형태로 이루어져 있음! 
 
 ```swift
 private class NSCacheEntry<KeyType : AnyObject, ObjectType : AnyObject> {
@@ -516,40 +571,10 @@ private class NSCacheEntry<KeyType : AnyObject, ObjectType : AnyObject> {
 }
 ```
 
-### totalCostLimit
-
-```swift
-var purgeAmount = (totalCostLimit > 0) ? (_totalCost - totalCostLimit) : 0
-  while purgeAmount > 0 {
-    if let entry = _head {
-      delegate?.cache(unsafeDowncast(self, to:NSCache<AnyObject, AnyObject>.self), willEvictObject: entry.value)
-                
-      _totalCost -= entry.cost
-      purgeAmount -= entry.cost
-                
-      remove(entry) // _head will be changed to next entry in remove(_:)
-      _entries[NSCacheKey(entry.key)] = nil
-    } else {
-      break
-    }
-  }
-```
-
-### 캐싱이 지워지는 것에 대한 체크
-> 갯수 제한, 용량 제한을 구현한 `ImageCacheManager` 에 해당 방식으로 캐싱이 삭제되는 것을 확인할 수 있었음.
-
-```swift
-extension ImageCacheManager: NSCacheDelegate {
-  func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any) {
-    print("\(obj as? UIImage) 정보가 캐시에서 지워진다.")
-  }
-}
-```
-
-### NSCache가 딕셔너리와 다르게 키 값을 복사하지 않는다는 말에 대해?
-
+3. NSCache가 딕셔너리와 다르게 키 값을 복사하지 않는다는 말에 대해?
 - 이 부분도 의문이 들었지만, 내부 코드를 뜯어보니 조금은 이해되었음.
 - 복사하지 않고 참조한다 = 참조 타입만 사용할 수 있다 = AnyObject로 구현해야 한다
+- 그래서 key로 struct 타입인 String, Int 등은 사용하지 못하기에 브릿징을 통해 NSString 등으로 키값을 지정해줘야 했던 것.
 
 ```swift
 open class NSCache<KeyType : **AnyObject**, ObjectType : AnyObject> : NSObject {
@@ -557,8 +582,8 @@ open class NSCache<KeyType : **AnyObject**, ObjectType : AnyObject> : NSObject {
 
 ```swift
 open func setObject(_ obj: ObjectType, forKey key: KeyType, cost g: Int) {
-    let g = max(g, 0)
-    let **keyRef = NSCacheKey(key)**
+    let g = max(g, 0) // costLimit을 지정하지 않으면 기본은 0임.
+    let keyRef = NSCacheKey(key)
 ```
 
 ```swift
@@ -572,6 +597,18 @@ fileprivate class NSCacheKey: NSObject {
 
 - 참조 타입 키값을 wrapping 하는 방식으로 NSCacheKey 로 저장하는 것을 알 수 있었음.
 
+
+4. 캐싱이 지워지는 것에 대한 체크
+> 갯수 제한, 용량 제한을 구현한 `ImageCacheManager` 에 해당 방식으로 캐싱이 삭제되는 것을 확인할 수 있었음.
+
+```swift
+extension ImageCacheManager: NSCacheDelegate {
+  func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any) {
+    print("\(obj as? UIImage) 정보가 캐시에서 지워진다.")
+  }
+}
+```
+
 ### 결국 내린 결론,
 
 갯수에 대한 제한은 줄 수 있음. 
@@ -584,10 +621,10 @@ open var totalCostLimit: Int = 0 // limits are imprecise/not strict
 
 주석에 달려있듯이 정확하진 않다고 하긴 하지만, 사용해볼 수 있을 것 같다!
 
-### 최종 리팩터링한 ImageCacheManager
-
+### 최종 구현
+- 최종 리팩터링한 ImageCacheManager
 - countLimit, totalCostLimit를 통해 캐싱 갯수 제한과 저장 용량 제한을 주었음
-    
+
 ```swift
 final class ImageCacheManager {
   
@@ -612,7 +649,7 @@ final class ImageCacheManager {
   
   private let cache = NSCache<NSString, UIImage>()
   
-  // 총 100개 까지만 FIFO로 캐싱함
+  // 총 100개 까지만 캐싱함
   var countLimit = 100 {
     didSet { cache.countLimit = countLimit }
   }
@@ -662,14 +699,16 @@ final class ImageCacheManager {
 <details>
 <summary>FileManager의 Combine을 통한 비동기 처리, </summary>
 
-### 초기 구현 방식
-- FileManger 를 통해 이미지를 가져올 때 파일 입출력을 main Thread 에서 그냥 돌리고 있어서 이미지가 크거나, 여러 요청이 동시 다발적으로 들어오게 되면 경우에는 문제가 발생할 수 있을 것이라 판단
+### 배경
+- 사용자가 추가한 옷의 이미지를 로컬에 파일로 저장하기 위해 FileManager를 사용
+- 아래와 같이 처음에 구현한 FileManger 코드에서는 이미지를 가져올 때 파일 입출력을 main Thread 에서 그냥 돌리고 있었음
+- 이미지가 크거나, 여러 요청이 동시 다발적으로 들어오게 되면 경우에는 문제가 발생할 수 있을 것이라 판단
 
-```swift
+```swift!
 func save(image: UIImage, id: UUID) throws {
-	guard let data = image.pngData(),
+  guard let data = image.pngData(),
         let filePath = filePath(of: id) else { return }
-	try data.write(to: filePath)
+  try data.write(to: filePath)
 }
 
 func load(withID id: UUID) -> UIImage? {
@@ -681,23 +720,13 @@ func load(withID id: UUID) -> UIImage? {
     return nil
   }
 }
-
-@discardableResult
-func remove(withID id: UUID) -> Bool {
-  guard let filePath = filePath(of: id) else { return false }
-
-  do {
-    try FileManager.default.removeItem(at: filePath)
-    return true
-  } catch {
-    return false
-	}
-}
+...
 ```
 
-### Completion Handler 방식으로 변경
+### 1차 리팩터링 - Completion Handler 방식으로 변경
 
-그래서 이렇게 DispatchQueue의 global() 큐를 통해 백그라운드 스레드에서 돌리고, 결과값을 completion Handler 에서 처리하게끔 변경함
+- DispatchQueue의 global() 큐를 통해 백그라운드 스레드에서 돌리고, 결과값을 completion Handler 에서 처리하게끔 변경함
+- write 작업은 `qos: .utility` 로 지시하고, read 작업은 기본 qos로 지시함
 
 ```swift
 func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)? = nil) {
@@ -730,24 +759,11 @@ func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)? =
       }
     }
   }
-
-  func remove(withID id: UUID, completion: ((FileManagerError?) -> Void)? = nil) {
-    guard let filePath = filePath(of: id) else {
-      completion?(.invalidFilePath)
-      return
-    }
-
-    DispatchQueue.global(qos: .utility).async {
-      do {
-        try FileManager.default.removeItem(at: filePath)
-        completion?(nil)
-      } catch {
-        completion?(.failToWrite(error: error))
-      }
-    }
+...
 ```
 
-- 그러나 이렇게 활용한다면… fetchClothesList 를 하는 곳에서도 복잡하게 비동기 처리를 해주고, 로딩이 다 완료되었을 때 completion 처리를 하기 위해서 아래같이 복잡하게 로직을 작성해야 했음.
+### 2차 문제 발생
+- 그러나 이렇게 활용한다면… 데이터 배열을 받아와서 각각의 데이터에 이미지를 매핑해주고, 여러 이미지의 로딩이 다 완료되었을 때의 시점에 대해 completion 처리를 하기 위해서 아래와 같이 복잡하게 로직을 작성해야 했음.
     > DispatchGroup을 이용해서, 모든 비동기 작업이 완료되었을 때 completion을 호출하도록 처리.
 - 이렇게 했을 때는 기존의 ViewModel 에서 사용자 입력 이벤트에 대해 Combine으로 바인딩 한 부분과도 잘 맞지 않고, 코드가 직관적이지 않아지는 단점이 발생함.
     > Combine으로 리팩터링 해보기로 결정
@@ -759,7 +775,8 @@ func fetchClothesList(completion: @escaping (ClothesList?) -> Void) {
       completion(nil)
       return
     }
-
+ 
+    // Realm 에서 먼저 데이터를 가져오고,
     let clothesEntities = realm.objects(ClothesEntity.self)
     var clothesList = ClothesList(clothesByCategory: [:])
 
@@ -771,6 +788,7 @@ func fetchClothesList(completion: @escaping (ClothesList?) -> Void) {
 
       dispatchGroup.enter()
 
+      // 각각의 옷 모델에 image를 매핑해준다.
       ImageFileStorage.shared.load(withID: model.id) { image in
         if let image = image {
           model.image = image
@@ -783,18 +801,18 @@ func fetchClothesList(completion: @escaping (ClothesList?) -> Void) {
       }
     }
 
+    // 모든 이미지의 로딩이 완료된 시점을 dispatchGroup으로 notify 함.
     dispatchGroup.notify(queue: .main) {
       completion(clothesList)
     }
   }
 ```
 
-### ImageFileManager Combine 으로 리팩터링
+### 2차 리팩터링 - Combine 으로 리팩터링
 
+1. 이미지를 로컬 파일에서 가져오는 로직을 Combine으로 구현
 > Future를 사용한 이유: 한 번 값을 내밷고 바로 종료되는 것이 적합한 동작이라 판단했기 때문에.
-> 
 > 공식문서: `A publisher that eventually produces a single value and then finishes or fails.`
-> 
 
 ```swift 
 // ImageFileManager 의 이미지를 로딩하는 부분을 Combine으로 리팩터링
@@ -821,10 +839,10 @@ return Future { promise in
 }
 ```
 
-### Storage Combine 으로 리팩터링
-    
-- ClothesStorage 또한 realm 에서 먼저 entity 를 로딩하여 model 로 매핑 한 후, ImageFileManager에서 이미지를 로딩하여 넣어주고 반환하는데
-- 해당 로직을 Combine으로 리팩터링 함
+2. Storage에서 모델을 가져오고 이미지를 매핑하는 로직 Combine으로 리팩터링
+- `realm` 에서 먼저 entity 를 로딩하여 model 로 매핑 한 후, 
+    `ImageFileManager`에서 이미지를 로딩하여 넣어주고 반환하는 
+    `ClothesStorage`의 로직을 Combine으로 리팩터링
 
 ```swift
 // ClothesStorage에서 리스트를 받아오는 부분
@@ -869,10 +887,8 @@ func fetchClothesList() -> AnyPublisher<ClothesList, StorageError> {
 }
 ```
 
-### 메서드 분리
-
+3. 메서드 분리
 > ClothesStorage 내부의 combine 결합 로직이 커져서 메서드로 분리함
-> 
 
 ```swift
 func fetchClothesList() -> AnyPublisher<ClothesList, StorageError> {
@@ -925,20 +941,19 @@ private func addingImagePublishers(to clothesModels: [Clothes]) -> AnyPublisher<
 <details>
 <summary>이미지를 가져와서 모델 객체에 매핑하는 역할을 POP로 구현</summary>
 
-- 각 Storage들을 갖고 데이터를 처리하는 Repository 형태로 구현함.
-> ClothesRepository를 구현한 후, StyleRepository 를 구현하던 중…
-> 
-- Style 들을 가져올 때 각 스타일 내부에 있는 Clothes 객체에 이미지를 로딩해서 매핑해줘야 하는 작업이 똑같이 필요했음
-    > ClothesRepository에서 가져오면 되는 것 아닌가?
-    - 조금 비효율적인 면이 존재할 수 있지만, 각각의 Repository가 별개로 동작하는 것이 더 적절하겠다고 생각했기에 별도로 구현하였고 필연적으로 중복 코드가 발생함.
+### 배경
+- Repository는 Realm, FileManager의 각 Storage들을 갖고 데이터를 처리함 
+    현재 프로젝트에는 `ClothesRepository`, `StyleRepository` 두 Repository가 존재.
+- StyleRepository 를 구현하던 중, Style 들을 가져올 때 각 스타일 내부에 있는 Clothes 객체에 이미지를 로딩해서 매핑해줘야 하는 작업이 똑같이 필요했음
+    > Q. ClothesRepository에서 가져오면 되는 것 아닌가?
+        - A. 조금 비효율적인 면이 존재할 수 있지만, 사용되는 Scene이 전혀 다르기 때문에 각각의 Repository가 별개로 동작하는 것이 더 적절하겠다고 생각했기에 별도로 구현하였고 필연적으로 중복 코드가 발생함.
 - 공통되는 부분: **“이미지를 가져와서 로딩하는 부분”**
     - `ImageCacheManager`, `ImageFileStorage` 프로퍼티와 이미지를 Clothes 객체에 매핑해주는 부분을 프로토콜로 추상화하여 POP로 구현하기로 결정
 
 ### ImageFetchable POP 구현
 
 - 아래처럼 이미지를 매핑 해 주는 부분을 protocol extension 으로 구현함.
-    - 근데 이런 방식은 오직 Clothes 에만 이미지를 매핑할 수 있으므로,
-이미지를 매핑 받을 수 있는 protocol 타입을 정의하여 제네릭으로 차후 다른 모델 객체들도 이미지를 매핑할 수 있게 만들어주고 싶었음
+    - 하지만 이런 방식은 오직 Clothes 에만 이미지를 매핑할 수 있으므로, 이미지를 매핑 받을 수 있는 protocol 타입을 정의하여 제네릭으로 차후 다른 모델 객체들도 이미지를 매핑할 수 있게 만들어주고 싶었음
     - → 이미지를 불러올 때 필요한 정보는 id값과 image 프로퍼티 두 가지만 필요하기에 해당 부분을 protocol 로 분리하여 여러 모델타입에 이미지를 매핑할 수 있게 구현하기로 결정
 
 ```swift
@@ -977,7 +992,7 @@ extension ImageFetchable {
 }
 ```
 
-### 여러 타입에 이미지를 매핑할 수 있게 구현
+### 최종 구현 - 여러 타입에 이미지를 매핑할 수 있게 구현
 
 - 이미지를 매핑하는데 필요한 프로퍼티인 id, image만 분리하여 ImagableModel 이라는 프로토콜로 추상화함
 
@@ -1046,8 +1061,6 @@ extension ImageFetchableRepository {
 }
 ```
 
-### 최종 사용
-
 - Repository에서는 해당 ImageFetchable을 채택하고, 데이터를 받아온 후 `addingImages`를 호출 해주면 됨
 
 ```swift
@@ -1066,17 +1079,16 @@ final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchableReposito
     
 <details>
 <summary>ViewModel 유닛 테스트, CacheManager 유닛 테스트</summary>
+    
+### 배경
 - 사용자의 액션의 로직을 담고 있는 ViewModel 의 unit-test 를 구현하고자 했음
 
 ### 유닛테스트를 위한 Mock Repository 구현
 
 - ViewModel은 Repository에 의존하고 있으므로, 실제 Repository가 아닌 가상의 시나리오로 동작하는 Mock Repository를 구현하여 ViewModel을 테스트
     - Repository가 의존하고 있는 Storage 를 Mock으로 구현하여 Repository를 테스트 할 수도 있겠지만, 시간상 관계로 당장 급한 ViewModel부터 구현하기로 결정
-    
     > 드디어 protocol 추상화, 의존성 주입이 빛을 발할 때가 되었다..!😲🥂
-    > 
-- 단순히 기존에 만들어놓은 Mock 객체들을 return 해주도록 구현함
-    
+- 기존에 만들어놓은 Mock 객체들을 return 해주도록 구현함
     > 일단은 Repository가 성공의 시나리오만 발생시키도록 구현
     실패 시나리오가 필요할 시, 각 응답을 property 로 만들어 테스트 직전 원하는 결과를 주입시켜줄 수 있을 것 같았음
     > 
@@ -1121,9 +1133,7 @@ final class ClothesViewModelTests: XCTestCase {
 ```
 
 - clothes가 특정 카테고리의 clothes만 내보내는지 테스트
-    
     > given, when, then 패턴을 사용
-    > 
 
 ```swift
 func test_clothes가_특정_카테고리의_clothes만_내보내는지_테스트() {
@@ -1205,17 +1215,14 @@ func test_계절_filter가_적용되는지_테스트() {
 ```
 
 ### 이미지 캐시매니저 유닛 테스트
-
 - 메모리 캐시인 NSCache 를 활용한 `ImageCacheManager` 를 테스트
 - 싱글턴 형태이긴 했지만, 메모리 캐시이기 때문에 각각의 케이스 후 removeAll 만 호출 해 주면 문제없이 테스트를 진행할 수 있을 것이라 판단
 - 특히, 위에서 명시했던 갯수제한과 용량제한이 적절히 이뤄지는지를 테스트하고 싶었음
-    
-    > 다만, 해당 테스트가 반드시 성공하리라는 보장은 할 수 없었는데, NSCache의 특성상 
-    `countLimit`과 `totalCostLimit`이 제공하는 limit이 imprecise 하다고 명시되어 있었기 때문.
+    > 다만, 해당 테스트가 반드시 성공하리라는 보장은 할 수 없었는데, 
+    NSCache의 특성상 `countLimit`과 `totalCostLimit`이 제공하는 limit이 imprecise 하다고 명시되어 있었기 때문.
     다행히, 어느 정도까지는 예상한 대로 동작하는 것을 확인할 수 있었음
     > 
 - 저장시 갯수제한이 적용되는지 확인
-
 ```swift 
 func test_저장시_갯수제한이_적용되는지_확인() {
   // given
