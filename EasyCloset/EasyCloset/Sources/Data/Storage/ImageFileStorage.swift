@@ -39,105 +39,113 @@ final class ImageFileStorage: ImageFileStorageProtocol {
   
   @discardableResult
   func save(image: UIImage, id: UUID) -> AnyPublisher<Void, FileManagerError> {
-    return Future { [weak self] promise in
-      guard let self = self else { return }
-      
-      guard let data = image.pngData() else {
-        promise(.failure(.invalidData))
-        return
-      }
-      
-      guard let filePath = self.filePath(of: id) else {
-        promise(.failure(.invalidFilePath))
-        return
-      }
-      
-      do {
-        try data.write(to: filePath)
-        promise(.success(()))
-      } catch {
-        promise(.failure(.failToWrite(error: error)))
+    return Deferred {
+      Future { [weak self] promise in
+        guard let self = self else { return }
+        
+        guard let data = image.pngData() else {
+          promise(.failure(.invalidData))
+          return
+        }
+        
+        guard let filePath = self.filePath(of: id) else {
+          promise(.failure(.invalidFilePath))
+          return
+        }
+        
+        do {
+          try data.write(to: filePath)
+          promise(.success(()))
+        } catch {
+          promise(.failure(.failToWrite(error: error)))
+        }
       }
     }
-    .receive(on: DispatchQueue.global(qos: .utility))
+    .subscribe(on: DispatchQueue.global(qos: .utility))
     .eraseToAnyPublisher()
   }
   
   func load(withID id: UUID) -> AnyPublisher<UIImage, FileManagerError> {
-    return Future { promise in
-      guard let filePath = self.filePath(of: id) else {
-        promise(.failure(.invalidFilePath))
-        return
-      }
-      
-      do {
-        let data = try Data(contentsOf: filePath)
-        guard let image = UIImage(data: data) else {
-          promise(.failure(.invalidData))
+    return Deferred {
+      Future { promise in
+        guard let filePath = self.filePath(of: id) else {
+          promise(.failure(.invalidFilePath))
           return
         }
-        promise(.success(image))
-      } catch {
-        promise(.failure(.failToWrite(error: error)))
+        
+        do {
+          let data = try Data(contentsOf: filePath)
+          guard let image = UIImage(data: data) else {
+            promise(.failure(.invalidData))
+            return
+          }
+          promise(.success(image))
+        } catch {
+          promise(.failure(.failToWrite(error: error)))
+        }
       }
     }
-    .receive(on: DispatchQueue.global())
+    .subscribe(on: DispatchQueue.global())
     .eraseToAnyPublisher()
   }
   
   func remove(withID id: UUID) -> AnyPublisher<Void, FileManagerError> {
-    return Future { [weak self] promise in
-      guard let self = self else { return }
-      
-      guard let filePath = filePath(of: id) else {
-        promise(.failure(.invalidFilePath))
-        return
-      }
-      
-      do {
-        try FileManager.default.removeItem(at: filePath)
-        promise(.success(()))
-      } catch {
-        promise(.failure(.failToWrite(error: error)))
+    return Deferred {
+      Future { [weak self] promise in
+        guard let self = self else { return }
+        
+        guard let filePath = filePath(of: id) else {
+          promise(.failure(.invalidFilePath))
+          return
+        }
+        
+        do {
+          try FileManager.default.removeItem(at: filePath)
+          promise(.success(()))
+        } catch {
+          promise(.failure(.failToWrite(error: error)))
+        }
       }
     }
-    .receive(on: DispatchQueue.global(qos: .utility))
+    .subscribe(on: DispatchQueue.global(qos: .utility))
     .eraseToAnyPublisher()
   }
   
   func removeAll() -> AnyPublisher<Void, FileManagerError> {
-    return Future { promise in
-      guard let path = Constants.path,
-            let filePathURLs = try? FileManager.default.contentsOfDirectory(at: path,
-                                                                            includingPropertiesForKeys: nil) else {
-        promise(.failure(.invalidFilePath))
-        return
-      }
-      
-      let imagePathURLs = filePathURLs.filter {
-        $0.pathExtension == Constants.imageExtension
-      }
-      
-      // 중간에 삭제 작업이 실패해도 계속 이어나가기 위해, 발생한 에러들을 배열에 담으며 for문을 돌림
-      var occuredErrors: [Error] = []
-      
-      for imagePathURL in imagePathURLs {
-        do {
-          try FileManager.default.removeItem(at: imagePathURL)
-        } catch {
-          // 여기서 promise(.failure()) 를 호출하면, 뒤의 아이템이 삭제되지 않고 조기종료 될 수 있기에...
-          occuredErrors.append(error)
-        }
-        
-        if let firstError = occuredErrors.first {
-          promise(.failure(.failToWrite(error: firstError)))
+    return Deferred {
+      Future { promise in
+        guard let path = Constants.path,
+              let filePathURLs = try? FileManager.default.contentsOfDirectory(at: path,
+                                                                              includingPropertiesForKeys: nil) else {
+          promise(.failure(.invalidFilePath))
           return
         }
         
-        promise(.success(()))
+        let imagePathURLs = filePathURLs.filter {
+          $0.pathExtension == Constants.imageExtension
+        }
+        
+        // 중간에 삭제 작업이 실패해도 계속 이어나가기 위해, 발생한 에러들을 배열에 담으며 for문을 돌림
+        var occuredErrors: [Error] = []
+        
+        for imagePathURL in imagePathURLs {
+          do {
+            try FileManager.default.removeItem(at: imagePathURL)
+          } catch {
+            // 여기서 promise(.failure()) 를 호출하면, 뒤의 아이템이 삭제되지 않고 조기종료 될 수 있기에...
+            occuredErrors.append(error)
+          }
+          
+          if let firstError = occuredErrors.first {
+            promise(.failure(.failToWrite(error: firstError)))
+            return
+          }
+          
+          promise(.success(()))
+        }
       }
     }
-    .receive(on: DispatchQueue.global(qos: .utility))
+    .subscribe(on: DispatchQueue.global(qos: .utility))
     .eraseToAnyPublisher()
   }
   
