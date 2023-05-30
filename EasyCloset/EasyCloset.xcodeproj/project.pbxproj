@@ -31,8 +31,6 @@
 		B43889A92A14B7E600476BFC /* ClothesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889A82A14B7E600476BFC /* ClothesCell.swift */; };
 		B43889AB2A14B8F300476BFC /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AA2A14B8F300476BFC /* ReusableView.swift */; };
 		B43889AD2A14B92600476BFC /* UICollectionView+RegisterDeque.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */; };
-		B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */; };
-		B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */; };
 		B445316C2A239C81003B8461 /* ImageCacheManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B445316B2A239C81003B8461 /* ImageCacheManagerTests.swift */; };
 		B4470B502A1734780024B2B7 /* ClothesCategoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */; };
 		B4470B522A1740AD0024B2B7 /* Array+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */; };
@@ -129,8 +127,6 @@
 		B43889A82A14B7E600476BFC /* ClothesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCell.swift; sourceTree = "<group>"; };
 		B43889AA2A14B8F300476BFC /* ReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		B43889AC2A14B92600476BFC /* UICollectionView+RegisterDeque.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+RegisterDeque.swift"; sourceTree = "<group>"; };
-		B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselFlowLayout.swift; sourceTree = "<group>"; };
-		B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCarouselCell.swift; sourceTree = "<group>"; };
 		B445316B2A239C81003B8461 /* ImageCacheManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManagerTests.swift; sourceTree = "<group>"; };
 		B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClothesCategoryHeaderView.swift; sourceTree = "<group>"; };
 		B4470B512A1740AD0024B2B7 /* Array+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeIndex.swift"; sourceTree = "<group>"; };
@@ -509,8 +505,6 @@
 			children = (
 				B4D95D4A2A19E164009C8931 /* ClothesDetail */,
 				B4504B6D2A1DEA940018C9BC /* Filter */,
-				B43889AE2A14C56500476BFC /* CarouselFlowLayout.swift */,
-				B43889B22A150BF500476BFC /* ClothesCarouselCell.swift */,
 				B4470B4F2A1734780024B2B7 /* ClothesCategoryHeaderView.swift */,
 				B43889A82A14B7E600476BFC /* ClothesCell.swift */,
 				B4470B572A17461E0024B2B7 /* AddClothesCell.swift */,
@@ -715,7 +709,6 @@
 				B46111432A1F481200104C3A /* ClothesRepository.swift in Sources */,
 				B43889A62A14B22100476BFC /* UIViewController+Preview.swift in Sources */,
 				B4F1F4252A18C1FF00DA6358 /* Highlightable.swift in Sources */,
-				B43889B32A150BF500476BFC /* ClothesCarouselCell.swift in Sources */,
 				B49CAAD52A1B8AD6008254C7 /* UIImage+Collage.swift in Sources */,
 				B4F1F42E2A18D81000DA6358 /* WeatherType.swift in Sources */,
 				B4C4E7CA2A207A03000859DD /* StyleRepository.swift in Sources */,
@@ -733,7 +726,6 @@
 				B4F1F41B2A17A90F00DA6358 /* InfoView.swift in Sources */,
 				B46CB8B62A14739F00039F72 /* AppDelegate.swift in Sources */,
 				B4C4E7D22A2094C7000859DD /* StyleDetailViewModel.swift in Sources */,
-				B43889AF2A14C56500476BFC /* CarouselFlowLayout.swift in Sources */,
 				B4F1F4232A18AD9700DA6358 /* UITabBarController+Transition.swift in Sources */,
 				B4684F0A2A23612C00EAD18F /* UIViewController+Keyboard.swift in Sources */,
 				B4B50C052A25066E002DE5E8 /* MenuConfigurable.swift in Sources */,
