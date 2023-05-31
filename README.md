@@ -189,21 +189,21 @@ let label2 = UILabel().then {
 ### 배경
     
 > 이런 형태의 Carousel View를 구현해야 했음
-> ![image](https://github.com/qwerty3345/ios-closet-app/assets/59835351/4c468ca4-a24c-4a5c-b6d9-8444dabf5f90)
+	
+![image](https://github.com/qwerty3345/ios-closet-app/assets/59835351/4c468ca4-a24c-4a5c-b6d9-8444dabf5f90)
 
-- 초기엔 컬렉션뷰의 컴포지셔널 레이아웃으로 구성하였으나, 특정 셀의 크기를 키우며 자연스럽게 애니메이션을 주는 커스텀을 하기가 쉽지 않았음.
-    - orthogonal 방식으로 툭툭 다음으로 넘어가게 구현하는 것은 쉬웠지만, 사용자의 스크롤에 따라 사이즈를 자연스럽게 키우고 줄이는 형태의 구현이 쉽지 않았음. 
-    > CompositionalLayout에서 `contentOffset`와, 사이즈를 조절할 중앙에 있는 `cell`을 정확히 가져오는 것을 실패함. 
-    
-### 1차 구현
-- FlowLayout을 커스텀해서 사용하기로 결정. Library 를 해체해보면서 필요한 부분만 뽑아서 따로 CarouselFlowLayout이라는 Custom Class 를 만듬
-    - [UPCarouselFlowLayout](https://github.com/zepojo/UPCarouselFlowLayout) 을 참고
-- 전체의 틀을 보면 각 상의/하의/… 의 섹션의 가로 스크롤 형태가 반복 되기에 컬렉션뷰의 셀로 구성하고
-해당 셀 내부에 가로로 Carousel 레이아웃의 컬렉션뷰가 들어가 있는 중첩 컬렉션뷰의 형태
+- 초기엔 컬렉션뷰의 컴포지셔널 레이아웃으로 구성하려고 시도
+- orthogonal 방식으로 툭툭 다음으로 넘어가게 구현하는 것은 쉬웠지만, 사용자의 스크롤에 따라 사이즈를 자연스럽게 키우고 줄이는 형태의 구현에서 막힘.
+- CompositionalLayout에서 세로 스크롤 내부에 중첩 형태로 가로 스크롤을 구현 할 경우, contentOffset 을 출력하면 x좌표의 변경은 출력되지 않았음.
+	> (각 섹션이 가로 스크롤을 하는 것이지, 전체 컬렉션뷰의 스크롤뷰가 가로 스크롤을 하는 것이 아니기 때문)
+
+### 1차 구현 - FlowLayout 커스텀
+- [UPCarouselFlowLayout](https://github.com/zepojo/UPCarouselFlowLayout) 라이브러리를 참고해, 뜯어보면서 필요한 부분만 뽑아서 따로 FlowLayout을 상속한 Custom Class 구현
+- 각 상의/하의/…의 카테고리를 컬렉션뷰의 셀로 구성하고 해당 셀 내부에 가로로 스크롤 하는 Carousel 레이아웃의 컬렉션뷰가 들어가 있는 중첩 컬렉션뷰의 형태로 구현
 ![EasyCloset 관련 001](https://github.com/qwerty3345/ios-closet-app/assets/59835351/3f650c9a-3218-4388-981d-9ee426fcaaec)
 
 <details>
-<summary>CaroselFlowLayout 코드</summary>
+<summary>구현한 CaroselFlowLayout 코드</summary>
     
 ```swift
 final class CarouselFlowLayout: UICollectionViewFlowLayout {
@@ -304,22 +304,15 @@ final class CarouselFlowLayout: UICollectionViewFlowLayout {
 ```       
 
 </details>
-                                                                      
-### 2차 문제 상황
-- 기존의 FlowLayout을 커스텀한 버전도 동작은 잘 되었지만, 중첩 컬렉션뷰의 특성 상 코드의 흐름이 알기 어려워지고 컬렉션뷰 -> 셀 -> 컬렉션뷰 -> 셀 의 형태였기 때문에 데이터의 흐름도 깊어지는 단점이 발생했음
-- 이전에는 Compositional Layout 으로 구현하려다 실패한 Carousel 구현을 다시 한 번 시도 해 보기로 결정
-  > 포기 지점: Compositional Layout 으로는 중첩 형태를 구현해서 contentOffset을 출력해도 x축의 좌표를 알아낼 수 없었음. 
-- Compositional Layout은 비교적 최근에 공개된 API이기 때문에 Reference를 찾기 어려웠음.
-- 그러다 `visibleItemsInvalidationHandler` 를 알게 되어서 다시 한 번 도전함
-    > 공식문서: A closure called before each layout cycle to allow modification of the items in the section immediately before they’re displayed.
-    > 항목이 표시되기 직전에 섹션의 항목을 수정할 수 있도록 각 레이아웃 주기 전에 호출되는 클로저입니다.
-    > https://developer.apple.com/documentation/uikit/nscollectionlayoutsection/3199096-visibleitemsinvalidationhandler
 
-## 최종 구현 - CompositionalLayout에 적용
-- 아래와 같이 `visibleItemsInvalidationHandler` 에 적용함으로서 offset를 가져올 수 있었고, 
-- 현재 표시되고 있는 visibleItems의 정보를 가져옴으로서 셀 아이템들의 중심부로부터의 거리를 계산 해 tranform을 적용할 수 있었음.
-- 덕분에 중첩 컬렉션뷰를 사용하지 않을 수 있어 Carousel의 행에 해당했던 CarouselCell를 삭제할 수 있었고, 뷰간 데이터의 흐름이 명확해지는 장점이 발생.
+### 1차 구현 방식의 문제점	
+- 중첩 컬렉션뷰의 특성 상 "컬렉션뷰 -> 셀 -> 컬렉션뷰 -> 셀" 의 형태였기 때문에 코드의 흐름, 데이터의 흐름이 알기 어려워지는 현사 발생
+- 셀이 재사용되기 때문에 발생되는 자잘한 이슈도 겪음
 
+### 최종 구현 - CompositionalLayout에 적용
+- 그러더 중, Compositional Layout의 공식 문서에서 `visibleItemsInvalidationHandler` 를 발견함.
+- 해당 섹션의 scroll Offset를 가져올 수 있었고, 화면에 표시되고 있는 visibleItems의 정보를 가져와서 중심부로부터의 거리를 계산 해 tranform해줄 수 있었음
+- 이렇게 단일 컬렉션뷰로 구성할 수 있었고 코드의 흐름과 데이터의 흐름이 훨씬 직관적이어짐
 ![EasyCloset 관련 003](https://github.com/qwerty3345/ios-closet-app/assets/59835351/88ccc209-dacf-4b00-94d9-6ffcf3e38998)
     
 ```swift 
@@ -358,30 +351,21 @@ private func setupCollectionViewCarousel(to section: NSCollectionLayoutSection) 
 <summary>NSCache를 통한 메모리 캐시 구현 / 저장 갯수, 용량 제한</summary>
 
 ### 배경
-- 이미지 로딩 프로세스는 아래와 같음
-    1. id값을 바탕으로 메모리 Cahche 에서 이미지를 가져오려고 시도
-        - 있으면 → return
-    2. 없으면 FileManager 에서 download 하고 return
-        - 동시에 메모리 Cache에 저장
-- 초기에 아래 코드처럼 단순히 Image Caching 매니저를 구현하였으나, 문제점이 떠오름
-- NSCache가 내부적으로 처리를 해주겠지만, 혹시나 캐싱으로 저장되는 이미지가 너무 크거나 저장되는 이미지의 갯수가 너무 많다면?
-- NSCache가 알아서 삭제해주는 정책이 있다고는 하지만 메모리를 불필요하게 사용하는 상황이 발생하지 않을까?
-- 아주 큰 용량의 이미지로 테스트 해본 결과, 앱이 허용하는 메모리 까지는 거의 끝없이 저장함.
-    
+- 이미지 로딩 프로세스
+<img width="783" alt="image" src="https://github.com/qwerty3345/ios-closet-app/assets/59835351/699bd82a-1b55-4ec4-8edb-c2132cdbe5da">
+	
+- 처음엔 단순히 NSCache에 저장만 하는 것으로 구현하였으나 문제점이 떠오름.
+- NSCache가 내부적으로 처리를 해준다고는 하지만, 혹시나 캐싱으로 저장되는 이미지가 너무 크거나 저장되는 이미지의 갯수가 너무 많다면,
+  앱이 구동되는 런타임에 메모리를 불필요하게 많이 사용하는 상황이 발생하지 않을까? 라는 생각이 떠오름
+- 아주 큰 용량의 이미지로 테스트 해본 결과, 앱이 허용하는 메모리 까지는 거의 끝없이 저장하느 것을 확인할 수 있었음
+
+> 초기 구현 _ 단순히 NSCache에 저장
 ```swift 
 final class ImageCacheManager {
-  
-  // MARK: - Singleton
-  static let shared = ImageCacheManager()
-  
-  private init() { }
-  
-  // MARK: - Properties
-  
+  static let shared = ImageCacheManager()  
+	
   private let cache = NSCache<NSString, UIImage>()
-  
-  // MARK: - Public Methods
-  
+	
   func get(for key: String) -> UIImage? {
     cache.object(forKey: key as NSString)
   }
@@ -389,63 +373,50 @@ final class ImageCacheManager {
   func store(_ value: UIImage, for key: String) {
     cache.setObject(value, forKey: key as NSString)
   }
-  
-}
 ```
 
 > NSCache에 대해 좀 더 깊이 학습하며 리팩터링 하기로 결정함
 
-### 문제 해결을 위한 NSCache에 대한 학습
-1. Thread Safe 할까? 
-- Thread Safe 하다!
-> 출처: 공식문서
-> You can add, remove, and query items in the cache from different threads without having to lock the cache yourself.
+### NSCache에 대한 학습
+1. Thread Safe한 이유는?
+- 내부적으로 `NSLock`을 사용하여 lock, unlock을 하기 때문에 thread safe 했던 것
+```swift 
+open class NSCache<KeyType : AnyObject, ObjectType : AnyObject> : NSObject {
+    private let _lock = NSLock()
+    ...
+```
 
-    
-2. NSCache 의 내부는 어떻게 생겼을까?
-- 공식 문서의 내용 만으로는 이해에 한계가 있어 Swift Foundation 의 NSCache 코드를 뜯어봄
-> 출처: https://github.com/apple/swift-corelibs-foundation/blob/main/Sources/Foundation/NSCache.swift
-> 
-- 내부적으로 NSLock을 사용해서 lock, unlock 을 해주기 때문에 thread safe 했던 것
+2. 내부 구조는 Dictionary + Linked List 구조임
+- 캐싱이라는 작업 특성상 데이터를 추가, 삭제하는 작업이 빈번하게 발생하기 때문에 데이터를 밀고 당기기 쉽게 하기 위해 링크드리스트를 활용해서 해당 작업을 빠르게 처리하는 것이 아닐까.라고 생각
+- 또한, 만약 링크드 리스트 구조만 사용한다면 탐색에 O(n)이 발생되기에 동시에 딕셔너리 구조를 사용함으로써 key값으로 데이터를 접근할 때 O(1)으로 빠르게 탐색하게 하는 것이라고 생각
+
 ```swift
 open class NSCache<KeyType : AnyObject, ObjectType : AnyObject> : NSObject {
     private var _entries = Dictionary<NSCacheKey, NSCacheEntry<KeyType, ObjectType>>()
-    private let _lock = NSLock()
-    private var _totalCost = 0
-    private var _head: NSCacheEntry<KeyType, ObjectType>?
-```
-- 또한 딕셔너리를 사용하지만, 내부의 `_entries` 의 value 인 `NSCacheEntry` 를 살펴보면 prev, next 를 가지는 `linkedList` 형태로 이루어져 있음! 
-
-```swift
+...
 private class NSCacheEntry<KeyType : AnyObject, ObjectType : AnyObject> {
     var key: KeyType
     var value: ObjectType
     var cost: Int
     var prevByCost: NSCacheEntry?
     var nextByCost: NSCacheEntry?
-    init(key: KeyType, value: ObjectType, cost: Int) {
-        self.key = key
-        self.value = value
-        self.cost = cost
-    }
-}
+...
 ```
 
-3. NSCache가 딕셔너리와 다르게 키 값을 복사하지 않는다는 말에 대해?
-- 이 부분도 의문이 들었지만, 내부 코드를 뜯어보니 조금은 이해되었음.
-- 복사하지 않고 참조한다 = 참조 타입만 사용할 수 있다 = AnyObject로 구현해야 한다
+3. 딕셔너리와 다르게 키 값을 복사하지 않는다?
+- 복사하지 않고 참조한다 = 참조 타입만 사용할 수 있다 = AnyObject로 구현해야 한다.
 - 그래서 key로 struct 타입인 String, Int 등은 사용하지 못하기에 브릿징을 통해 NSString 등으로 키값을 지정해줘야 했던 것.
+- 또하 내부 entry Dictionary의 Key를 Wrapping하는 NSCacheKey라는 클래스가 존재함
+
 
 ```swift
-open class NSCache<KeyType : **AnyObject**, ObjectType : AnyObject> : NSObject {
+open class NSCache<KeyType : AnyObject, ObjectType : AnyObject> : NSObject {
 ```
-
 ```swift
 open func setObject(_ obj: ObjectType, forKey key: KeyType, cost g: Int) {
     let g = max(g, 0) // costLimit을 지정하지 않으면 기본은 0임.
     let keyRef = NSCacheKey(key)
 ```
-
 ```swift
 fileprivate class NSCacheKey: NSObject {
     var value: AnyObject
@@ -455,81 +426,43 @@ fileprivate class NSCacheKey: NSObject {
     }
 ```
 
-- 참조 타입 키값을 wrapping 하는 방식으로 NSCacheKey 로 저장하는 것을 알 수 있었음.
-
-	
-4. countLimit, totalCostLimit
-- countLimit으로 저장 갯수의 제한을 줄 수 있고,totalCostLimit으로 저장의 비용의 가중치를 부여해 특정 비용만큼 저장될 수 있게 할 수 있음.
-주의해야 할 점은, 해당 수치들로 줄 수 있는 제약은 imprecise/not strict 정확하지 않을 수 있다라고 되어 있었고,
-또한 저장 시 cost를 지정 해 주지 않으면 totalCostLimit를 지정했더라도 기본 cost는 0이기 때문에 적용되지 않는 문제가 있을 수 있음.
+4. 캐싱이 삭제되는 것에 대한 체크
+- NSCacheDelegate 의 willEvictObject를 구현함으로서 캐시 데이터가 삭제되는 것을 확인할 수 있음
 
 ```swift 
-open class NSCache<KeyType : AnyObject, ObjectType : AnyObject> : NSObject {
-
-  private var _totalCost = 0
-
-  open var totalCostLimit: Int = 0 // limits are imprecise/not strict
-  open var countLimit: Int = 0 // limits are imprecise/not strict
-
-  
-  open func setObject(_ obj: ObjectType, forKey key: KeyType) {
-    setObject(obj, forKey: key, cost: 0)
-  }
-  
-  open func setObject(_ obj: ObjectType, forKey key: KeyType, cost g: Int) {
-    let g = max(g, 0)
-    let keyRef = NSCacheKey(key)
-```
-
-5. 캐싱이 지워지는 것에 대한 체크
-> 갯수 제한, 용량 제한을 구현한 `ImageCacheManager` 에 해당 방식으로 캐싱이 삭제되는 것을 확인할 수 있었음.
-
-```swift
 extension ImageCacheManager: NSCacheDelegate {
   func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any) {
     print("\(obj as? UIImage) 정보가 캐시에서 지워진다.")
   }
 }
 ```
+	
+5. countLimit, totalCostLimit
+- countLimit으로 저장 갯수의 제한을 줄 수 있고,totalCostLimit으로 저장의 비용의 가중치를 부여해 특정 비용만큼 저장될 수 있게 할 수 있음.
+- 주의해야 할 점은, 해당 수치들로 줄 수 있는 제약은 imprecise/not strict 정확하지 않을 수 있다라고 명시되어 있고,
+- 또한 저장 시 cost를 지정 해 주지 않으면 totalCostLimit를 지정했더라도 기본 cost는 0이기 때문에 적용되지 않는 문제가 있을 수 있음.
 
-### 결국 내린 결론,
+```swift 
+open class NSCache<KeyType : AnyObject, ObjectType : AnyObject> : NSObject {
+  private var _totalCost = 0
+  open var totalCostLimit: Int = 0 // limits are imprecise/not strict
+  open var countLimit: Int = 0 // limits are imprecise/not strict
 
-갯수에 대한 제한은 줄 수 있음. 
-또한, 저장되는 각 이미지에 용량에 따라 차등적인 CostLimit을 줌으로서 
-각 데이터나 총 저장되는 용량에 대한 제한을 간접적으로 줄 수 있음. 
-
-```swift
-open var totalCostLimit: Int = 0 // limits are imprecise/not strict
+  open func setObject(_ obj: ObjectType, forKey key: KeyType) {
+    setObject(obj, forKey: key, cost: 0)
+  }
+  
+  open func setObject(_ obj: ObjectType, forKey key: KeyType, cost g: Int) {
+    let g = max(g, 0)
+...
 ```
 
-주석에 달려있듯이 정확하진 않다고 하긴 하지만, 사용해볼 수 있을 것 같다!
-
 ### 최종 구현
-- 최종 리팩터링한 ImageCacheManager
-- countLimit, totalCostLimit를 통해 캐싱 갯수 제한과 저장 용량 제한을 주었음
+- countLimit 캐싱 갯수 제한을 주었음
+- totalCostLimit를 지정하고, 저장 시 각 이미지의 바이트 용량에 따라 차등적인 CostLimit을 줌으로서, 용량 제한을 간접적으로 줄 수 있음.
 
 ```swift
 final class ImageCacheManager {
-  
-  // MARK: - Constants
-  
-  private enum Constants {
-    static let initialByteLimit = 200 * megaByteUnit // 초기 제약: 200메가바이트
-    static let kiloByteUnit = 1024
-    static let megaByteUnit = 1024 * 1024
-  }
-  
-  // MARK: - Singleton
-  
-  static let shared = ImageCacheManager()
-  
-  private init() {
-    cache.countLimit = countLimit
-    cache.totalCostLimit = byteLimit
-  }
-  
-  // MARK: - Properties
-  
   private let cache = NSCache<NSString, UIImage>()
   
   // 총 100개 까지만 캐싱함
@@ -544,12 +477,6 @@ final class ImageCacheManager {
     get { byteLimit / Constants.megaByteUnit }
     set { byteLimit = newValue * Constants.megaByteUnit }
   }
-  var kiloByteLimit: Int {
-    get { byteLimit / Constants.kiloByteUnit }
-    set { byteLimit = newValue * Constants.kiloByteUnit }
-  }
-  
-  // MARK: - Public Methods
   
   func get(for id: UUID) -> UIImage? {
     cache.object(forKey: id.uuidString as NSString)
@@ -559,22 +486,8 @@ final class ImageCacheManager {
     let bytesOfImage = value.pngData()?.count ?? 0
     cache.setObject(value, forKey: id.uuidString as NSString, cost: bytesOfImage)
   }
-  
-  func removeAll() {
-    cache.removeAllObjects()
-  }
-}
+...
 ```
-
-> 테스트 결과 아쉬운 점은, UIImage 의 실제 이미지 사이즈를 측정하는 것이 쉽지 않았음.
-> 
-- 처음엔`jpegData(compressionQuality: 1.0).count` 으로 측정 했는데, jpeg 으로 변환 한 후의 data 사이즈를 측정하는 것이기에 실제 데이터 자체의 용량과는 차이가 있었음.
-- 콜라쥬 등을 처리하기 위해 배경 색상을 날려줘야 하기 때문에,
-이미지 저장을 png 로 해야 해서 png 로 저장하고 png 로 이미지 데이터를 계산하니 어느 정도 일치 해서 구현을 끝냄
-
-> 주의해야 할 점은, cost를 지정하지 않으면 기본 값은 0 이기 때문에 costLimist 을 걸어주더라도 저장할 때 setObject에서 cost 를 지정하지 않는다면 무한히 캐싱이 저장될 수 있다.
-> 
-- NSCache는 캐시 히트에 따른 처리까지는 제공하지 않지만, 애초에 디스크 캐싱이 아닌, 메모리 캐싱이기에 더 가벼운 관점으로 접근해도 별 문제 없다고 판단됐음
 </details>
     
 ## 🗳️ File Manager의 파일 입출력 Combine 으로 비동기 처리
@@ -586,8 +499,9 @@ final class ImageCacheManager {
 - 사용자가 추가한 옷의 이미지를 로컬에 파일로 저장하기 위해 FileManager를 사용
 - 아래와 같이 처음에 구현한 FileManger 코드에서는 이미지를 가져올 때 파일 입출력을 main Thread 에서 그냥 돌리고 있었음
 - 이미지가 크거나, 여러 요청이 동시 다발적으로 들어오게 되면 경우에는 문제가 발생할 수 있을 것이라 판단
+<img width="1002" alt="image" src="https://github.com/qwerty3345/ios-closet-app/assets/59835351/56e1b373-d794-456b-ade9-7fd825944b9d">
 
-```swift!
+```swift 
 func save(image: UIImage, id: UUID) throws {
   guard let data = image.pngData(),
         let filePath = filePath(of: id) else { return }
@@ -599,19 +513,16 @@ func load(withID id: UUID) -> UIImage? {
   do {
     let data = try Data(contentsOf: filePath)
     return UIImage(data: data)
-  } catch {
-    return nil
   }
-}
 ...
 ```
 
-### 1차 리팩터링 - Completion Handler 방식으로 변경
+### 1차 리팩터링 - DispatchQueue + Completion Handler
 
 - DispatchQueue의 global() 큐를 통해 백그라운드 스레드에서 돌리고, 결과값을 completion Handler 에서 처리하게끔 변경함
 - write 작업은 `qos: .utility` 로 지시하고, read 작업은 기본 qos로 지시함
 
-```swift
+```swift 
 func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)? = nil) {
     guard let data = image.pngData(),
           let filePath = filePath(of: id) else { return }
@@ -646,10 +557,11 @@ func save(image: UIImage, id: UUID, completion: ((FileManagerError?) -> Void)? =
 ```
 
 ### 2차 문제 발생
-- 그러나 이렇게 활용한다면… 데이터 배열을 받아와서 각각의 데이터에 이미지를 매핑해주고, 여러 이미지의 로딩이 다 완료되었을 때의 시점에 대해 completion 처리를 하기 위해서 아래와 같이 복잡하게 로직을 작성해야 했음.
-    > DispatchGroup을 이용해서, 모든 비동기 작업이 완료되었을 때 completion을 호출하도록 처리.
-- 이렇게 했을 때는 기존의 ViewModel 에서 사용자 입력 이벤트에 대해 Combine으로 바인딩 한 부분과도 잘 맞지 않고, 코드가 직관적이지 않아지는 단점이 발생함.
-    > Combine으로 리팩터링 해보기로 결정
+- storage의 데이터인 entity 배열을 받아와서 각각의 entity에 이미지를 매핑해주고, DispatchGroup을 이용해서, 여러 이미지의 로딩이 다 완료되었을 때 completion을 호출하도록 처리
+- 하지만 이렇게 구현 했을 때는 기존에 ViewModel 의 input, output에 대해 Combine으로 바인딩 한 부분과도 잘 맞지 않고, 코드가 직관적이지 않아지는 단점이 발생
+- 이에 Combine으로 리팩터링하기로 결정
+	
+> Repository 에서 Clothes 목록을 가져오는 메서드 (파일매니저 메서드를 호출)
 
 ```swift
 // Repository 에서 Clothes 목록을 가져오는 메서드
@@ -691,87 +603,44 @@ func fetchClothesList(completion: @escaping (ClothesList?) -> Void) {
   }
 ```
 
-### 2차 리팩터링 - Combine 으로 리팩터링
+### 2차 리팩터링 - Combine
 
 1. 이미지를 로컬 파일에서 가져오는 로직을 Combine으로 구현
-> Future를 사용한 이유: 한 번 값을 내밷고 바로 종료되는 것이 적합한 동작이라 판단했기 때문에.
-> 공식문서: `A publisher that eventually produces a single value and then finishes or fails.`
+- Future만 구현하고 `subscribe(on:)`을 해줬을 떄는 백그라운드 스레드로 변경되지 않았음 -> Future의 특성 때문
+- Future는 생성되는 "즉시" 실행되기 때문에 stream을 바꾸기 전에 이미 호출한 스레드로 실행이 되는 형태
+- 반면 Deferred 는 구독이 시작하는 순간에 클로저를 호출하기 때문에 Future를 Deferred로 감싸줌으로서, 호출을 지연할 수 있게 되어 stream을 백그라운드 스레드로 변경할 수 있게 됨
+> 참고: https://stackoverflow.com/questions/62264708/execute-combine-future-in-background-thread-is-not-working
 
 ```swift 
 // ImageFileManager 의 이미지를 로딩하는 부분을 Combine으로 리팩터링
 func load(withID id: UUID) -> AnyPublisher<UIImage, FileManagerError> {
-return Future { promise in
-  guard let filePath = self.filePath(of: id) else {
-    promise(.failure(.invalidFilePath))
-    return
-  }
-
-  do {
-    let data = try Data(contentsOf: filePath)
-    guard let image = UIImage(data: data) else {
-      promise(.failure(.invalidData))
-      return
-    }
-    promise(.success(image))
-  } catch {
-    promise(.failure(.failToWrite(error: error)))
-  }
-}
-.receive(on: DispatchQueue.global())
-.eraseToAnyPublisher()
-}
-```
-
-2. Storage에서 모델을 가져오고 이미지를 매핑하는 로직 Combine으로 리팩터링
-- `realm` 에서 먼저 entity 를 로딩하여 model 로 매핑 한 후, 
-    `ImageFileManager`에서 이미지를 로딩하여 넣어주고 반환하는 
-    `ClothesStorage`의 로직을 Combine으로 리팩터링
-
-```swift
-// ClothesStorage에서 리스트를 받아오는 부분
-func fetchClothesList() -> AnyPublisher<ClothesList, StorageError> {
-  return Future { [weak self] promise in
-    guard let self = self else { return }
-
-    guard let realm = self.realm else {
-      promise(.failure(.realmNotInitialized))
-      return
-    }
-
-    // 반영한 모델들을 다 합한 결과를 future로 내뱉음.
-    let clothesEntities = realm.objects(ClothesEntity.self)
-    var clothesList = ClothesList(clothesByCategory: [:])
-    let clothesModelsWithoutImage = clothesEntities.map { $0.toModelWithoutImage() }
-
-    // ImageFileStorage를 호출해 이미지를 로딩해서 clothes에 넣는 것을 처리하는 Publisher들
-    let clothesWithImagePublishers: [AnyPublisher<Clothes, Never>] = clothesModelsWithoutImage.map { model in
-      ImageFileStorage.shared.load(withID: model.id)
-        .replaceError(with: UIImage())
-        .map { image in
-          var clothes = model
-          clothes.image = image
-          return clothes
+    return Deferred { // Deferred를 사용함으로서 Future가 즉시 바로 실행되지 않게 함
+      Future { promise in
+        guard let filePath = self.filePath(of: id) else {
+          promise(.failure(.invalidFilePath))
+          return
         }
-        .eraseToAnyPublisher()
-    }
-
-    // 위에서 만든 단일의 Clothes를 방출하는 여러 Publisher들을 모아서 [Clothes] 를 방출하는 하나의 Publisher로 만듬
-    Publishers.MergeMany(clothesWithImagePublishers)
-      .collect()
-      .eraseToAnyPublisher()
-      .sink { clothesArray in
-        // 이미지가 모두 반영 된 ClothesList
-        let clothesList = clothesArray.toClothesList()
-        promise(.success(clothesList))
+        
+        do {
+          let data = try Data(contentsOf: filePath)
+          guard let image = UIImage(data: data) else {
+            promise(.failure(.invalidData))
+            return
+          }
+          promise(.success(image))
+        } catch {
+          promise(.failure(.failToWrite(error: error)))
+        }
       }
-      .store(in: &cancellables)
+    }
+    .subscribe(on: DispatchQueue.global()) // 백그라운드 스레드로로 upstream을 변경
+    .eraseToAnyPublisher()
   }
-  .eraseToAnyPublisher()
-}
 ```
 
-3. 메서드 분리
-> ClothesStorage 내부의 combine 결합 로직이 커져서 메서드로 분리함
+2. 모델을 가져오고 이미지를 매핑하는 로직을 Combine으로 구현
+- `realm` 에서 먼저 entity 를 로딩하여 model 로 매핑 한 후, `ImageFileManager`에서 이미지를 로딩하여 넣어주고 반환하는 
+   `ClothesStorage`의 로직을 Combine으로 리팩터링 (아직 Repository 객체 분리 전이라 Storage끼리 서로 참조하고 있는 형태)
 
 ```swift
 func fetchClothesList() -> AnyPublisher<ClothesList, StorageError> {
@@ -825,13 +694,14 @@ private func addingImagePublishers(to clothesModels: [Clothes]) -> AnyPublisher<
 <summary>이미지를 가져와서 모델 객체에 매핑하는 역할을 POP로 구현</summary>
 
 ### 배경
-- Repository는 Realm, FileManager의 각 Storage들을 갖고 데이터를 처리함 
-    현재 프로젝트에는 `ClothesRepository`, `StyleRepository` 두 Repository가 존재.
-- StyleRepository 를 구현하던 중, Style 들을 가져올 때 각 스타일 내부에 있는 Clothes 객체에 이미지를 로딩해서 매핑해줘야 하는 작업이 똑같이 필요했음
-    > Q. ClothesRepository에서 가져오면 되는 것 아닌가?
-        - A. 조금 비효율적인 면이 존재할 수 있지만, 사용되는 Scene이 전혀 다르기 때문에 각각의 Repository가 별개로 동작하는 것이 더 적절하겠다고 생각했기에 별도로 구현하였고 필연적으로 중복 코드가 발생함.
-- 공통되는 부분: **“이미지를 가져와서 로딩하는 부분”**
-    - `ImageCacheManager`, `ImageFileStorage` 프로퍼티와 이미지를 Clothes 객체에 매핑해주는 부분을 프로토콜로 추상화하여 POP로 구현하기로 결정
+	
+<img width="1192" alt="image" src="https://github.com/qwerty3345/ios-closet-app/assets/59835351/bc78fb7e-b152-4b88-aa57-abe76341aab6">
+
+	
+- StyleRepository 를 구현하던 중, Style 들을 가져올 때 각 스타일 내부에 있는 Clothes 객체에 "이미지를 가져와서 매핑"하는 작업이 똑같이 필요했음
+    > Q. StyleRepository가 ClothesRepository에서 데이터르 가져오면 되는 것 아닌가?
+        - A. 조금 비효율적인 면이 존재할 수 있지만, 사용되는 Scene이 전혀 다르기 때문에 각각의 Repository가 별개로 동작하는 것이 더 적절하겠다고 생각했기에 별도로 구현함. (ex. Clothes을 확인하지 않고, Style화면만 볼 수도 있기에...)
+- 이미지를 매핑하는 로직을 프로토콜로 추상화하여 POP로 구현하기로 결정
 
 ### ImageFetchable POP 구현
 
@@ -877,12 +747,12 @@ extension ImageFetchable {
 
 ### 최종 구현 - 여러 타입에 이미지를 매핑할 수 있게 구현
 
-- 이미지를 매핑하는데 필요한 프로퍼티인 id, image만 분리하여 ImagableModel 이라는 프로토콜로 추상화함
+- 이미지를 매핑하는데 필요한 프로퍼티인 id, image만 분리하여 ImagableModel 이라는 프로토콜로 추상화
 
 ```swift
 protocol ImagableModel {
   var id: UUID { get }
-  // 이미지를 매핑할 때 저장할 수 있어야 하므로 get set 둘 다 제약을 줌
+  // 이미지를 매핑할 때 저장할 수 있어야 하므로 get set 둘 다 요구사항을 줌
   var image: UIImage? { get set }
 }
 
@@ -895,56 +765,15 @@ struct Clothes: ImagableModel {
 ```
 
 - 아래처럼 `addingImages` 메서드에 `ImagableModel`로 제네릭을 줌으로서, 이미지를 가질 수 있는 (ImagebleModel을 채택한) 어떤 타입의 모델에 대해서도 매핑이 가능하게 되었음.
+	> 그 외 다른 부분의 구현 로직은 동일
 
 ```swift
 protocol ImageFetchableRepository {
-  var imageCacheManager: ImageCacheManager { get }
-  var imageFileStorage: ImageFileStorageProtocol { get }
   func addingImages<T: ImagableModel>(to imagableModels: [T]) -> AnyPublisher<[T], RepositoryError>
-}
-
-extension ImageFetchableRepository {
-  var imageCacheManager: ImageCacheManager { .shared }
-  
-  // storage에 저장된 이미지가 아직 로딩되지 않은 모델들에 이미지를 추가해서 매핑해줌
-  func addingImages<T: ImagableModel>(to imagableModels: [T]) -> AnyPublisher<[T], RepositoryError> {
-    // 모델이 비어있으면 fail 반환
-    guard imagableModels.isEmpty == false else {
-      return Fail(error: RepositoryError.invalidData)
-        .eraseToAnyPublisher()
-    }
-    
-    let modelsWithImagePublishers = imagableModels.map { imagableModel in
-			// 캐시에서 먼저 가져오도록 시도
-      if let image = imageCacheManager.get(for: imagableModel.id) {
-        var model = imagableModel
-        model.image = image
-        return Just(model)
-          .setFailureType(to: RepositoryError.self)
-          .eraseToAnyPublisher()
-      }
-
-			// 저장된 파일 스토리지에서 가져옴
-      return imageFileStorage.load(withID: imagableModel.id)
-        .replaceError(with: UIImage())
-        .map { image in
-          var model = imagableModel
-          imageCacheManager.store(image, for: model.id) // 메모리 캐시에 저장
-          model.image = image
-          return model
-        }
-        .setFailureType(to: RepositoryError.self)
-        .eraseToAnyPublisher()
-    }
-    
-    return Publishers.MergeMany(modelsWithImagePublishers)
-      .collect()
-      .eraseToAnyPublisher()
-  }
-}
+...
 ```
 
-- Repository에서는 해당 ImageFetchable을 채택하고, 데이터를 받아온 후 `addingImages`를 호출 해주면 됨
+- Repository에서는 해당 ImageFetchable을 채택하고, 데이터를 받아온 후 `addingImages`를 호출만 하면 되는 간단한 방식이 됨
 
 ```swift
 final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchableRepository {
@@ -967,36 +796,23 @@ final class ClothesRepository: ClothesRepositoryProtocol, ImageFetchableReposito
 - 사용자의 액션의 로직을 담고 있는 ViewModel 의 unit-test 를 구현하고자 했음
 
 ### 유닛테스트를 위한 Mock Repository 구현
+	
+<img width="1175" alt="image" src="https://github.com/qwerty3345/ios-closet-app/assets/59835351/52e06de9-6f13-4d4b-83ae-10b0a2b01cf9">
 
 - ViewModel은 Repository에 의존하고 있으므로, 실제 Repository가 아닌 가상의 시나리오로 동작하는 Mock Repository를 구현하여 ViewModel을 테스트
-    - Repository가 의존하고 있는 Storage 를 Mock으로 구현하여 Repository를 테스트 할 수도 있겠지만, 시간상 관계로 당장 급한 ViewModel부터 구현하기로 결정
     > 드디어 protocol 추상화, 의존성 주입이 빛을 발할 때가 되었다..!😲🥂
 - 기존에 만들어놓은 Mock 객체들을 return 해주도록 구현함
-    > 일단은 Repository가 성공의 시나리오만 발생시키도록 구현
-    실패 시나리오가 필요할 시, 각 응답을 property 로 만들어 테스트 직전 원하는 결과를 주입시켜줄 수 있을 것 같았음
+    > 일단은 Repository가 성공의 시나리오만 발생시키도록 구현. 실패 시나리오가 필요할 시, 각 응답을 property 로 만들어 테스트 직전 원하는 결과를 주입시켜줄 수 있을 것 같았음
     > 
 
 ```swift
-@testable import EasyCloset
-import Combine
-
 final class MockClothesRepository: ClothesRepositoryProtocol {
   func fetchClothesList() -> AnyPublisher<ClothesList, RepositoryError> {
     return Just(ClothesList.mocks)
       .setFailureType(to: RepositoryError.self)
       .eraseToAnyPublisher()
   }
-  
-  func save(clothes: Clothes) -> AnyPublisher<Void, RepositoryError> {
-    return Just(())
-      .setFailureType(to: RepositoryError.self)
-      .eraseToAnyPublisher()
-  }
-  
-  func removeAll() {
-    return
-  }
-}
+...
 ```
 
 ### ClothesViewModel 테스트
@@ -1004,76 +820,24 @@ final class MockClothesRepository: ClothesRepositoryProtocol {
 - 이처럼 `ClothesRepositoryProtocol` 를 구현한 `MockRepository`를 ViewModel 에 주입해서 `sut`를 초기화
 
 ```swift
-final class ClothesViewModelTests: XCTestCase {
-	var sut: ClothesViewModel!
-  private var cancellables: Set<AnyCancellable>!
-  
-  override func setUpWithError() throws {
-    let mockRepository = MockClothesRepository()
-    sut = ClothesViewModel(repository: mockRepository)
-    cancellables = []
-  }
+var sut: ClothesViewModel!
+
+override func setUpWithError() throws {
+  let mockRepository = MockClothesRepository()
+  sut = ClothesViewModel(repository: mockRepository)
+...
 ```
 
-- clothes가 특정 카테고리의 clothes만 내보내는지 테스트
-    > given, when, then 패턴을 사용
-
-```swift
-func test_clothes가_특정_카테고리의_clothes만_내보내는지_테스트() {
-  // given
-  let expectation = XCTestExpectation()
-  let category = ClothesCategory.accessory
-  
-  // when
-  sut.clothes(of: category)
-    .sink { clothes in
-      // then
-      XCTAssertTrue(clothes.allSatisfy {
-        $0.category == category
-      })
-      expectation.fulfill()
-    }
-    .store(in: &cancellables)
-}
-```
-
-- 최신순 filter가 적용되는지 테스트
-
-```swift
-func test_최신순_filter가_적용되는지_테스트() {
-  // given
-  let categories = ClothesCategory.allCases
-  sut.searchFilters.send([.sort(.new)])
-  
-  // 각각의 카테고리에 대한 expectation
-  var expectations: [XCTestExpectation] = []
-  
-  categories.forEach { category in
-    let expectation = XCTestExpectation(description: category.korean)
-    expectations.append(expectation)
-    
-    // when
-    sut.clothes(of: category)
-      .sink { clothes in
-        let sortedClothes = clothes.sorted(by: { $0.createdAt > $1.createdAt })
-        
-        // then
-        XCTAssertEqual(clothes, sortedClothes)
-        expectation.fulfill()
-      }
-      .store(in: &cancellables)
-  }
-}
-```
-
-- 계절 filter가 적용되는지 테스트
+### 계절 filter가 적용되는지 테스트
+- 사용자가 필터 검색을 입력한 시나리오인 filter르 걸었을 때,
+- 기대하는 출력값이 나오는지 테스트
 
 ```swift
 func test_계절_filter가_적용되는지_테스트() {
   // given
   let categories = ClothesCategory.allCases
   let weatherFilterType: WeatherType = .fall
-  sut.searchFilters.send([.weather(weatherFilterType)])
+  sut.searchFilters.send([.weather(weatherFilterType)]) // 계절 filter 검색
   
   // 각각의 카테고리에 대한 expectation
   var expectations: [XCTestExpectation] = []
@@ -1084,23 +848,22 @@ func test_계절_filter가_적용되는지_테스트() {
     
     // when
     sut.clothes(of: category)
-      .sink { clothes in
-        
+      .sink { clothes in     
         // then
         XCTAssertTrue(clothes.allSatisfy {
+	 // 모든 결과값이 해당 filter와 동일한지 체크
           $0.weatherType == weatherFilterType
         })
         expectation.fulfill()
       }
       .store(in: &cancellables)
-  }
-}
+...
 ```
 
 ### 이미지 캐시매니저 유닛 테스트
 - 메모리 캐시인 NSCache 를 활용한 `ImageCacheManager` 를 테스트
 - 싱글턴 형태이긴 했지만, 메모리 캐시이기 때문에 각각의 케이스 후 removeAll 만 호출 해 주면 문제없이 테스트를 진행할 수 있을 것이라 판단
-- 특히, 위에서 명시했던 갯수제한과 용량제한이 적절히 이뤄지는지를 테스트하고 싶었음
+- 특히, 구현했던 갯수제한과 용량제한이 적절히 이뤄지는지를 테스트하고 싶었음
     > 다만, 해당 테스트가 반드시 성공하리라는 보장은 할 수 없었는데, 
     NSCache의 특성상 `countLimit`과 `totalCostLimit`이 제공하는 limit이 imprecise 하다고 명시되어 있었기 때문.
     다행히, 어느 정도까지는 예상한 대로 동작하는 것을 확인할 수 있었음
@@ -1124,7 +887,6 @@ func test_저장시_갯수제한이_적용되는지_확인() {
 
   // 갯수 제한을 준 갯수보다 같거나 적게 저장되었는지 확인
   XCTAssertGreaterThanOrEqual(countLimit, storedImages.count)
-}
 ```
 
 - 저장시 용량제한이 적용되는지 확인
@@ -1141,7 +903,7 @@ func test_저장시_용량제한이_적용되는지_확인() {
     UIImage(systemName: "pencil.circle.fill")!,
     UIImage(systemName: "pencil.line")!
   ]
-	// 가장 작은 이미지 용량
+  // 가장 작은 이미지 용량
   let imageDataSize = images.compactMap { $0.pngData()?.count }.min() ?? 0
   let ids = (0..<5).map { _ in UUID() }
   
@@ -1157,7 +919,6 @@ func test_저장시_용량제한이_적용되는지_확인() {
 
   // 용량 제한을 준 3개로 주었기에, 그보다 같거나 적게 저장되었는지 확인
   XCTAssertGreaterThanOrEqual(3, storedImages.count)
-}
 ```
 </details>
     
