@@ -13,7 +13,16 @@ final class ClothesViewModel {
   
   // MARK: - Properties
   
-  @Published private(set) var clothesList = ClothesList(clothesByCategory: [:])
+  // repository에서 가져온 모델 객체
+  @Published private var clothesList = ClothesList(clothesByCategory: [:])
+  
+  // 필터가 적용된 clothesList를 뷰컨에서 바인딩
+  var filteredClothesList: AnyPublisher<ClothesList, Never> {
+    $clothesList
+      .combineLatest(searchFilters)
+      .map(applyFilters)
+      .eraseToAnyPublisher()
+  }
   
   let searchFilters = CurrentValueSubject<FilterItems, Never>([.sort(.new)])
   let deleteClothes = PassthroughSubject<Clothes, Never>()
@@ -36,11 +45,9 @@ final class ClothesViewModel {
   func clothes(of category: ClothesCategory) -> AnyPublisher<[Clothes], Never> {
     $clothesList
       .map { $0.clothesByCategory[category] ?? [] }
-      .combineLatest(searchFilters)
-      .map(applyFilters)
       .eraseToAnyPublisher()
   }
-  
+
   // MARK: - Private Methods
   
   private func bind() {
@@ -68,34 +75,37 @@ final class ClothesViewModel {
       }
       .store(in: &cancellables)
   }
-    
-  private func applyFilters(clothesList: [Clothes], filters: FilterItems) -> [Clothes] {
-    return filters.reduce(clothesList) { currentList, filter in
-      switch filter {
-      case .sort(let sort):
-        return applySort(filter: sort, to: currentList)
-      case .weather(let weather):
-        return applyWeather(filter: weather, to: currentList)
-      case .clothes(let clothes):
-        return applyClothes(filter: clothes, to: currentList)
+  
+  private func applyFilters(to clothesList: ClothesList, filters: FilterItems) -> ClothesList {
+    let filteredClothesByCategory = clothesList.clothesByCategory.mapValues { clothesArray in
+      filters.reduce(clothesArray) { clothesArray, filter in
+        switch filter {
+        case .sort(let sort):
+          return applySort(filter: sort, to: clothesArray)
+        case .weather(let weather):
+          return applyWeather(filter: weather, to: clothesArray)
+        case .clothes(let clothes):
+          return applyClothes(filter: clothes, to: clothesArray)
+        }
       }
     }
+    return ClothesList(clothesByCategory: filteredClothesByCategory)
   }
   
-  private func applySort(filter: SortBy, to clothesList: [Clothes]) -> [Clothes] {
+  private func applySort(filter: SortBy, to clothesArray: [Clothes]) -> [Clothes] {
     switch filter {
     case .new:
-      return clothesList.sorted { $0.createdAt > $1.createdAt }
+      return clothesArray.sorted { $0.createdAt > $1.createdAt }
     case .old:
-      return clothesList.sorted { $0.createdAt < $1.createdAt }
+      return clothesArray.sorted { $0.createdAt < $1.createdAt }
     }
   }
   
-  private func applyWeather(filter: WeatherType, to clothesList: [Clothes]) -> [Clothes] {
-    return clothesList.filter { $0.weatherType == filter }
+  private func applyWeather(filter: WeatherType, to clothesArray: [Clothes]) -> [Clothes] {
+    return clothesArray.filter { $0.weatherType == filter }
   }
   
-  private func applyClothes(filter: ClothesCategory, to clothesList: [Clothes]) -> [Clothes] {
-    return clothesList.filter { $0.category == filter }
+  private func applyClothes(filter: ClothesCategory, to clothesArray: [Clothes]) -> [Clothes] {
+    return clothesArray.filter { $0.category == filter }
   }
 }
