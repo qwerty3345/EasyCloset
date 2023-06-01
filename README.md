@@ -90,6 +90,13 @@
     ├── ClothesViewModel.swift
     ├── StyleDetailViewModel.swift
     └── StyleViewModel.swift
+
+// 유닛 테스트
+├── ClothesViewModelTests.swift
+├── Data
+│   ├── MockClothesRepository.swift
+│   └── MockStyleRepository.swift
+└── ImageCacheManagerTests.swift
 ```
 </details>
 
