@@ -82,7 +82,7 @@ final class ClothesController: UIViewController {
   // MARK: - Private Methods
   
   private func bind() {
-    viewModel.$clothesList
+    viewModel.filteredClothesList
       .sink { [weak self] clothesList in
         self?.applySnapshot(with: clothesList)
       }

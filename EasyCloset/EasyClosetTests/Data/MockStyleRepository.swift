@@ -22,6 +22,10 @@ final class MockStyleRepository: StyleRepositoryProtocol {
       .eraseToAnyPublisher()
   }
   
+  func remove(style: EasyCloset.Style) {
+    return
+  }
+  
   func removeAll() {
     return
   }

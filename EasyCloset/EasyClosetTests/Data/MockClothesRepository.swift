@@ -10,6 +10,7 @@
 import Combine
 
 final class MockClothesRepository: ClothesRepositoryProtocol {
+  
   func fetchClothesList() -> AnyPublisher<ClothesList, RepositoryError> {
     return Just(ClothesList.mocks)
       .setFailureType(to: RepositoryError.self)
@@ -20,6 +21,10 @@ final class MockClothesRepository: ClothesRepositoryProtocol {
     return Just(())
       .setFailureType(to: RepositoryError.self)
       .eraseToAnyPublisher()
+  }
+  
+  func remove(clothes: EasyCloset.Clothes) {
+    return
   }
   
   func removeAll() {
