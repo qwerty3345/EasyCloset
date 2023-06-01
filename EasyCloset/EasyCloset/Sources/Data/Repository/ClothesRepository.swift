@@ -6,11 +6,11 @@
 //
 
 import UIKit
-import RealmSwift
+import Then
 
 import Combine
 
-import Then
+import RealmSwift
 
 // MARK: - Protocol
 

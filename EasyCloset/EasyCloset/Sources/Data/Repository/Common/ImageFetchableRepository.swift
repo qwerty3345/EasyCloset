@@ -5,10 +5,9 @@
 //  Created by Mason Kim on 2023/05/26.
 //
 
-import Foundation
+import UIKit
 
 import Combine
-import UIKit
 
 protocol ImageFetchableRepository {
   var imageCacheManager: ImageCacheManager { get }

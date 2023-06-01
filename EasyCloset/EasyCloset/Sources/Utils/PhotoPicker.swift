@@ -78,7 +78,8 @@ final class PhotoPicker: NSObject {
       }
     }.eraseToAnyPublisher()
   }
-  
+
+  // iOS 14부터 제시된 PHPicker를 사용하기에 따로 권한 부여 필요 X
   func requestAlbum() -> AnyPublisher<UIImage, PhotoPickerError> {
     return Future { [weak self] promise in
       guard let self = self else { return }
