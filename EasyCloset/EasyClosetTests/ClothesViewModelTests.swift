@@ -45,54 +45,39 @@ final class ClothesViewModelTests: XCTestCase {
   
   func test_최신순_filter가_적용되는지_테스트() {
     // given
-    let categories = ClothesCategory.allCases
     sut.searchFilters.send([.sort(.new)])
+    let expectation = XCTestExpectation()
     
-    // 각각의 카테고리에 대한 expectation
-    var expectations: [XCTestExpectation] = []
-    
-    categories.forEach { category in
-      let expectation = XCTestExpectation(description: category.korean)
-      expectations.append(expectation)
-      
-      // when
-      sut.clothes(of: category)
-        .sink { clothes in
+    // when
+    sut.filteredClothesList
+      .sink { clothesList in
+        clothesList.clothesByCategory.forEach { category, clothes in
           let sortedClothes = clothes.sorted(by: { $0.createdAt > $1.createdAt })
-          
           // then
           XCTAssertEqual(clothes, sortedClothes)
-          expectation.fulfill()
         }
-        .store(in: &cancellables)
-    }
+        expectation.fulfill()
+      }
+      .store(in: &cancellables)
   }
   
   func test_계절_filter가_적용되는지_테스트() {
     // given
-    let categories = ClothesCategory.allCases
     let weatherFilterType: WeatherType = .fall
     sut.searchFilters.send([.weather(weatherFilterType)])
+    let expectation = XCTestExpectation()
     
-    // 각각의 카테고리에 대한 expectation
-    var expectations: [XCTestExpectation] = []
-    
-    categories.forEach { category in
-      let expectation = XCTestExpectation(description: category.korean)
-      expectations.append(expectation)
-      
-      // when
-      sut.clothes(of: category)
-        .sink { clothes in
-          
-          // then
+    // when
+    sut.filteredClothesList
+      .sink { clothesList in
+        clothesList.clothesByCategory.forEach { category, clothes in
           XCTAssertTrue(clothes.allSatisfy {
             $0.weatherType == weatherFilterType
           })
-          expectation.fulfill()
         }
-        .store(in: &cancellables)
-    }
+        expectation.fulfill()
+      }
+      .store(in: &cancellables)
   }
 
 }
