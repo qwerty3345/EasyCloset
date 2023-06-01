@@ -40,6 +40,7 @@ final class StyleViewModel {
       }
       .sink { completion in
         if case let .failure(error) = completion {
+          // TODO: 에러 처리
           print(error)
         }
       } receiveValue: { [weak self] styles in
